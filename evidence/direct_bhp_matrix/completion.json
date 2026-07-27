@@ -1,0 +1,10 @@
+{
+  "complete": true,
+  "expected_selected_cells": 32,
+  "failed_cells": 0,
+  "failures": [],
+  "finished_utc": "2026-07-26T10:17:41.972369+00:00",
+  "full_matrix_complete": true,
+  "schema": "nobs-direct-bhp-completion-v1",
+  "successful_cells": 32
+}

@@ -1,0 +1,68 @@
+{
+  "experiment": "reconstructed NS-2.35+nOBS attack/mitigation scenarios",
+  "status": "reconstructed",
+  "simulator": {
+    "binary": "../build/ns-allinone-2.35/ns-2.35/ns",
+    "version": "NS-2.35 with nOBS v2.1 overlay",
+    "script": "scenario.tcl",
+    "trace": "Simulator trace-all",
+    "python_simulator_used": false,
+    "binary_modified_for_experiment": false
+  },
+  "cli": {
+    "positional_args": ["scenario", "seed", "attack_rate_mbps", "sim_time_s", "mitigation", "optional_trace_path"],
+    "scenario_values": ["S0", "S1", "S2"],
+    "mitigation_values": ["none", "rate_limit", "isolation"]
+  },
+  "scenarios": {
+    "S0": "legal TCP Reno only; mitigation=none",
+    "S1": "legal TCP Reno plus 8 UDP CBR attackers; mitigation=none",
+    "S2_rate_limit": "attack plus one stock NS-2 TBF drop policer per attacker at CIR 4 Mb/s, attached 0.25 s after attack start",
+    "S2_isolation": "attacking UDP agents are redirected to a local discard sink 0.25 s after attack start; already-created optical bursts drain normally"
+  },
+  "documented_parameters": {
+    "optical_nodes": 7,
+    "topology": "T backbone derived from sim20_7bmulti-cont.tcl",
+    "legal_transport": "TCP Reno",
+    "attacker_transport": "UDP CBR",
+    "attacker_count": 8,
+    "rate_limit_cir_mbps_per_attacker": 4.0,
+    "isolation_detection_delay_s": 0.25,
+    "pilot_seed_count_per_scenario": 1
+  },
+  "reconstructed-assumption": {
+    "legal_flow_count": 2,
+    "legal_sender_access_rate_mbps_each": 3.0,
+    "attack_rate_semantics": "per-attacker offered rate, not aggregate",
+    "pilot_attack_rate_mbps_each": 12.0,
+    "legal_packet_bytes": 1000,
+    "attacker_packet_bytes": 1000,
+    "attack_start_s": 0.1,
+    "pilot_sim_time_s": 5.0,
+    "optical_link_rate_mbps_per_wavelength": 400,
+    "optical_link_delay_ms": 10,
+    "max_wavelengths_per_link": 1,
+    "electronic_queue_packets": 10000,
+    "burst_max_packets": 20,
+    "burst_timeout_ms": 7,
+    "burst_flow_queues": 1,
+    "jet_type": 1,
+    "converter_count_per_optical_node": 2,
+    "fdl_count_per_optical_node": 3,
+    "fdl_delays_s": [0.001, 0.01, 0.02],
+    "tbf_scope": "one ingress token bucket per attacking UDP source",
+    "tbf_bucket_bits": 32000,
+    "tbf_queue_packets": 0,
+    "randomization": "CBR random_=0 within each run; each seed selects one reproducible run-level attack multiplier uniformly from [0.8,1.2], shared by all attackers and paired attack/mitigation cells",
+    "measurement_duration_s": 5.0,
+    "post_measurement_drain_s": 0.25,
+    "receiver_selection": "all attackers target legal receiver electronic node 9",
+    "nam_trace": "disabled to keep pilot raw artifacts bounded; trace-all text is retained"
+  },
+  "interpretation_limits": [
+    "The thesis does not supply its original topology/configuration/raw traces, so this is not a bit-for-bit reproduction.",
+    "No parameter was tuned to force agreement with thesis result tables.",
+    "TBF is the stock NS-2 token bucket, not a reconstructed RFC 2698 two-rate three-color marker because PIR/CBS/PBS/color policy were not specified.",
+    "Pilot runs are execution/integration checks, not inferential results."
+  ]
+}

@@ -1,0 +1,466 @@
+{
+  "effects": {
+    "S1_reduction_vs_S0_pct": 50.066688896298764,
+    "S1_remaining_vs_S0_pct": 49.933311103701236,
+    "S2_isolation_recovered_lost_bytes_pct": 100.0,
+    "S2_isolation_vs_S0_pct": 100.0,
+    "S2_rate_limit_recovered_lost_bytes_pct": 100.0,
+    "S2_rate_limit_vs_S0_pct": 100.0,
+    "paired_direction_counts": {
+      "S1_below_S0": 8,
+      "S2_isolation_above_S1": 8,
+      "S2_rate_limit_above_S1": 8
+    },
+    "two_sided_exact_sign_test_p_for_8_of_8_same_direction": 0.0078125
+  },
+  "interpretation_limits": [
+    "Intervals describe only the eight fixed seeds.",
+    "The workload emits native direct control-only BHPs with absent data payload.",
+    "The guard is a deterministic contemporaneous token-budget state machine, not a reconstructed ML detector.",
+    "Legitimate nOBS controls do not enter the explicit direct-BHP guard path; zero collateral here is architectural scope, not an estimated false-positive rate.",
+    "Claims are limited to the declared seven-node topology, traffic profile, and five-second runs."
+  ],
+  "matrix": "evidence/direct_bhp_matrix",
+  "schema": "nobs-direct-bhp-analysis-v1",
+  "seeds": [
+    101,
+    202,
+    303,
+    404,
+    505,
+    606,
+    707,
+    808
+  ],
+  "source_validation_sha256": "812338e8741de622475667e792d98bc40e1eaf4bcc4641c78a57ee358e0d1782",
+  "summary": {
+    "S0": {
+      "action_totals": {
+        "admitted": 0,
+        "allow": 0,
+        "blocked": 0,
+        "blocked_fraction": null,
+        "direct_bhp_created": 0,
+        "drop_over_profile": 0,
+        "quarantine": 0,
+        "release": 0
+      },
+      "direct_bhp_created": {
+        "descriptive_95pct_t_interval": [
+          0.0,
+          0.0
+        ],
+        "mean": 0.0,
+        "n": 8,
+        "sd": 0.0,
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "legal_tcp_bytes": {
+        "descriptive_95pct_t_interval": [
+          50623120.0,
+          50623120.0
+        ],
+        "mean": 50623120.0,
+        "n": 8,
+        "sd": 0.0,
+        "values": [
+          50623120,
+          50623120,
+          50623120,
+          50623120,
+          50623120,
+          50623120,
+          50623120,
+          50623120
+        ]
+      },
+      "legal_tcp_packets": {
+        "descriptive_95pct_t_interval": [
+          48678.0,
+          48678.0
+        ],
+        "mean": 48678.0,
+        "n": 8,
+        "sd": 0.0,
+        "values": [
+          48678,
+          48678,
+          48678,
+          48678,
+          48678,
+          48678,
+          48678,
+          48678
+        ]
+      },
+      "optical_burst_pairs": {
+        "descriptive_95pct_t_interval": [
+          4917.0,
+          4917.0
+        ],
+        "mean": 4917.0,
+        "n": 8,
+        "sd": 0.0,
+        "values": [
+          4917,
+          4917,
+          4917,
+          4917,
+          4917,
+          4917,
+          4917,
+          4917
+        ]
+      },
+      "successful_link_reservations": {
+        "descriptive_95pct_t_interval": [
+          19606.0,
+          19606.0
+        ],
+        "mean": 19606.0,
+        "n": 8,
+        "sd": 0.0,
+        "values": [
+          19606,
+          19606,
+          19606,
+          19606,
+          19606,
+          19606,
+          19606,
+          19606
+        ]
+      }
+    },
+    "S1": {
+      "action_totals": {
+        "admitted": 433520,
+        "allow": 433520,
+        "blocked": 0,
+        "blocked_fraction": 0.0,
+        "direct_bhp_created": 433520,
+        "drop_over_profile": 0,
+        "quarantine": 0,
+        "release": 0
+      },
+      "direct_bhp_created": {
+        "descriptive_95pct_t_interval": [
+          47991.44368607449,
+          60388.55631392551
+        ],
+        "mean": 54190.0,
+        "n": 8,
+        "sd": 7414.355496506182,
+        "values": [
+          60680,
+          50520,
+          54048,
+          44960,
+          43528,
+          61608,
+          62784,
+          55392
+        ]
+      },
+      "legal_tcp_bytes": {
+        "descriptive_95pct_t_interval": [
+          20868973.420368813,
+          29686626.579631187
+        ],
+        "mean": 25277800.0,
+        "n": 8,
+        "sd": 5273584.029622142,
+        "values": [
+          23633040,
+          19282720,
+          21178640,
+          32276480,
+          18868800,
+          26734320,
+          30314000,
+          29934400
+        ]
+      },
+      "legal_tcp_packets": {
+        "descriptive_95pct_t_interval": [
+          20068.24367343155,
+          28546.75632656845
+        ],
+        "mean": 24307.5,
+        "n": 8,
+        "sd": 5070.753874636675,
+        "values": [
+          22726,
+          18543,
+          20366,
+          31037,
+          18145,
+          25708,
+          29150,
+          28785
+        ]
+      },
+      "optical_burst_pairs": {
+        "descriptive_95pct_t_interval": [
+          2517.0884946731403,
+          3268.6615053268597
+        ],
+        "mean": 2892.875,
+        "n": 8,
+        "sd": 449.4941402764414,
+        "values": [
+          2763,
+          2427,
+          2555,
+          3414,
+          2288,
+          2996,
+          3361,
+          3339
+        ]
+      },
+      "successful_link_reservations": {
+        "descriptive_95pct_t_interval": [
+          10042.002294476457,
+          13045.247705523543
+        ],
+        "mean": 11543.625,
+        "n": 8,
+        "sd": 1796.1544586381524,
+        "values": [
+          11029,
+          9683,
+          10192,
+          13627,
+          9126,
+          11951,
+          13411,
+          13330
+        ]
+      }
+    },
+    "S2_isolation": {
+      "action_totals": {
+        "admitted": 16,
+        "allow": 16,
+        "blocked": 433504,
+        "blocked_fraction": 0.9999630928215538,
+        "direct_bhp_created": 433520,
+        "drop_over_profile": 144,
+        "quarantine": 433360,
+        "release": 0
+      },
+      "direct_bhp_created": {
+        "descriptive_95pct_t_interval": [
+          47991.44368607449,
+          60388.55631392551
+        ],
+        "mean": 54190.0,
+        "n": 8,
+        "sd": 7414.355496506182,
+        "values": [
+          60680,
+          50520,
+          54048,
+          44960,
+          43528,
+          61608,
+          62784,
+          55392
+        ]
+      },
+      "legal_tcp_bytes": {
+        "descriptive_95pct_t_interval": [
+          50623120.0,
+          50623120.0
+        ],
+        "mean": 50623120.0,
+        "n": 8,
+        "sd": 0.0,
+        "values": [
+          50623120,
+          50623120,
+          50623120,
+          50623120,
+          50623120,
+          50623120,
+          50623120,
+          50623120
+        ]
+      },
+      "legal_tcp_packets": {
+        "descriptive_95pct_t_interval": [
+          48678.0,
+          48678.0
+        ],
+        "mean": 48678.0,
+        "n": 8,
+        "sd": 0.0,
+        "values": [
+          48678,
+          48678,
+          48678,
+          48678,
+          48678,
+          48678,
+          48678,
+          48678
+        ]
+      },
+      "optical_burst_pairs": {
+        "descriptive_95pct_t_interval": [
+          4917.0,
+          4917.0
+        ],
+        "mean": 4917.0,
+        "n": 8,
+        "sd": 0.0,
+        "values": [
+          4917,
+          4917,
+          4917,
+          4917,
+          4917,
+          4917,
+          4917,
+          4917
+        ]
+      },
+      "successful_link_reservations": {
+        "descriptive_95pct_t_interval": [
+          19606.0,
+          19606.0
+        ],
+        "mean": 19606.0,
+        "n": 8,
+        "sd": 0.0,
+        "values": [
+          19606,
+          19606,
+          19606,
+          19606,
+          19606,
+          19606,
+          19606,
+          19606
+        ]
+      }
+    },
+    "S2_rate_limit": {
+      "action_totals": {
+        "admitted": 48,
+        "allow": 16,
+        "blocked": 433472,
+        "blocked_fraction": 0.9998892784646614,
+        "direct_bhp_created": 433520,
+        "drop_over_profile": 144,
+        "quarantine": 433328,
+        "release": 32
+      },
+      "direct_bhp_created": {
+        "descriptive_95pct_t_interval": [
+          47991.44368607449,
+          60388.55631392551
+        ],
+        "mean": 54190.0,
+        "n": 8,
+        "sd": 7414.355496506182,
+        "values": [
+          60680,
+          50520,
+          54048,
+          44960,
+          43528,
+          61608,
+          62784,
+          55392
+        ]
+      },
+      "legal_tcp_bytes": {
+        "descriptive_95pct_t_interval": [
+          50623120.0,
+          50623120.0
+        ],
+        "mean": 50623120.0,
+        "n": 8,
+        "sd": 0.0,
+        "values": [
+          50623120,
+          50623120,
+          50623120,
+          50623120,
+          50623120,
+          50623120,
+          50623120,
+          50623120
+        ]
+      },
+      "legal_tcp_packets": {
+        "descriptive_95pct_t_interval": [
+          48678.0,
+          48678.0
+        ],
+        "mean": 48678.0,
+        "n": 8,
+        "sd": 0.0,
+        "values": [
+          48678,
+          48678,
+          48678,
+          48678,
+          48678,
+          48678,
+          48678,
+          48678
+        ]
+      },
+      "optical_burst_pairs": {
+        "descriptive_95pct_t_interval": [
+          4917.0,
+          4917.0
+        ],
+        "mean": 4917.0,
+        "n": 8,
+        "sd": 0.0,
+        "values": [
+          4917,
+          4917,
+          4917,
+          4917,
+          4917,
+          4917,
+          4917,
+          4917
+        ]
+      },
+      "successful_link_reservations": {
+        "descriptive_95pct_t_interval": [
+          19606.0,
+          19606.0
+        ],
+        "mean": 19606.0,
+        "n": 8,
+        "sd": 0.0,
+        "values": [
+          19606,
+          19606,
+          19606,
+          19606,
+          19606,
+          19606,
+          19606,
+          19606
+        ]
+      }
+    }
+  }
+}

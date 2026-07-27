@@ -1,0 +1,74 @@
+{
+  "schema": "nobs-matrix-experiment-v1",
+  "name": "full-400mbps-rate40-8seed",
+  "description": "Paired native NS-2.35+nOBS S0/S1/S2 experiment at a load selected from the preceding S1 sweep.",
+  "seeds": [1, 2, 3, 4, 5, 6, 7, 8],
+  "nominal_attack_rate_mbps_per_source": 40.0,
+  "simulation": {
+    "measurement_duration_s": 5.0,
+    "post_measurement_drain_s": 0.25,
+    "per_cell_timeout_s": 900.0
+  },
+  "scenarios": [
+    {"label": "S0", "scenario": "S0", "mitigation": "none"},
+    {"label": "S1", "scenario": "S1", "mitigation": "none"},
+    {"label": "S2_rate_limit", "scenario": "S2", "mitigation": "rate_limit"},
+    {"label": "S2_isolation", "scenario": "S2", "mitigation": "isolation"}
+  ],
+  "traffic": {
+    "legal_flow_count": 2,
+    "legal_packet_bytes": 1000,
+    "legal_access_mbps": 155.0,
+    "protected_legal_flow_count": 2,
+    "protected_legal_mbps": 3.0,
+    "attacker_count": 8,
+    "attacker_packet_bytes": 1000,
+    "attacker_access_mbps": 155.0,
+    "attack_start_s": 0.1,
+    "legal_start_stagger_s": 0.05,
+    "tcp_window_packets": 500,
+    "legal_flow_id_base": 100,
+    "attacker_flow_id_base": 200,
+    "attack_multiplier_min": 0.8,
+    "attack_multiplier_max": 1.2
+  },
+  "network": {
+    "topology_profile": "nobs-explicit-topology-v1",
+    "optical_nodes": [0, 1, 2, 3, 4, 5, 6],
+    "optical_links": [[0, 1], [1, 2], [2, 3], [3, 4], [5, 6], [6, 2]],
+    "optical_routes": [
+      {"source": 0, "destination": 4, "path": [0, 1, 2, 3, 4]},
+      {"source": 4, "destination": 0, "path": [4, 3, 2, 1, 0]},
+      {"source": 5, "destination": 4, "path": [5, 6, 2, 3, 4]},
+      {"source": 4, "destination": 5, "path": [4, 3, 2, 6, 5]}
+    ],
+    "legal_ingress_by_flow": [0, 5],
+    "attacker_ingress_node": 5,
+    "receiver_egress_node": 4,
+    "attacker_target_receiver_index": 0,
+    "optical_node_type": 3,
+    "wavelength_conversion_type": 1,
+    "ack_dont_burst": 0,
+    "source_routing_enabled": 1,
+    "debug_level": 0,
+    "optical_rate_mbps": 400.0,
+    "optical_delay_ms": 10.0,
+    "electronic_access_delay_ms": 1.0,
+    "electronic_receiver_access_mbps": 155.0,
+    "electronic_queue_packets": 10000,
+    "max_wavelengths_per_link": 1,
+    "burst_max_packets": 20,
+    "burst_timeout_ms": 7.0,
+    "max_delayed_bursts": 5,
+    "max_flow_queues": 1,
+    "jet_type": 1,
+    "converter_count_per_optical_node": 2,
+    "fdl_delays_s": [0.001, 0.01, 0.02]
+  },
+  "mitigation": {
+    "detection_delay_s": 0.25,
+    "rate_limit_cir_mbps_per_attacker": 4.0,
+    "tbf_bucket_bits": 32000,
+    "tbf_queue_packets": 0
+  }
+}

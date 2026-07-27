@@ -1,0 +1,943 @@
+{
+  "cells": {
+    "seed_101/S0": {
+      "actions": {},
+      "causal_chains": 0,
+      "created": 0,
+      "network": {
+        "legal_ack_receive_packets": 48322,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 25490440,
+            "legal_receive_packets": 24511
+          },
+          "101": {
+            "legal_receive_bytes": 25132680,
+            "legal_receive_packets": 24167
+          }
+        },
+        "legal_tcp_receive_bytes": 50623120,
+        "legal_tcp_receive_packets": 48678,
+        "optical_burst_pairs": 4917,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 19606
+      }
+    },
+    "seed_101/S1": {
+      "actions": {
+        "ALLOW": 60680
+      },
+      "causal_chains": 60680,
+      "created": 60680,
+      "network": {
+        "legal_ack_receive_packets": 22637,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 12814920,
+            "legal_receive_packets": 12323
+          },
+          "101": {
+            "legal_receive_bytes": 10818120,
+            "legal_receive_packets": 10403
+          }
+        },
+        "legal_tcp_receive_bytes": 23633040,
+        "legal_tcp_receive_packets": 22726,
+        "optical_burst_pairs": 2763,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 11029
+      }
+    },
+    "seed_101/S2_isolation": {
+      "actions": {
+        "ALLOW": 2,
+        "DROP_OVER_PROFILE": 18,
+        "QUARANTINE_INGRESS": 60660
+      },
+      "causal_chains": 60680,
+      "created": 60680,
+      "network": {
+        "legal_ack_receive_packets": 48322,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 25490440,
+            "legal_receive_packets": 24511
+          },
+          "101": {
+            "legal_receive_bytes": 25132680,
+            "legal_receive_packets": 24167
+          }
+        },
+        "legal_tcp_receive_bytes": 50623120,
+        "legal_tcp_receive_packets": 48678,
+        "optical_burst_pairs": 4917,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 19606
+      }
+    },
+    "seed_101/S2_rate_limit": {
+      "actions": {
+        "ALLOW": 2,
+        "DROP_OVER_PROFILE": 18,
+        "QUARANTINE_INGRESS": 60656,
+        "RELEASE": 4
+      },
+      "causal_chains": 60680,
+      "created": 60680,
+      "network": {
+        "legal_ack_receive_packets": 48322,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 25490440,
+            "legal_receive_packets": 24511
+          },
+          "101": {
+            "legal_receive_bytes": 25132680,
+            "legal_receive_packets": 24167
+          }
+        },
+        "legal_tcp_receive_bytes": 50623120,
+        "legal_tcp_receive_packets": 48678,
+        "optical_burst_pairs": 4917,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 19606
+      }
+    },
+    "seed_202/S0": {
+      "actions": {},
+      "causal_chains": 0,
+      "created": 0,
+      "network": {
+        "legal_ack_receive_packets": 48322,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 25490440,
+            "legal_receive_packets": 24511
+          },
+          "101": {
+            "legal_receive_bytes": 25132680,
+            "legal_receive_packets": 24167
+          }
+        },
+        "legal_tcp_receive_bytes": 50623120,
+        "legal_tcp_receive_packets": 48678,
+        "optical_burst_pairs": 4917,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 19606
+      }
+    },
+    "seed_202/S1": {
+      "actions": {
+        "ALLOW": 50520
+      },
+      "causal_chains": 50520,
+      "created": 50520,
+      "network": {
+        "legal_ack_receive_packets": 18517,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 9244600,
+            "legal_receive_packets": 8890
+          },
+          "101": {
+            "legal_receive_bytes": 10038120,
+            "legal_receive_packets": 9653
+          }
+        },
+        "legal_tcp_receive_bytes": 19282720,
+        "legal_tcp_receive_packets": 18543,
+        "optical_burst_pairs": 2427,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 9683
+      }
+    },
+    "seed_202/S2_isolation": {
+      "actions": {
+        "ALLOW": 2,
+        "DROP_OVER_PROFILE": 18,
+        "QUARANTINE_INGRESS": 50500
+      },
+      "causal_chains": 50520,
+      "created": 50520,
+      "network": {
+        "legal_ack_receive_packets": 48322,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 25490440,
+            "legal_receive_packets": 24511
+          },
+          "101": {
+            "legal_receive_bytes": 25132680,
+            "legal_receive_packets": 24167
+          }
+        },
+        "legal_tcp_receive_bytes": 50623120,
+        "legal_tcp_receive_packets": 48678,
+        "optical_burst_pairs": 4917,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 19606
+      }
+    },
+    "seed_202/S2_rate_limit": {
+      "actions": {
+        "ALLOW": 2,
+        "DROP_OVER_PROFILE": 18,
+        "QUARANTINE_INGRESS": 50496,
+        "RELEASE": 4
+      },
+      "causal_chains": 50520,
+      "created": 50520,
+      "network": {
+        "legal_ack_receive_packets": 48322,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 25490440,
+            "legal_receive_packets": 24511
+          },
+          "101": {
+            "legal_receive_bytes": 25132680,
+            "legal_receive_packets": 24167
+          }
+        },
+        "legal_tcp_receive_bytes": 50623120,
+        "legal_tcp_receive_packets": 48678,
+        "optical_burst_pairs": 4917,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 19606
+      }
+    },
+    "seed_303/S0": {
+      "actions": {},
+      "causal_chains": 0,
+      "created": 0,
+      "network": {
+        "legal_ack_receive_packets": 48322,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 25490440,
+            "legal_receive_packets": 24511
+          },
+          "101": {
+            "legal_receive_bytes": 25132680,
+            "legal_receive_packets": 24167
+          }
+        },
+        "legal_tcp_receive_bytes": 50623120,
+        "legal_tcp_receive_packets": 48678,
+        "optical_burst_pairs": 4917,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 19606
+      }
+    },
+    "seed_303/S1": {
+      "actions": {
+        "ALLOW": 54048
+      },
+      "causal_chains": 54048,
+      "created": 54048,
+      "network": {
+        "legal_ack_receive_packets": 20301,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 8705880,
+            "legal_receive_packets": 8372
+          },
+          "101": {
+            "legal_receive_bytes": 12472760,
+            "legal_receive_packets": 11994
+          }
+        },
+        "legal_tcp_receive_bytes": 21178640,
+        "legal_tcp_receive_packets": 20366,
+        "optical_burst_pairs": 2555,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 10192
+      }
+    },
+    "seed_303/S2_isolation": {
+      "actions": {
+        "ALLOW": 2,
+        "DROP_OVER_PROFILE": 18,
+        "QUARANTINE_INGRESS": 54028
+      },
+      "causal_chains": 54048,
+      "created": 54048,
+      "network": {
+        "legal_ack_receive_packets": 48322,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 25490440,
+            "legal_receive_packets": 24511
+          },
+          "101": {
+            "legal_receive_bytes": 25132680,
+            "legal_receive_packets": 24167
+          }
+        },
+        "legal_tcp_receive_bytes": 50623120,
+        "legal_tcp_receive_packets": 48678,
+        "optical_burst_pairs": 4917,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 19606
+      }
+    },
+    "seed_303/S2_rate_limit": {
+      "actions": {
+        "ALLOW": 2,
+        "DROP_OVER_PROFILE": 18,
+        "QUARANTINE_INGRESS": 54024,
+        "RELEASE": 4
+      },
+      "causal_chains": 54048,
+      "created": 54048,
+      "network": {
+        "legal_ack_receive_packets": 48322,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 25490440,
+            "legal_receive_packets": 24511
+          },
+          "101": {
+            "legal_receive_bytes": 25132680,
+            "legal_receive_packets": 24167
+          }
+        },
+        "legal_tcp_receive_bytes": 50623120,
+        "legal_tcp_receive_packets": 48678,
+        "optical_burst_pairs": 4917,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 19606
+      }
+    },
+    "seed_404/S0": {
+      "actions": {},
+      "causal_chains": 0,
+      "created": 0,
+      "network": {
+        "legal_ack_receive_packets": 48322,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 25490440,
+            "legal_receive_packets": 24511
+          },
+          "101": {
+            "legal_receive_bytes": 25132680,
+            "legal_receive_packets": 24167
+          }
+        },
+        "legal_tcp_receive_bytes": 50623120,
+        "legal_tcp_receive_packets": 48678,
+        "optical_burst_pairs": 4917,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 19606
+      }
+    },
+    "seed_404/S1": {
+      "actions": {
+        "ALLOW": 44960
+      },
+      "causal_chains": 44960,
+      "created": 44960,
+      "network": {
+        "legal_ack_receive_packets": 31018,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 16280200,
+            "legal_receive_packets": 15655
+          },
+          "101": {
+            "legal_receive_bytes": 15996280,
+            "legal_receive_packets": 15382
+          }
+        },
+        "legal_tcp_receive_bytes": 32276480,
+        "legal_tcp_receive_packets": 31037,
+        "optical_burst_pairs": 3414,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 13627
+      }
+    },
+    "seed_404/S2_isolation": {
+      "actions": {
+        "ALLOW": 2,
+        "DROP_OVER_PROFILE": 18,
+        "QUARANTINE_INGRESS": 44940
+      },
+      "causal_chains": 44960,
+      "created": 44960,
+      "network": {
+        "legal_ack_receive_packets": 48322,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 25490440,
+            "legal_receive_packets": 24511
+          },
+          "101": {
+            "legal_receive_bytes": 25132680,
+            "legal_receive_packets": 24167
+          }
+        },
+        "legal_tcp_receive_bytes": 50623120,
+        "legal_tcp_receive_packets": 48678,
+        "optical_burst_pairs": 4917,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 19606
+      }
+    },
+    "seed_404/S2_rate_limit": {
+      "actions": {
+        "ALLOW": 2,
+        "DROP_OVER_PROFILE": 18,
+        "QUARANTINE_INGRESS": 44936,
+        "RELEASE": 4
+      },
+      "causal_chains": 44960,
+      "created": 44960,
+      "network": {
+        "legal_ack_receive_packets": 48322,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 25490440,
+            "legal_receive_packets": 24511
+          },
+          "101": {
+            "legal_receive_bytes": 25132680,
+            "legal_receive_packets": 24167
+          }
+        },
+        "legal_tcp_receive_bytes": 50623120,
+        "legal_tcp_receive_packets": 48678,
+        "optical_burst_pairs": 4917,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 19606
+      }
+    },
+    "seed_505/S0": {
+      "actions": {},
+      "causal_chains": 0,
+      "created": 0,
+      "network": {
+        "legal_ack_receive_packets": 48322,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 25490440,
+            "legal_receive_packets": 24511
+          },
+          "101": {
+            "legal_receive_bytes": 25132680,
+            "legal_receive_packets": 24167
+          }
+        },
+        "legal_tcp_receive_bytes": 50623120,
+        "legal_tcp_receive_packets": 48678,
+        "optical_burst_pairs": 4917,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 19606
+      }
+    },
+    "seed_505/S1": {
+      "actions": {
+        "ALLOW": 43528
+      },
+      "causal_chains": 43528,
+      "created": 43528,
+      "network": {
+        "legal_ack_receive_packets": 18032,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 9770840,
+            "legal_receive_packets": 9396
+          },
+          "101": {
+            "legal_receive_bytes": 9097960,
+            "legal_receive_packets": 8749
+          }
+        },
+        "legal_tcp_receive_bytes": 18868800,
+        "legal_tcp_receive_packets": 18145,
+        "optical_burst_pairs": 2288,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 9126
+      }
+    },
+    "seed_505/S2_isolation": {
+      "actions": {
+        "ALLOW": 2,
+        "DROP_OVER_PROFILE": 18,
+        "QUARANTINE_INGRESS": 43508
+      },
+      "causal_chains": 43528,
+      "created": 43528,
+      "network": {
+        "legal_ack_receive_packets": 48322,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 25490440,
+            "legal_receive_packets": 24511
+          },
+          "101": {
+            "legal_receive_bytes": 25132680,
+            "legal_receive_packets": 24167
+          }
+        },
+        "legal_tcp_receive_bytes": 50623120,
+        "legal_tcp_receive_packets": 48678,
+        "optical_burst_pairs": 4917,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 19606
+      }
+    },
+    "seed_505/S2_rate_limit": {
+      "actions": {
+        "ALLOW": 2,
+        "DROP_OVER_PROFILE": 18,
+        "QUARANTINE_INGRESS": 43504,
+        "RELEASE": 4
+      },
+      "causal_chains": 43528,
+      "created": 43528,
+      "network": {
+        "legal_ack_receive_packets": 48322,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 25490440,
+            "legal_receive_packets": 24511
+          },
+          "101": {
+            "legal_receive_bytes": 25132680,
+            "legal_receive_packets": 24167
+          }
+        },
+        "legal_tcp_receive_bytes": 50623120,
+        "legal_tcp_receive_packets": 48678,
+        "optical_burst_pairs": 4917,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 19606
+      }
+    },
+    "seed_606/S0": {
+      "actions": {},
+      "causal_chains": 0,
+      "created": 0,
+      "network": {
+        "legal_ack_receive_packets": 48322,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 25490440,
+            "legal_receive_packets": 24511
+          },
+          "101": {
+            "legal_receive_bytes": 25132680,
+            "legal_receive_packets": 24167
+          }
+        },
+        "legal_tcp_receive_bytes": 50623120,
+        "legal_tcp_receive_packets": 48678,
+        "optical_burst_pairs": 4917,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 19606
+      }
+    },
+    "seed_606/S1": {
+      "actions": {
+        "ALLOW": 61608
+      },
+      "causal_chains": 61608,
+      "created": 61608,
+      "network": {
+        "legal_ack_receive_packets": 25557,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 14835640,
+            "legal_receive_packets": 14266
+          },
+          "101": {
+            "legal_receive_bytes": 11898680,
+            "legal_receive_packets": 11442
+          }
+        },
+        "legal_tcp_receive_bytes": 26734320,
+        "legal_tcp_receive_packets": 25708,
+        "optical_burst_pairs": 2996,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 11951
+      }
+    },
+    "seed_606/S2_isolation": {
+      "actions": {
+        "ALLOW": 2,
+        "DROP_OVER_PROFILE": 18,
+        "QUARANTINE_INGRESS": 61588
+      },
+      "causal_chains": 61608,
+      "created": 61608,
+      "network": {
+        "legal_ack_receive_packets": 48322,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 25490440,
+            "legal_receive_packets": 24511
+          },
+          "101": {
+            "legal_receive_bytes": 25132680,
+            "legal_receive_packets": 24167
+          }
+        },
+        "legal_tcp_receive_bytes": 50623120,
+        "legal_tcp_receive_packets": 48678,
+        "optical_burst_pairs": 4917,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 19606
+      }
+    },
+    "seed_606/S2_rate_limit": {
+      "actions": {
+        "ALLOW": 2,
+        "DROP_OVER_PROFILE": 18,
+        "QUARANTINE_INGRESS": 61584,
+        "RELEASE": 4
+      },
+      "causal_chains": 61608,
+      "created": 61608,
+      "network": {
+        "legal_ack_receive_packets": 48322,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 25490440,
+            "legal_receive_packets": 24511
+          },
+          "101": {
+            "legal_receive_bytes": 25132680,
+            "legal_receive_packets": 24167
+          }
+        },
+        "legal_tcp_receive_bytes": 50623120,
+        "legal_tcp_receive_packets": 48678,
+        "optical_burst_pairs": 4917,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 19606
+      }
+    },
+    "seed_707/S0": {
+      "actions": {},
+      "causal_chains": 0,
+      "created": 0,
+      "network": {
+        "legal_ack_receive_packets": 48322,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 25490440,
+            "legal_receive_packets": 24511
+          },
+          "101": {
+            "legal_receive_bytes": 25132680,
+            "legal_receive_packets": 24167
+          }
+        },
+        "legal_tcp_receive_bytes": 50623120,
+        "legal_tcp_receive_packets": 48678,
+        "optical_burst_pairs": 4917,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 19606
+      }
+    },
+    "seed_707/S1": {
+      "actions": {
+        "ALLOW": 62784
+      },
+      "causal_chains": 62784,
+      "created": 62784,
+      "network": {
+        "legal_ack_receive_packets": 28939,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 15032200,
+            "legal_receive_packets": 14455
+          },
+          "101": {
+            "legal_receive_bytes": 15281800,
+            "legal_receive_packets": 14695
+          }
+        },
+        "legal_tcp_receive_bytes": 30314000,
+        "legal_tcp_receive_packets": 29150,
+        "optical_burst_pairs": 3361,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 13411
+      }
+    },
+    "seed_707/S2_isolation": {
+      "actions": {
+        "ALLOW": 2,
+        "DROP_OVER_PROFILE": 18,
+        "QUARANTINE_INGRESS": 62764
+      },
+      "causal_chains": 62784,
+      "created": 62784,
+      "network": {
+        "legal_ack_receive_packets": 48322,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 25490440,
+            "legal_receive_packets": 24511
+          },
+          "101": {
+            "legal_receive_bytes": 25132680,
+            "legal_receive_packets": 24167
+          }
+        },
+        "legal_tcp_receive_bytes": 50623120,
+        "legal_tcp_receive_packets": 48678,
+        "optical_burst_pairs": 4917,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 19606
+      }
+    },
+    "seed_707/S2_rate_limit": {
+      "actions": {
+        "ALLOW": 2,
+        "DROP_OVER_PROFILE": 18,
+        "QUARANTINE_INGRESS": 62760,
+        "RELEASE": 4
+      },
+      "causal_chains": 62784,
+      "created": 62784,
+      "network": {
+        "legal_ack_receive_packets": 48322,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 25490440,
+            "legal_receive_packets": 24511
+          },
+          "101": {
+            "legal_receive_bytes": 25132680,
+            "legal_receive_packets": 24167
+          }
+        },
+        "legal_tcp_receive_bytes": 50623120,
+        "legal_tcp_receive_packets": 48678,
+        "optical_burst_pairs": 4917,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 19606
+      }
+    },
+    "seed_808/S0": {
+      "actions": {},
+      "causal_chains": 0,
+      "created": 0,
+      "network": {
+        "legal_ack_receive_packets": 48322,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 25490440,
+            "legal_receive_packets": 24511
+          },
+          "101": {
+            "legal_receive_bytes": 25132680,
+            "legal_receive_packets": 24167
+          }
+        },
+        "legal_tcp_receive_bytes": 50623120,
+        "legal_tcp_receive_packets": 48678,
+        "optical_burst_pairs": 4917,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 19606
+      }
+    },
+    "seed_808/S1": {
+      "actions": {
+        "ALLOW": 55392
+      },
+      "causal_chains": 55392,
+      "created": 55392,
+      "network": {
+        "legal_ack_receive_packets": 28632,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 13896520,
+            "legal_receive_packets": 13363
+          },
+          "101": {
+            "legal_receive_bytes": 16037880,
+            "legal_receive_packets": 15422
+          }
+        },
+        "legal_tcp_receive_bytes": 29934400,
+        "legal_tcp_receive_packets": 28785,
+        "optical_burst_pairs": 3339,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 13330
+      }
+    },
+    "seed_808/S2_isolation": {
+      "actions": {
+        "ALLOW": 2,
+        "DROP_OVER_PROFILE": 18,
+        "QUARANTINE_INGRESS": 55372
+      },
+      "causal_chains": 55392,
+      "created": 55392,
+      "network": {
+        "legal_ack_receive_packets": 48322,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 25490440,
+            "legal_receive_packets": 24511
+          },
+          "101": {
+            "legal_receive_bytes": 25132680,
+            "legal_receive_packets": 24167
+          }
+        },
+        "legal_tcp_receive_bytes": 50623120,
+        "legal_tcp_receive_packets": 48678,
+        "optical_burst_pairs": 4917,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 19606
+      }
+    },
+    "seed_808/S2_rate_limit": {
+      "actions": {
+        "ALLOW": 2,
+        "DROP_OVER_PROFILE": 18,
+        "QUARANTINE_INGRESS": 55368,
+        "RELEASE": 4
+      },
+      "causal_chains": 55392,
+      "created": 55392,
+      "network": {
+        "legal_ack_receive_packets": 48322,
+        "legal_tcp_per_flow": {
+          "100": {
+            "legal_receive_bytes": 25490440,
+            "legal_receive_packets": 24511
+          },
+          "101": {
+            "legal_receive_bytes": 25132680,
+            "legal_receive_packets": 24167
+          }
+        },
+        "legal_tcp_receive_bytes": 50623120,
+        "legal_tcp_receive_packets": 48678,
+        "optical_burst_pairs": 4917,
+        "optical_explicit_data_drops": 0,
+        "optical_successful_link_reservations": 19606
+      }
+    }
+  },
+  "detector_boundary": {
+    "guard_precedes_reservation": true,
+    "observation_fields": [
+      "claimed_burst_bytes",
+      "claimed_packet_count",
+      "claimed_reservation_cost",
+      "destination",
+      "event_time",
+      "packet_uid",
+      "range_valid",
+      "route_class",
+      "route_consistent",
+      "syntax_valid",
+      "trusted_ingress"
+    ],
+    "oracle_markers": []
+  },
+  "expected_selected_cells": 32,
+  "full_matrix_complete": true,
+  "network_outcome_gate": {
+    "complete_seed_quartets": 8,
+    "per_seed": {
+      "101": {
+        "isolation_recovery_fraction_of_s0": 1.0,
+        "legal_tcp_receive_bytes": {
+          "S0": 50623120,
+          "S1": 23633040,
+          "S2_isolation": 50623120,
+          "S2_rate_limit": 50623120
+        },
+        "rate_limit_recovery_fraction_of_s0": 1.0,
+        "s1_remaining_fraction_of_s0": 0.46684281806415723
+      },
+      "202": {
+        "isolation_recovery_fraction_of_s0": 1.0,
+        "legal_tcp_receive_bytes": {
+          "S0": 50623120,
+          "S1": 19282720,
+          "S2_isolation": 50623120,
+          "S2_rate_limit": 50623120
+        },
+        "rate_limit_recovery_fraction_of_s0": 1.0,
+        "s1_remaining_fraction_of_s0": 0.3809073798691191
+      },
+      "303": {
+        "isolation_recovery_fraction_of_s0": 1.0,
+        "legal_tcp_receive_bytes": {
+          "S0": 50623120,
+          "S1": 21178640,
+          "S2_isolation": 50623120,
+          "S2_rate_limit": 50623120
+        },
+        "rate_limit_recovery_fraction_of_s0": 1.0,
+        "s1_remaining_fraction_of_s0": 0.4183590422715945
+      },
+      "404": {
+        "isolation_recovery_fraction_of_s0": 1.0,
+        "legal_tcp_receive_bytes": {
+          "S0": 50623120,
+          "S1": 32276480,
+          "S2_isolation": 50623120,
+          "S2_rate_limit": 50623120
+        },
+        "rate_limit_recovery_fraction_of_s0": 1.0,
+        "s1_remaining_fraction_of_s0": 0.6375837759505933
+      },
+      "505": {
+        "isolation_recovery_fraction_of_s0": 1.0,
+        "legal_tcp_receive_bytes": {
+          "S0": 50623120,
+          "S1": 18868800,
+          "S2_isolation": 50623120,
+          "S2_rate_limit": 50623120
+        },
+        "rate_limit_recovery_fraction_of_s0": 1.0,
+        "s1_remaining_fraction_of_s0": 0.37273087869732247
+      },
+      "606": {
+        "isolation_recovery_fraction_of_s0": 1.0,
+        "legal_tcp_receive_bytes": {
+          "S0": 50623120,
+          "S1": 26734320,
+          "S2_isolation": 50623120,
+          "S2_rate_limit": 50623120
+        },
+        "rate_limit_recovery_fraction_of_s0": 1.0,
+        "s1_remaining_fraction_of_s0": 0.5281049449342514
+      },
+      "707": {
+        "isolation_recovery_fraction_of_s0": 1.0,
+        "legal_tcp_receive_bytes": {
+          "S0": 50623120,
+          "S1": 30314000,
+          "S2_isolation": 50623120,
+          "S2_rate_limit": 50623120
+        },
+        "rate_limit_recovery_fraction_of_s0": 1.0,
+        "s1_remaining_fraction_of_s0": 0.5988172992893366
+      },
+      "808": {
+        "isolation_recovery_fraction_of_s0": 1.0,
+        "legal_tcp_receive_bytes": {
+          "S0": 50623120,
+          "S1": 29934400,
+          "S2_isolation": 50623120,
+          "S2_rate_limit": 50623120
+        },
+        "rate_limit_recovery_fraction_of_s0": 1.0,
+        "s1_remaining_fraction_of_s0": 0.5913187492197242
+      }
+    }
+  },
+  "schema": "nobs-direct-bhp-validation-v1",
+  "selected_cells_complete": true,
+  "valid": true
+}

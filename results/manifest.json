@@ -1,0 +1,80 @@
+{
+  "project": "obs-bhp-reproduction-mvp",
+  "classification": "reproduced_mvp_with_explicit_assumptions",
+  "source_pdf": "deliverables/LuanVan_ThS_NguyenQuangTin_CAPNHAT_KETQUA_NS2_20260726.pdf",
+  "python": "3.12.12",
+  "numpy": "2.2.6",
+  "config": {
+    "simulation": {
+      "duration_s": 5.0,
+      "dt_s": 0.001,
+      "wavelength_slots": 40,
+      "burst_duration_s": 0.004,
+      "offset_s": 0.00025,
+      "legal_rate_mbps": 70.0,
+      "attacker_rate_mbps": 12.0,
+      "attacker_count": 8,
+      "legal_flow_count": 4,
+      "seed_count": 8,
+      "seeds": [
+        101,
+        202,
+        303,
+        404,
+        505,
+        606,
+        707,
+        808
+      ],
+      "rate_jitter": 0.2,
+      "attack_start_s": 1.0,
+      "attack_stop_s": 4.5,
+      "window_s": 0.25
+    },
+    "defense": {
+      "detect_delay_s": 0.25,
+      "cir_mbps": 4.0,
+      "isolation_rate_mbps": 0.0,
+      "threshold_mbps": 4.0
+    },
+    "sweep": {
+      "rates_mbps": [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45,
+        50
+      ],
+      "seeds": [
+        101,
+        202,
+        303
+      ]
+    },
+    "assumptions": {
+      "model": "discrete-time shared reservation approximation; not NS-2/nOBS",
+      "legal_packet_bytes": 1040,
+      "burst_bytes": 12500,
+      "reservation_scale": 0.58,
+      "background_capacity_mbps": 100.0
+    }
+  },
+  "reported_targets": {
+    "S0_legal_packets": 82568,
+    "S1_legal_packets": 38281,
+    "S0_bursts": 40462,
+    "S1_bursts": 64839,
+    "S1_reduction_percent": -53.6
+  },
+  "notes": [
+    "Not NS-2.35+nOBS bit-for-bit reproduction.",
+    "Missing thesis artifacts are documented in README and thesis_requirements.md.",
+    "S2 isolation uses n=6 as reported."
+  ],
+  "config_sha256": "a999f8b78dc636e157d9d37850962bad1edb3cd5bf2839e324622f61f294503b"
+}

@@ -1,0 +1,6 @@
+{
+  "simulation": {"duration_s": 5.0, "dt_s": 0.001, "wavelength_slots": 40, "burst_duration_s": 0.004, "offset_s": 0.00025, "legal_rate_mbps": 70.0, "attacker_rate_mbps": 12.0, "attacker_count": 8, "legal_flow_count": 4, "seed_count": 8, "seeds": [101, 202, 303, 404, 505, 606, 707, 808], "rate_jitter": 0.20, "attack_start_s": 1.0, "attack_stop_s": 4.5, "window_s": 0.25},
+  "defense": {"detect_delay_s": 0.25, "cir_mbps": 4.0, "isolation_rate_mbps": 0.0, "threshold_mbps": 4.0},
+  "sweep": {"rates_mbps": [5, 10, 15, 20, 25, 30, 35, 40, 45, 50], "seeds": [101, 202, 303]},
+  "assumptions": {"model": "discrete-time shared reservation approximation; not NS-2/nOBS", "legal_packet_bytes": 1040, "burst_bytes": 12500, "reservation_scale": 0.58, "background_capacity_mbps": 100.0}
+}
