@@ -3,11 +3,16 @@ from docx import Document
 from docx.enum.text import WD_COLOR_INDEX
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
-import zipfile, os
+import hashlib, zipfile, os
 
 base=Path(__file__).resolve().parents[1]
 src=base/'deliverables/LuanVan_ThS_NguyenQuangTin_CAPNHAT_KETQUA_NS2_20260726.docx'
-# base is the repository root, resolved from this script location
+original=base/'deliverables/LuanVan_ThS_NguyenQuangTin_BAN_GOC_01072026.docx'
+original_sha256='a5cb463bd902422cee6e3e243157b238de02aedab4b881c957cd0b650480637e'
+# The stable updated source is used to rebuild content; the immutable original is
+# the sole comparison baseline for the review/highlight copy.
+assert original.is_file(), f'missing original DOCX: {original}'
+assert hashlib.sha256(original.read_bytes()).hexdigest() == original_sha256, 'original DOCX hash mismatch'
 out=base/'LuanVan_ThS_NguyenQuangTin_CAPNHAT_KETQUA_NS2_20260726.docx'
 high=base/'LuanVan_ThS_NguyenQuangTin_CAPNHAT_KETQUA_NS2_20260726_HIGHLIGHT.docx'
 
@@ -101,23 +106,51 @@ with zipfile.ZipFile(out) as z:
     media = [n for n in z.namelist() if n.startswith("word/media/")]
 if "word/media/image26.png" in media and "word/media/image29.png" in media:
     replace_media(out, {"word/media/image26.png": fig1.read_bytes(), "word/media/image29.png": fig2.read_bytes()})
-# Create the review copy. Differences against the packaged baseline are highlighted;
-# the explicitly rebuilt thesis sections/tables are also marked unconditionally so
-# the review artifact remains useful when the packaged baseline is already the
-# corrected final document.
-new=Document(out); old=Document(src)
+# Create the review copy against the immutable original DOCX, not against the
+# already-updated packaged source. Every changed paragraph/cell is marked. A
+# changed embedded image is marked by shading its containing drawing paragraph.
+new=Document(out); old=Document(original)
 oldp=[p.text for p in old.paragraphs]; oldt=[[[c.text for c in r.cells] for r in t.rows] for t in old.tables]
-explicit_paragraphs = set(repl)
+
+def shade_paragraph(p):
+    for r in p.runs:
+        r.font.highlight_color=WD_COLOR_INDEX.YELLOW
+    pPr=p._p.get_or_add_pPr()
+    shd=pPr.find(qn('w:shd'))
+    if shd is None:
+        shd=OxmlElement('w:shd'); pPr.append(shd)
+    shd.set(qn('w:fill'),'FFF2CC')
+
 for i,p in enumerate(new.paragraphs):
-    if p.text and (i in explicit_paragraphs or i>=len(oldp) or p.text!=oldp[i]):
-        for r in p.runs: r.font.highlight_color=WD_COLOR_INDEX.YELLOW
+    ov=oldp[i] if i<len(oldp) else None
+    if p.text != ov:
+        shade_paragraph(p)
 for ti,t in enumerate(new.tables):
     for ri,row in enumerate(t.rows):
         for ci,c in enumerate(row.cells):
             ov=oldt[ti][ri][ci] if ti<len(oldt) and ri<len(oldt[ti]) and ci<len(oldt[ti][ri]) else None
-            if c.text and (ti in {3, 4, 7} or c.text!=ov):
+            if c.text != ov:
                 for p in c.paragraphs:
-                    for r in p.runs: r.font.highlight_color=WD_COLOR_INDEX.YELLOW
+                    shade_paragraph(p)
                 tcPr=c._tc.get_or_add_tcPr(); shd=OxmlElement('w:shd'); shd.set(qn('w:fill'),'FFF2CC'); tcPr.append(shd)
+
+def media_hashes(path):
+    with zipfile.ZipFile(path) as z:
+        return {
+            n: hashlib.sha256(z.read(n)).hexdigest()
+            for n in z.namelist()
+            if n.startswith("word/media/")
+        }
+
+old_media, new_media = media_hashes(original), media_hashes(out)
+changed_media={n for n in set(old_media)|set(new_media) if old_media.get(n)!=new_media.get(n)}
+for p in new.paragraphs:
+    for blip in p._p.xpath('.//a:blip'):
+        rid=blip.get(qn('r:embed'))
+        if rid and rid in new.part.rels:
+            target='word/'+str(new.part.rels[rid].target_ref).replace('\\','/').lstrip('/')
+            if target in changed_media:
+                shade_paragraph(p)
+                break
 new.save(high)
 print(out); print(high)

@@ -10,6 +10,8 @@ BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DIRECT="$BASE/experiments/direct_bhp"
 CANONICAL="$BASE/evidence/direct_bhp_matrix"
 SOURCE_DOCX="$BASE/deliverables/LuanVan_ThS_NguyenQuangTin_CAPNHAT_KETQUA_NS2_20260726.docx"
+ORIGINAL_DOCX="$BASE/deliverables/LuanVan_ThS_NguyenQuangTin_BAN_GOC_01072026.docx"
+ORIGINAL_SHA256="a5cb463bd902422cee6e3e243157b238de02aedab4b881c957cd0b650480637e"
 NORMAL_DOCX="$BASE/LuanVan_ThS_NguyenQuangTin_CAPNHAT_KETQUA_NS2_20260726.docx"
 HIGHLIGHT_DOCX="$BASE/LuanVan_ThS_NguyenQuangTin_CAPNHAT_KETQUA_NS2_20260726_HIGHLIGHT.docx"
 MODE="${1:---full}"
@@ -35,7 +37,13 @@ require_file "$DIRECT/runner.py"
 require_file "$DIRECT/validator.py"
 require_file "$DIRECT/analyze_results.py"
 require_file "$SOURCE_DOCX"
+require_file "$ORIGINAL_DOCX"
+[[ "$(sha256sum "$ORIGINAL_DOCX" | awk '{print $1}')" == "$ORIGINAL_SHA256" ]] || {
+  echo "Original DOCX hash mismatch: $ORIGINAL_DOCX" >&2
+  exit 4
+}
 require_file "$BASE/docx_work/rebuild_direct_docx.py"
+require_file "$BASE/docx_work/audit_docx_highlights.py"
 require_file "$BASE/docx_work/validate_updated_docx.py"
 require_file "$BASE/docx_work/final_integrity_check.py"
 command -v python3 >/dev/null
@@ -121,6 +129,18 @@ mkdir -p "$BACKUP"
 python3 "$BASE/docx_work/rebuild_direct_docx.py"
 python3 "$BASE/docx_work/validate_updated_docx.py" "$NORMAL_DOCX"
 python3 "$BASE/docx_work/final_integrity_check.py"
+python3 "$BASE/docx_work/audit_docx_highlights.py" \
+  "$ORIGINAL_DOCX" "$NORMAL_DOCX" "$HIGHLIGHT_DOCX" \
+  > "$RUN_ROOT/highlight_audit.json"
+python3 - "$RUN_ROOT/highlight_audit.json" <<'PY'
+import json, sys
+result = json.load(open(sys.argv[1], encoding="utf-8"))
+assert result.get("complete") is True, result
+assert not result.get("missing_paragraph_marks"), result
+assert not result.get("missing_cell_marks"), result
+assert not result.get("missing_media_marks"), result
+print("HIGHLIGHT_AUDIT_GATE_OK")
+PY
 require_file "$BASE/docx_work/figure_3_4_direct.png"
 require_file "$BASE/docx_work/figure_3_7_direct.png"
 
@@ -167,7 +187,8 @@ mkdir -p "$DELIVERY"
 cp -a "$NORMAL_DOCX" "$HIGHLIGHT_DOCX" "$PDF" \
   "$BASE/docx_work/figure_3_4_direct.png" "$BASE/docx_work/figure_3_7_direct.png" \
   "$RUN_ROOT/validation.rerun.json" "$RUN_ROOT/analysis/summary.json" \
-  "$RUN_ROOT/analysis/REPORT.md" "$RUN_ROOT/pdfinfo.txt" "$DELIVERY/"
+  "$RUN_ROOT/analysis/REPORT.md" "$RUN_ROOT/pdfinfo.txt" \
+  "$RUN_ROOT/highlight_audit.json" "$DELIVERY/"
 (
   cd "$DELIVERY"
   sha256sum ./* > SHA256SUMS.txt

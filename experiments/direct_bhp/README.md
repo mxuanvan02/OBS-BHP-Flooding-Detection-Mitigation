@@ -74,6 +74,8 @@ Each cell under `seed_<seed>/<label>/` retains:
 - `command.txt`
 - `run.json`, including input and artifact SHA-256 values
 
-## Execution status for this implementation session
+## Execution status for the retained evidence
 
-Only a limited native smoke was run during this implementation session. The complete 32-cell matrix was **not** run, and no full-matrix completion claim is made here.
+The retained canonical evidence contains a completed and validated 32-cell matrix generated on 2026-07-26: four configured scenarios × eight fixed seeds. During the later implementation session, only limited native smoke execution was performed locally; the canonical evidence was reused rather than all 32 native cells being rerun. Therefore `--reuse-canonical` validates the retained completion, validation and summary artifacts, but does not regenerate raw traces excluded from the repository.
+
+The 32-cell evidence is limited to the declared seven-node topology, traffic profile and five-second runs. It does not establish that the separate ML/UCI, reconstructed UDP/CBR, online-detector, PSO-SVM deployment or end-to-end latency branches have been run completely.
