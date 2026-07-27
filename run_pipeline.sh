@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Reproduce the native direct-BHP thesis matrix, figures, DOCX and PDF.
+# Run the OBS/BHP experiment, validation, figures, DOCX and PDF pipeline.
 # Usage:
-#   bash reproduce_thesis.sh --full             # rerun all 32 NS-2.35+nOBS cells
-#   bash reproduce_thesis.sh --reuse-canonical  # reuse the validated canonical 32-cell matrix
+#   bash run_pipeline.sh --full             # rerun all 32 NS-2.35+nOBS cells
+#   bash run_pipeline.sh --reuse-canonical  # reuse the validated canonical 32-cell matrix
 set -Eeuo pipefail
 IFS=$'\n\t'
 
@@ -19,7 +19,7 @@ LOG="$RUN_ROOT/pipeline.log"
 
 case "$MODE" in
   --full|--reuse-canonical) ;;
-  *) echo "Usage: bash reproduce_thesis.sh [--full|--reuse-canonical]" >&2; exit 2 ;;
+  *) echo "Usage: bash run_pipeline.sh [--full|--reuse-canonical]" >&2; exit 2 ;;
 esac
 
 mkdir -p "$RUN_ROOT"
