@@ -24,7 +24,7 @@ required = [
     "50,07%",
     "1000 Mb/s",
     "12 Mb/s/nguồn",
-    "control-only BHP",
+    "BHP điều khiển trực tiếp",
     "100% mức S0",
 ]
 for needle in required:

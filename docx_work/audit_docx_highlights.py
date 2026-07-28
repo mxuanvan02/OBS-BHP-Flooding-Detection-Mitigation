@@ -79,6 +79,7 @@ def main() -> int:
                 missing_paragraph_marks.append(i)
 
     changed_cells = []
+    deleted_cells = []
     missing_cell_marks = []
     max_t = max(len(original.tables), len(normal.tables))
     for ti in range(max_t):
@@ -96,6 +97,13 @@ def main() -> int:
                 if old != new:
                     key = [ti, ri, ci]
                     changed_cells.append(key)
+                    # A removed row/cell cannot be highlighted in a clean review
+                    # copy because it no longer exists. Record it explicitly as
+                    # a structural deletion; only surviving/new cells require a
+                    # visible yellow mark.
+                    if new is None:
+                        deleted_cells.append(key)
+                        continue
                     marked = bool(
                         review_t
                         and ri < len(review_t.rows)
@@ -124,6 +132,7 @@ def main() -> int:
         "changed_paragraphs": changed_paragraphs,
         "missing_paragraph_marks": missing_paragraph_marks,
         "changed_cells": changed_cells,
+        "deleted_cells": deleted_cells,
         "missing_cell_marks": missing_cell_marks,
         "changed_media": changed_media,
         "changed_media_paragraphs": media_paragraphs,

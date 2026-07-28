@@ -46,6 +46,8 @@ require_file "$BASE/docx_work/rebuild_direct_docx.py"
 require_file "$BASE/docx_work/audit_docx_highlights.py"
 require_file "$BASE/docx_work/validate_updated_docx.py"
 require_file "$BASE/docx_work/final_integrity_check.py"
+require_file "$BASE/docx_work/build_figure_lineage_manifest.py"
+require_file "$BASE/docx_work/audit_chapter3_lists.py"
 command -v python3 >/dev/null
 command -v libreoffice >/dev/null
 command -v pdfinfo >/dev/null
@@ -142,7 +144,13 @@ assert not result.get("missing_media_marks"), result
 print("HIGHLIGHT_AUDIT_GATE_OK")
 PY
 require_file "$BASE/docx_work/figure_3_4_direct.png"
+require_file "$BASE/docx_work/figure_3_5_scope.png"
+require_file "$BASE/docx_work/figure_3_6_evidence_gap.png"
 require_file "$BASE/docx_work/figure_3_7_direct.png"
+python3 "$BASE/docx_work/build_figure_lineage_manifest.py" \
+  "$NORMAL_DOCX" "$RUN_ROOT/figure_lineage"
+require_file "$RUN_ROOT/figure_lineage/FIGURE_LINEAGE.json"
+require_file "$RUN_ROOT/figure_lineage/FIGURE_LINEAGE.md"
 
 # Render in an isolated LibreOffice profile so a desktop instance cannot hijack the job.
 echo "[5/7] Render final DOCX to PDF"
@@ -168,7 +176,7 @@ assert pdf.stat().st_size > 1_000_000, pdf.stat().st_size
 pages = int(re.search(r"^Pages:\s+(\d+)", info, re.M).group(1))
 assert pages >= 60, pages
 assert "A4" in info
-required = ["48.678", "24.307,5", "50,07%", "control-only BHP", "100% mức S0"]
+required = ["48.678", "24.307,5", "50,07%", "BHP điều khiển trực tiếp", "100% mức S0"]
 missing = [x for x in required if x not in text]
 assert not missing, f"missing rendered content: {missing}"
 obsolete = ["82.568", "38.281", "3.426", "316,25", "90,77%", "40 Mb/s/nguồn"]
@@ -179,20 +187,63 @@ hits = [p for p in meta if re.search(p, text, re.I)]
 assert not hits, f"metadiscourse remains: {hits}"
 print(f"FINAL_PDF_GATE_OK pages={pages} bytes={pdf.stat().st_size}")
 PY
+python3 "$BASE/docx_work/audit_chapter3_lists.py" "$NORMAL_DOCX" "$PDF"
 
 # Copy a self-contained delivery set without altering the validated matrix.
 echo "[7/7] Package deliverables"
 DELIVERY="$RUN_ROOT/deliverables"
 mkdir -p "$DELIVERY"
 cp -a "$NORMAL_DOCX" "$HIGHLIGHT_DOCX" "$PDF" \
-  "$BASE/docx_work/figure_3_4_direct.png" "$BASE/docx_work/figure_3_7_direct.png" \
+  "$BASE/docx_work/figure_3_4_direct.png" \
+  "$BASE/docx_work/figure_3_5_scope.png" \
+  "$BASE/docx_work/figure_3_6_evidence_gap.png" \
+  "$BASE/docx_work/figure_3_7_direct.png" \
+  "$RUN_ROOT/figure_lineage/FIGURE_LINEAGE.json" \
+  "$RUN_ROOT/figure_lineage/FIGURE_LINEAGE.md" \
   "$RUN_ROOT/validation.rerun.json" "$RUN_ROOT/analysis/summary.json" \
   "$RUN_ROOT/analysis/REPORT.md" "$RUN_ROOT/pdfinfo.txt" \
   "$RUN_ROOT/highlight_audit.json" "$DELIVERY/"
 (
   cd "$DELIVERY"
   sha256sum ./* > SHA256SUMS.txt
+  sha256sum -c SHA256SUMS.txt
 )
+
+FINAL_ZIP="$BASE/deliverables/LuanVan_ThS_NguyenQuangTin_FINAL_NATIVE_DIRECT_BHP_${STAMP}.zip"
+mkdir -p "$BASE/deliverables"
+python3 - "$DELIVERY" "$FINAL_ZIP" <<'PY'
+from pathlib import Path
+import sys, zipfile
+source, output = map(Path, sys.argv[1:])
+with zipfile.ZipFile(output, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
+    for path in sorted(source.iterdir()):
+        if path.is_file():
+            archive.write(path, path.name)
+with zipfile.ZipFile(output) as archive:
+    bad = archive.testzip()
+    assert bad is None, bad
+    names = set(archive.namelist())
+    required = {
+        "LuanVan_ThS_NguyenQuangTin_CAPNHAT_KETQUA_NS2_20260726.docx",
+        "LuanVan_ThS_NguyenQuangTin_CAPNHAT_KETQUA_NS2_20260726_HIGHLIGHT.docx",
+        "LuanVan_ThS_NguyenQuangTin_CAPNHAT_KETQUA_NS2_20260726.pdf",
+        "FIGURE_LINEAGE.json", "FIGURE_LINEAGE.md", "SHA256SUMS.txt",
+    }
+    assert required <= names, sorted(required - names)
+print(f"ZIP_STRUCTURE_OK files={len(names)} bytes={output.stat().st_size}")
+PY
+TMP_EXTRACT="$RUN_ROOT/zip_verify"
+mkdir -p "$TMP_EXTRACT"
+unzip -q "$FINAL_ZIP" -d "$TMP_EXTRACT"
+(
+  cd "$TMP_EXTRACT"
+  sha256sum -c SHA256SUMS.txt
+)
+cmp "$DELIVERY/${NORMAL_DOCX##*/}" "$TMP_EXTRACT/${NORMAL_DOCX##*/}"
+cmp "$DELIVERY/${HIGHLIGHT_DOCX##*/}" "$TMP_EXTRACT/${HIGHLIGHT_DOCX##*/}"
+cmp "$DELIVERY/${PDF##*/}" "$TMP_EXTRACT/${PDF##*/}"
+cmp "$DELIVERY/FIGURE_LINEAGE.json" "$TMP_EXTRACT/FIGURE_LINEAGE.json"
+echo "ZIP_FRESHNESS_GATE_OK sha256=$(sha256sum "$FINAL_ZIP" | awk '{print $1}')"
 
 cat <<EOF
 PIPELINE_OK
@@ -201,5 +252,6 @@ matrix=$MATRIX
 run_root=$RUN_ROOT
 deliverables=$DELIVERY
 pdf=$PDF
+zip=$FINAL_ZIP
 log=$LOG
 EOF
