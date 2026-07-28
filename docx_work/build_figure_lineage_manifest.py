@@ -25,7 +25,7 @@ def main() -> int:
     generator = base / "docx_work/rebuild_direct_docx.py"
     canonical_summary = base / "evidence/direct_bhp_matrix/summary.json"
     canonical_per_seed = base / "evidence/direct_bhp_matrix/per_seed.csv"
-    uci_root = base.parent / "obs_repro/source_only/uci404/outputs"
+    uci_root = base / "source_only/uci404/outputs"
     uci_manifest_path = uci_root / "output_manifest.json"
     original_docx = base / "deliverables/LuanVan_ThS_NguyenQuangTin_BAN_GOC_01072026.docx"
 
@@ -68,14 +68,14 @@ def main() -> int:
                 uci_root / "summary/single_feature_summary.csv",
             ]
             category = "experimental-result"
-            generator_path = base.parent / "obs_repro/source_only/uci404/pipeline.py"
+            generator_path = base / "source_only/uci404/pipeline.py"
         elif number == "3.2":
             sources = [
                 uci_root / "raw/rf_oof_permutation_fold.csv",
                 uci_root / "summary/rf_permutation_importance_summary.csv",
             ]
             category = "experimental-result"
-            generator_path = base.parent / "obs_repro/source_only/uci404/pipeline.py"
+            generator_path = base / "source_only/uci404/pipeline.py"
         elif number in {"3.4", "3.7"}:
             sources = [canonical_summary]
             category = "experimental-result"
@@ -125,7 +125,7 @@ def main() -> int:
 
     payload = {
         "schema": "thesis-figure-lineage-v1",
-        "document": str(docx),
+        "document": str(docx.relative_to(base)),
         "document_sha256": sha256(docx),
         "policy": "Hình 3.1–3.2 and 3.4–3.7 must be generated from declared experiment outputs; Hình 3.3 is explicitly conceptual architecture.",
         "all_gates_pass": True,

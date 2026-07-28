@@ -1,0 +1,23 @@
+position,name,arff_type,nominal_values,role
+1,Node,numeric,,predictor
+2,Utilised Bandwith Rate,numeric,,predictor
+3,Packet Drop Rate,numeric,,predictor
+4,Full_Bandwidth,numeric,,predictor
+5,Average_Delay_Time_Per_Sec,numeric,,predictor
+6,Percentage_Of_Lost_Pcaket_Rate,numeric,,predictor
+7,Percentage_Of_Lost_Byte_Rate,numeric,,predictor
+8,Packet Received  Rate,numeric,,predictor
+9,of Used_Bandwidth,numeric,,predictor
+10,Lost_Bandwidth,numeric,,predictor
+11,Packet Size_Byte,numeric,,predictor
+12,Packet_Transmitted,numeric,,predictor
+13,Packet_Received,numeric,,predictor
+14,Packet_lost,numeric,,predictor
+15,Transmitted_Byte,numeric,,predictor
+16,Received_Byte,numeric,,predictor
+17,10-Run-AVG-Drop-Rate,numeric,,predictor
+18,10-Run-AVG-Bandwith-Use,numeric,,predictor
+19,10-Run-Delay,numeric,,predictor
+20,Node Status,nominal,B|NB|P NB,predictor
+21,Flood Status,numeric,,predictor
+22,Class,nominal,NB-No Block|Block|No Block|NB-Wait,target

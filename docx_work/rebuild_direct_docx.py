@@ -256,7 +256,7 @@ doc.save(out)
 with zipfile.ZipFile(out) as z:
     media = [n for n in z.namelist() if n.startswith("word/media/")]
 media_updates={}
-uci_figs=base.parent/'obs_repro/source_only/uci404/outputs/figures'
+uci_figs=base/'source_only/uci404/outputs/figures'
 for name, source in {
     'word/media/image24.png': uci_figs/'single_feature_audit.png',
     'word/media/image25.png': uci_figs/'rf_oof_permutation_importance.png',

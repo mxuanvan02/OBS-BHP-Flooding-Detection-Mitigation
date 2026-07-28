@@ -16,3 +16,12 @@ docx_work/page_checks/
 docx_work/audits/
 /LuanVan_ThS_NguyenQuangTin_CAPNHAT_KETQUA_NS2_20260726.docx
 /LuanVan_ThS_NguyenQuangTin_CAPNHAT_KETQUA_NS2_20260726_HIGHLIGHT.docx
+.venv/
+_backups/
+docx_work/final_render_*/
+docx_work/render_*/
+docx_work/*_extracted.txt
+docx_work/FIGURE_LINEAGE.json
+/LuanVan_ThS_NguyenQuangTin_FINAL_NATIVE_DIRECT_BHP_*.zip
+/deliverables/LuanVan_ThS_NguyenQuangTin_FINAL_NATIVE_DIRECT_BHP_*.zip
+/deliverables/final_native_direct_bhp_*/

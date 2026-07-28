@@ -1,0 +1,106 @@
+{
+  "source_only_guarantee": "Reads the configured official ARFF directly; does not use results/window_dataset.csv or simulator.py.",
+  "dataset": {
+    "path": "../../data/uci404/extracted/OBS-Network-DataSet_2_Aug27.arff",
+    "uci_id": 404,
+    "landing_page_url": "https://archive.ics.uci.edu/dataset/404/burst+header+packet+bhp+flooding+attack+on+optical+burst+switching+obs+network",
+    "download_url": "https://archive.ics.uci.edu/static/public/404/burst+header+packet+bhp+flooding+attack+on+optical+burst+switching+obs+network.zip",
+    "doi": "10.24432/C51C81",
+    "expected_sha256": "c573b83a9b8db30658be8dd53ef5769a94bc03a0695e78d6c130306c60cc69de",
+    "target": "Class",
+    "resolved_path": "data/uci404/extracted/OBS-Network-DataSet_2_Aug27.arff",
+    "sha256": "c573b83a9b8db30658be8dd53ef5769a94bc03a0695e78d6c130306c60cc69de",
+    "bytes": 183659,
+    "relation": "'adellll-weka.filters.unsupervised.attribute.Remove-R1-weka.filters.unsupervised.attribute.Remove-R21,23'",
+    "rows": 1075,
+    "attributes_total_including_target": 22,
+    "predictors": 21,
+    "target_class_counts": {
+      "NB-No Block": 500,
+      "Block": 120,
+      "No Block": 155,
+      "NB-Wait": 300
+    },
+    "missing_cells": 15,
+    "missing_by_column": {
+      "Packet_lost": 15
+    },
+    "exact_duplicate_rows": 860,
+    "unique_rows": 215,
+    "unique_predictor_vectors": 215
+  },
+  "evaluation": {
+    "splitter": "StratifiedGroupKFold",
+    "group_definition": "identical vectors across all 21 original predictors (target excluded)",
+    "rationale": "the ARFF contains five exact copies of each of 215 unique predictor/target rows; grouping prevents copies crossing train/test",
+    "n_splits": 5,
+    "seeds": [
+      17,
+      42,
+      73,
+      101,
+      2026
+    ],
+    "zero_division": 0
+  },
+  "models": {
+    "DecisionTree": {
+      "criterion": "gini",
+      "splitter": "best",
+      "max_depth": null,
+      "min_samples_split": 2,
+      "random_state": "cv_seed"
+    },
+    "SVM-RBF": {
+      "C": 1.0,
+      "kernel": "rbf",
+      "gamma": "scale"
+    },
+    "KNN": {
+      "n_neighbors": 5,
+      "weights": "uniform",
+      "metric": "minkowski",
+      "p": 2
+    },
+    "GaussianNB": {
+      "var_smoothing": 1e-09
+    }
+  },
+  "single_feature_audit": {
+    "model": "DecisionTree",
+    "all_predictors": true,
+    "evaluation": "same repeated duplicate-group-aware stratified five-fold partitions as main benchmark"
+  },
+  "random_forest_importance": {
+    "n_estimators": 200,
+    "criterion": "gini",
+    "max_features": "sqrt",
+    "permutation_repeats": 10,
+    "scoring": "f1_macro",
+    "cv_seed": 42,
+    "random_state": 42,
+    "n_jobs": 1,
+    "evaluation": "duplicate-group-aware out-of-fold: fit on each training fold and permute original columns only on the corresponding unseen test fold"
+  },
+  "versions": {
+    "python": "3.12.12",
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "scipy": "1.16.2",
+    "scikit_learn": "1.7.2",
+    "matplotlib": "3.10.7",
+    "platform": "Linux-6.17.0-35-generic-x86_64-with-glibc2.39"
+  },
+  "limitations": [
+    "The UCI target is a four-class policy label, not an independently observed physical attack ground truth.",
+    "Node Status and Flood Status are documented by UCI as derived classifications/percentages related to the same measurements used to define Class; high performance can therefore reflect target-policy leakage or deterministic feature construction.",
+    "The ARFF repeats each of 215 unique rows five times. Duplicate-group-aware folds prevent exact copies crossing train/test, but UCI supplies no higher-level experiment group identifiers, so other dependence may remain.",
+    "Despite the current UCI landing page stating no missing values, the official ARFF contains 15 '?' cells in Packet_lost; training-fold median imputation is used and disclosed.",
+    "No hyperparameter tuning or nested CV is performed; these are fixed transparent baselines.",
+    "Permutation importance is model- and split-dependent and can be diluted among correlated or algebraically related predictors."
+  ],
+  "pso_svm": {
+    "status": "reported-only blocker",
+    "reason": "No original PSO-SVM executable artifact or complete source configuration (swarm, bounds, iterations, objective, preprocessing, seed) is present in the official UCI404 ARFF/metadata. No PSO-SVM result was invented or rerun."
+  }
+}

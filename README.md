@@ -19,21 +19,43 @@ The enforcement target is the trusted OBS edge ingress, before a BHP creates a w
 - records the causal chain `BHP_CREATE → OBSERVE → DETECT → DECIDE → ACT`;
 - validates source provenance, experiment manifests, traces, metrics, figures, and document artifacts.
 
-## Quick checks
+## Clone, install, and reproduce the published artifacts
+
+Validated reference environment: Ubuntu 24.04, Python 3.12.12, LibreOffice 24.2, and the exact Python package versions in `requirements.txt`. From a fresh clone:
 
 ```bash
-# Validate portable config/source boundary.
+git clone git@github.com:mxuanvan02/OBS-BHP-Flooding-Detection-Mitigation.git
+cd OBS-BHP-Flooding-Detection-Mitigation
+
+# Ubuntu/Debian: install system tools, create .venv, and install pinned Python packages.
+bash setup_environment.sh --system-deps
+source .venv/bin/activate
+
+# Recompute the UCI404 machine-learning tables and figures from the included ARFF.
+python3 source_only/uci404/pipeline.py
+python3 -m unittest discover -s source_only/uci404/tests -v
+
+# Validate portable/native configuration and all portable tests.
 python3 experiments/direct_bhp/validator.py --config experiments/direct_bhp/config.json
-
-# Check packaged compact evidence and rebuild final artifacts.
-bash run_pipeline.sh --reuse-canonical
-
-# Portable tests (native execution tests skip unless build/.../ns is provisioned).
 python3 -m unittest discover -s experiments/tests -v
 python3 -m unittest discover -s tests -v
+
+# Rebuild and gate the thesis DOCX/PDF using the packaged validated 32-cell matrix.
+bash run_pipeline.sh --reuse-canonical
 ```
 
-`--reuse-canonical` verifies the packaged 32-cell validation report and statistics; it does not claim to revalidate excluded raw traces. `--full` requires a native NS-2.35 build/toolchain and creates local runtime outputs that are ignored by Git. Current direct-BHP evidence is a native control-path prototype; it is not presented as a completed online ML detector or production deployment.
+A successful final command prints `PIPELINE_OK` and the generated artifact paths under `reproduction_runs/<timestamp>/`. This is the shortest audited route from a fresh clone to the tables, figures, statistics, DOCX, and PDF reported in the repository. It verifies and reuses the retained native 32-cell evidence because raw native traces are intentionally not committed. It does **not** describe the matrix as a newly executed NS-2 experiment.
+
+The included UCI404 ARFF is hash-gated at `c573b83a9b8db30658be8dd53ef5769a94bc03a0695e78d6c130306c60cc69de`. The UCI/ML analysis remains separate from the direct-BHP native experiment and does not fabricate the unavailable original PSO-SVM protocol.
+
+### Dependency check only
+
+If system packages are already installed, omit `--system-deps`:
+
+```bash
+bash setup_environment.sh
+source .venv/bin/activate
+```
 
 ## Source synchronization and reproducible native run
 
@@ -42,7 +64,15 @@ The experiment is reproducible only when both components below are available:
 1. The versioned nOBS overlay in `nobs/` (guard, audit, source-routing and BHP-agent files).
 2. A native, patched NS-2.35 binary at `build/ns-allinone-2.35/ns-2.35/ns`, or at the path supplied by `NOBS_NS_TREE`.
 
-The current repository snapshot contains the nOBS overlay and the runner/configuration, but **does not contain the native NS binary**. The runner therefore fails closed instead of silently substituting a Python simulation. Verify the state with:
+The current repository snapshot contains the nOBS overlay and the runner/configuration, but **does not contain the native NS binary**. The runner therefore fails closed instead of silently substituting a Python simulation. To perform a fresh native rerun, install/build NS-2.35 first:
+
+1. Download `ns-allinone-2.35.tar.gz` from the official SourceForge NS-2.35 release and extract it as `build/ns-allinone-2.35/`.
+2. Build the unmodified tree once with `cd build/ns-allinone-2.35 && ./install`. Old NS-2.35 may require compatibility patches on modern compilers; compiler-specific fixes are outside this repository and must not be confused with experiment logic.
+3. Copy the versioned overlay directories `nobs/{common,mdart,optical,queue,routing,tcl,tcp}` into `build/ns-allinone-2.35/ns-2.35/`, replacing matching files.
+4. Add every `optical/*.o` entry listed in `nobs/README.md` to `OBJ_CC` in the NS Makefile, including `op-bhp-flood-agent.o`, `op-bhp-guard.o`, and `op-bhp-audit.o`; then run `make clean && make` in the NS tree.
+5. Confirm `build/ns-allinone-2.35/ns-2.35/ns` is executable, or export `NOBS_NS_TREE=/absolute/path/to/ns-2.35`.
+
+These steps are intentionally explicit: a native 32-cell rerun is accepted only with the patched executable and all trace/causal gates. Verify the state with:
 
 ```bash
 cd /path/to/BHP-Flooding-OBS-Thesis-Reproduction

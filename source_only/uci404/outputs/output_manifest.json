@@ -1,0 +1,61 @@
+{
+  "algorithm": "SHA-256",
+  "note": "Manifest excludes itself.",
+  "files": [
+    {
+      "path": "dataset_schema.csv",
+      "bytes": 945,
+      "sha256": "afdea74ad4655786c52ff0af069a25e262d93578a86e9d8c53a8df7f315abc77"
+    },
+    {
+      "path": "figures/model_macro_f1.png",
+      "bytes": 45323,
+      "sha256": "0f39467d20d9c1f1376bfadfd51cd2b820649a63673760d4db07092b5f1f2ab0"
+    },
+    {
+      "path": "figures/rf_oof_permutation_importance.png",
+      "bytes": 125087,
+      "sha256": "91dc573960b82f0f4c243c6b98ebb0b3b90f0b2335ea068df5c1de05ee9679d9"
+    },
+    {
+      "path": "figures/single_feature_audit.png",
+      "bytes": 125122,
+      "sha256": "a9c670c79ecd84e3e46f205dfaef92943bcd46de7ab1bbe2a57153579508af76"
+    },
+    {
+      "path": "provenance.json",
+      "bytes": 4391,
+      "sha256": "56cd085cd5d7c1f5e277ed9e8eefb1a73acc527fddd7b2bcc4423e8a7cdec47e"
+    },
+    {
+      "path": "raw/fold_metrics.csv",
+      "bytes": 9921,
+      "sha256": "f67cf433f0f92e53a2affeadf000ee1c0b42d565dcb04f59740d6c520616d2ed"
+    },
+    {
+      "path": "raw/rf_oof_permutation_fold.csv",
+      "bytes": 7549,
+      "sha256": "60f9271a2816301dcbf8e4a64216697cb815e41fed604512715b30dcbbff0eed"
+    },
+    {
+      "path": "raw/single_feature_fold_metrics.csv",
+      "bytes": 55198,
+      "sha256": "350178b48d034d8ae3d6a5ffd67eead8be287ddf843c1bead91001c8f387ed67"
+    },
+    {
+      "path": "summary/model_summary.csv",
+      "bytes": 1704,
+      "sha256": "ed558b2ccce1a9ecd5218991687d9ff3c2fb3682bcf1302d55f89a7f410cfee4"
+    },
+    {
+      "path": "summary/rf_permutation_importance_summary.csv",
+      "bytes": 1962,
+      "sha256": "d46bd5de1d507d142fe932834b77d4077179bf2ce96d8af533926170a1c77aa0"
+    },
+    {
+      "path": "summary/single_feature_summary.csv",
+      "bytes": 7193,
+      "sha256": "2cbd1e2feb8ed0424c33521341164175d04b1fd2abfff6c982e8708fa6b91034"
+    }
+  ]
+}
