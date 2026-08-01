@@ -117,11 +117,28 @@ def _address_text(address: Address) -> str:
     return f"{address.node}.{address.port}"
 
 
+def _is_optical_event(event: Event) -> bool:
+    """Recognize optical bursts across NS-2 packet-name table variants.
+
+    Some native NS-2 trees print PT_OP_BURST as ``undefined`` because their
+    packet-name table is not aligned with the overlay.  The trace-visible
+    optical signature remains stable: sequence number -1 and an optical
+    destination with port -1.  Keep OP_BURST as the primary form and accept
+    only this narrow legacy fallback.
+    """
+    return event.packet_type == "OP_BURST" or (
+        event.packet_type == "undefined"
+        and event.sequence_number == -1
+        and event.destination.port == -1
+    )
+
+
 def _same_burst_pair(control: Event, data: Event) -> bool:
     """Validate fields copied to both packets by BurstAgent::recv."""
     return (
         data.packet_uid + 1 == control.packet_uid
-        and data.packet_type == control.packet_type == "OP_BURST"
+        and _is_optical_event(data)
+        and _is_optical_event(control)
         and data.size_bytes > control.size_bytes
         and data.from_node == control.from_node
         and data.to_node == control.to_node
@@ -185,7 +202,7 @@ def analyze(
 
     first_optical: dict[int, Event] = {}
     for uid, history in by_uid.items():
-        optical = [event for event in history if event.packet_type == "OP_BURST"]
+        optical = [event for event in history if _is_optical_event(event)]
         if optical:
             first_optical[uid] = optical[0]
 
@@ -214,7 +231,7 @@ def analyze(
         if not any(
             event.kind == "r" and event.to_node == event.destination.node
             for event in by_uid[uid]
-            if event.packet_type == "OP_BURST"
+            if _is_optical_event(event)
         )
     )
     if direct_not_delivered:

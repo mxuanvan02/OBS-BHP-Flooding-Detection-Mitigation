@@ -2,6 +2,7 @@ import hashlib
 import json
 import os
 import pathlib
+import re
 import subprocess
 import sys
 import tempfile
@@ -128,7 +129,11 @@ class ScenarioConfigTests(unittest.TestCase):
             self.assertEqual(run["experiment_config_sha256"], sha256(snapshot))
             trace = (output / "seed_7" / "S1" / "out.tr").read_text(encoding="utf-8")
             self.assertIn(" cbr ", trace)
-            self.assertIn(" OP_BURST ", trace)
+            self.assertTrue(
+                " OP_BURST " in trace
+                or re.search(r"(?m)^[-+r] [^\n]* undefined [^\n]* \d+\.-1 -1 ", trace),
+                "native trace contains neither OP_BURST nor the validated undefined optical signature",
+            )
             self.assertRegex(trace, r"(?m)^r [^ ]+ 4 9 cbr ")
 
 

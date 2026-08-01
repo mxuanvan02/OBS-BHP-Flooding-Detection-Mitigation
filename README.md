@@ -66,11 +66,15 @@ The experiment is reproducible only when both components below are available:
 
 The current repository snapshot contains the nOBS overlay and the runner/configuration, but **does not contain the native NS binary**. The runner therefore fails closed instead of silently substituting a Python simulation. To perform a fresh native rerun, install/build NS-2.35 first:
 
-1. Download `ns-allinone-2.35.tar.gz` from the official SourceForge NS-2.35 release and extract it as `build/ns-allinone-2.35/`.
-2. Build the unmodified tree once with `cd build/ns-allinone-2.35 && ./install`. Old NS-2.35 may require compatibility patches on modern compilers; compiler-specific fixes are outside this repository and must not be confused with experiment logic.
-3. Copy the versioned overlay directories `nobs/{common,mdart,optical,queue,routing,tcl,tcp}` into `build/ns-allinone-2.35/ns-2.35/`, replacing matching files.
-4. Add every `optical/*.o` entry listed in `nobs/README.md` to `OBJ_CC` in the NS Makefile, including `op-bhp-flood-agent.o`, `op-bhp-guard.o`, and `op-bhp-audit.o`; then run `make clean && make` in the NS tree.
-5. Confirm `build/ns-allinone-2.35/ns-2.35/ns` is executable, or export `NOBS_NS_TREE=/absolute/path/to/ns-2.35`.
+Run the provisioner below. It downloads the pinned NS-2.35 archive, verifies its SHA-256, extracts local X11 headers when needed, applies the versioned nOBS overlay, adds all nOBS objects to `OBJ_CC`, and builds the native binary. No manual copying or Makefile editing is required:
+
+```bash
+bash provision_native_ns.sh
+```
+
+The archive can also be supplied offline with `NS235_ARCHIVE=/absolute/path/ns-allinone-2.35.tar.gz`. The provisioner accepts only SHA-256 `2216f4e8e274f5c2437741fc6e9c9728369fabe1838c708ef974d262b941cd5d`. `xgraph` is optional; failure to build that helper does not invalidate the `ns` binary. Compiler or dependency failure stops the script and is not silently replaced by the Python model.
+
+After success, `build/ns-allinone-2.35/ns-2.35/ns` is the native executable. To rebuild from scratch, use `bash provision_native_ns.sh --clean`.
 
 These steps are intentionally explicit: a native 32-cell rerun is accepted only with the patched executable and all trace/causal gates. Verify the state with:
 
