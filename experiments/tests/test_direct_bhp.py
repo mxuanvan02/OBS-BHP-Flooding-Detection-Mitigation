@@ -192,7 +192,7 @@ class CausalValidationTests(unittest.TestCase):
                         "ingress": 5, "destination": -1, "route_class": -1,
                         "claimed_bytes": 0, "claimed_packets": 0,
                         "reservation_cost": 0, "reservation_result": "ACCEPTED",
-                        "control_result": "CONSUMED_AT_INGRESS", "data_result": "ABSENT",
+                        "control_result": "DELIVERED_TO_EGRESS", "data_result": "ABSENT",
                         "right_censored": 0},
         }
         rows = [native_row(kind, values[kind], validator.NATIVE_TRAILING_EMPTY_FIELDS[kind]) for kind in order]
@@ -215,8 +215,14 @@ class CausalValidationTests(unittest.TestCase):
                 "optical": {"burst_pairs": 1, "control_link_reservations_succeeded": 1,
                             "data_bursts_explicitly_dropped": 0},
             }
-            with mock.patch.object(validator.TRACE, "parse_path", return_value=metrics):
+            with mock.patch.object(validator.TRACE, "parse_path", return_value=metrics) as parse_path:
                 report = validator.validate_cell(root, item, 101, hashes, config)
+            parse_path.assert_called_once_with(
+                root / "out.tr",
+                direct_control_uids={42},
+                delivered_direct_control_uids={42},
+                forbidden_direct_control_uids=set(),
+            )
             self.assertEqual(report["causal_chains"], 1)
             self.assertEqual(report["actions"], {"ALLOW": 1})
 
@@ -236,6 +242,172 @@ class CausalValidationTests(unittest.TestCase):
             with mock.patch.object(validator.TRACE, "parse_path", return_value=metrics):
                 with self.assertRaisesRegex(validator.ValidationError, "non-causal record order"):
                     validator.validate_cell(root, item, 101, hashes, config)
+
+    def test_rejected_lifecycle_uses_reservation_rejected_and_needs_no_delivery(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            rows = self._chain()
+            rejected = {
+                "type": "OUTCOME", "event_time": 1, "packet_uid": 42,
+                "ingress": 5, "destination": -1, "route_class": -1,
+                "claimed_bytes": 0, "claimed_packets": 0,
+                "reservation_cost": 0, "reservation_result": "REJECTED",
+                "control_result": "RESERVATION_REJECTED", "data_result": "ABSENT",
+                "right_censored": 0,
+            }
+            rows[-1] = native_row("OUTCOME", rejected, 0)
+            item, hashes, config = self._cell(root, rows)
+            metrics = {
+                "transport": {
+                    "tcp": {"flow_ids": [100, 101], "legal_receive_packets": 2,
+                            "legal_receive_bytes": 2080, "per_flow": {}},
+                    "ack": {"legal_receive_packets": 2},
+                },
+                "optical": {"burst_pairs": 0, "control_link_reservations_succeeded": 0,
+                            "data_bursts_explicitly_dropped": 0},
+            }
+            with mock.patch.object(validator.TRACE, "parse_path", return_value=metrics) as parse_path:
+                validator.validate_cell(root, item, 101, hashes, config)
+            parse_path.assert_called_once_with(
+                root / "out.tr",
+                direct_control_uids={42},
+                delivered_direct_control_uids=set(),
+                forbidden_direct_control_uids=set(),
+            )
+
+    def test_rejects_audit_uid_without_source_provenance(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            rows = self._chain()
+            extra = {
+                "type": "OUTCOME", "event_time": 1, "packet_uid": 99,
+                "ingress": 5, "reservation_result": "REJECTED",
+                "control_result": "RESERVATION_REJECTED", "data_result": "ABSENT",
+                "right_censored": 0,
+            }
+            rows.append(native_row("OUTCOME", extra, 0))
+            item, hashes, config = self._cell(root, rows)
+            with self.assertRaisesRegex(validator.ValidationError, "no BHP_CREATE provenance"):
+                validator.validate_cell(root, item, 101, hashes, config)
+
+    def test_rejects_duplicate_outcome_for_source_uid(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            rows = self._chain()
+            rows.append(rows[-1])
+            item, hashes, config = self._cell(root, rows)
+            with self.assertRaisesRegex(validator.ValidationError, "has 2 OUTCOME records"):
+                validator.validate_cell(root, item, 101, hashes, config)
+
+    def test_rejects_contradictory_act_semantics(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            rows = self._chain()
+            common = {
+                "type": "ACT", "event_time": 1, "packet_uid": 42,
+                "ingress": 5, "destination": 4, "route_class": 5,
+                "claimed_bytes": 1000, "claimed_packets": 1,
+                "reservation_cost": "8e-06", "state_before": "NORMAL",
+                "state_after": "NORMAL", "action": "ALLOW", "reason": "NONE",
+                "detection_time": -1, "decision_time": 1, "action_time": 1,
+                "reservation_attempted": 0, "cleanup_succeeded": 1,
+            }
+            rows[2] = native_row("ACT", common, 0)
+            item, hashes, config = self._cell(root, rows)
+            with self.assertRaisesRegex(validator.ValidationError, "invalid ACT semantics"):
+                validator.validate_cell(root, item, 101, hashes, config)
+
+
+class TraceDirectControlTests(unittest.TestCase):
+    @staticmethod
+    def _event(uid: int, kind: str = "+", to_node: int = 1):
+        return validator.TRACE.Event(
+            kind=kind, time=1.0, from_node=0, to_node=to_node,
+            packet_type="OP_BURST", size_bytes=40, flags="-------",
+            flow_id=0, source=validator.TRACE.Address(0, 0),
+            destination=validator.TRACE.Address(4, 0), sequence_number=-1,
+            packet_uid=uid, line_number=1,
+        )
+
+    def test_first_hop_rejection_can_have_no_trace_event(self):
+        result = validator.TRACE.analyze([], direct_control_uids={42})
+        self.assertEqual(result["trace"]["lines"], 0)
+
+    def test_downstream_rejection_can_have_partial_trace(self):
+        result = validator.TRACE.analyze(
+            [self._event(42)], direct_control_uids={42}
+        )
+        self.assertEqual(result["trace"]["lines"], 1)
+
+    def test_blocked_direct_control_is_forbidden_in_trace(self):
+        with self.assertRaisesRegex(validator.TRACE.TraceFormatError, "blocked direct-BHP"):
+            validator.TRACE.analyze(
+                [self._event(42)], forbidden_direct_control_uids={42}
+            )
+
+    def test_accepted_direct_control_requires_destination_receive(self):
+        with self.assertRaisesRegex(validator.TRACE.TraceFormatError, "not delivered"):
+            validator.TRACE.analyze(
+                [self._event(42)], direct_control_uids={42},
+                delivered_direct_control_uids={42},
+            )
+
+    def test_delivered_set_must_be_subset_of_direct_set(self):
+        with self.assertRaisesRegex(validator.TRACE.TraceFormatError, "not a subset"):
+            validator.TRACE.analyze([], delivered_direct_control_uids={42})
+
+
+class ValidationProvenanceTests(unittest.TestCase):
+    def test_build_verified_provenance_exports_manifest_inputs_and_cell_artifacts(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            manifest = root / "matrix_manifest.json"
+            completion = root / "completion.json"
+            snapshot = root / "experiment_config.snapshot.json"
+            manifest.write_text('{"schema":"matrix"}\n', encoding="utf-8")
+            completion.write_text('{"complete":true}\n', encoding="utf-8")
+            snapshot.write_text('{"schema":"config"}\n', encoding="utf-8")
+            run_dir = root / "seed_101" / "S0"
+            run_dir.mkdir(parents=True)
+            metadata = {"artifact_sha256": {"out.tr": "abc", "stat.txt": "def"}}
+            run_json = run_dir / "run.json"
+            run_json.write_text(json.dumps(metadata) + "\n", encoding="utf-8")
+
+            result = validator.build_verified_provenance(
+                root, manifest, completion, snapshot, {(101, "S0")}, {"ns": "123"}
+            )
+
+            self.assertEqual(result["validation_engine_sha256"], hash_file(DIRECT / "validator.py"))
+            self.assertEqual(result["matrix_manifest_sha256"], hash_file(manifest))
+            self.assertEqual(result["completion_sha256"], hash_file(completion))
+            self.assertEqual(result["experiment_config_snapshot_sha256"], hash_file(snapshot))
+            self.assertEqual(result["verified_input_sha256"], {"ns": "123"})
+            self.assertEqual(
+                result["verified_cells"]["seed_101/S0"]["artifact_sha256"],
+                metadata["artifact_sha256"],
+            )
+            self.assertEqual(
+                result["verified_cells"]["seed_101/S0"]["run_json_sha256"],
+                hash_file(run_json),
+            )
+
+
+class NativeOwnershipRegressionTests(unittest.TestCase):
+    def test_null_destination_detaches_and_frees_phantom_and_control(self):
+        source = (EXPERIMENTS.parent / "nobs/optical/op-classifier.cc").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("Packet* phantom = burst->burst;", source)
+        self.assertIn("burst->burst = 0;", source)
+        self.assertIn("Packet::free(phantom);", source)
+        self.assertIn("Packet::free(p);", source)
+
+    def test_shared_audit_writer_suppresses_duplicate_headers(self):
+        source = (EXPERIMENTS.parent / "nobs/optical/op-bhp-audit.cc").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("fseek(stream_, 0, SEEK_END)", source)
+        self.assertIn("header_written_ = ftell(stream_) > 0;", source)
 
 
 @unittest.skipUnless(runner.NS.is_file() and os.access(runner.NS, os.X_OK), "native NS binary unavailable")

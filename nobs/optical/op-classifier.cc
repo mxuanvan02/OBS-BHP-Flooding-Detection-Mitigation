@@ -214,7 +214,27 @@ void OpClassifier::recv(Packet* p, Handler*h)
         //A burst arrived for deburstification
         if(DEBUG==1) printf("OpClassifier::recv packet in transit in optical domain. Send it to source routing agent for sending to next node at %f\n",NOW);
 
-// 	hdr_burst* burst = hdr_burst::access(p);
+        hdr_burst* burst = hdr_burst::access(p);
+        /* A direct BHP carries only a zero-packet phantom descriptor.  It
+         * must cross the final optical link before its lifecycle is closed,
+         * but it must not enter BurstAgent deburstification.  Return it to
+         * the source-route agent at the destination; that agent verifies the
+         * terminal route position, records OUTCOME, and frees both packets.
+         * Ordinary control and data bursts retain the original path. */
+        if (burst->burst_type == 0 && burst->burst != 0 &&
+            hdr_burst::access(burst->burst)->packet_num == 0) {
+            NsObject* node = slot_[0];
+            if (node == NULL) {
+                Packet* phantom = burst->burst;
+                burst->burst = 0;
+                if (phantom != NULL)
+                    Packet::free(phantom);
+                Packet::free(p);
+                return;
+            }
+            node->recv(p,h);
+            return;
+        }
         //printf("OpClassifier::recv 2 type burst->burst_type %d at %f\n",burst->burst_type,NOW);
         BurstAgent_->recv(p,h);
 

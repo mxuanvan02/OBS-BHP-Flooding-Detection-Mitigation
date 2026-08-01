@@ -29,6 +29,7 @@ SOURCE_INPUTS = (
     "optical/op-bhp-guard.h", "optical/op-bhp-guard.cc",
     "optical/op-bhp-audit.h", "optical/op-bhp-audit.cc",
     "optical/op-bhp-flood-agent.h", "optical/op-bhp-flood-agent.cc",
+    "optical/op-classifier.cc",
     "optical/op-sragent.h", "optical/op-sragent.cc",
 )
 

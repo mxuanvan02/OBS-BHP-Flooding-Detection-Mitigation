@@ -159,6 +159,11 @@ foreach id $optical_nodes {
     $source_agent create
     eval $source_agent fdl_size $fdl_delays
     $source_agent set ackdontburst $ack_dont_burst
+    # Every optical source-route agent shares the append-only audit path so
+    # a direct control can emit its terminal OUTCOME at the actual egress.
+    # Only the trusted ingress enables the guard below; other nodes merely
+    # obtain a writer for lifecycle evidence.
+    $source_agent bhp-guard-log $audit_path
     set burst_agent [$n($id) set burst_agent_]
     $burst_agent burst_create
     eval $burst_agent optic_nodes $optical_nodes

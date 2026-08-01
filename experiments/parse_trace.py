@@ -133,7 +133,24 @@ def _same_burst_pair(control: Event, data: Event) -> bool:
     )
 
 
-def analyze(events: Iterable[Event]) -> dict:
+def analyze(
+    events: Iterable[Event], direct_control_uids: set[int] | None = None,
+    delivered_direct_control_uids: set[int] | None = None,
+    forbidden_direct_control_uids: set[int] | None = None,
+) -> dict:
+    direct_control_uids = set() if direct_control_uids is None else set(direct_control_uids)
+    delivered_direct_control_uids = (
+        set() if delivered_direct_control_uids is None
+        else set(delivered_direct_control_uids)
+    )
+    forbidden_direct_control_uids = (
+        set() if forbidden_direct_control_uids is None
+        else set(forbidden_direct_control_uids)
+    )
+    if not delivered_direct_control_uids <= direct_control_uids:
+        raise TraceFormatError("delivered direct-BHP UIDs are not a subset of traced UIDs")
+    if direct_control_uids & forbidden_direct_control_uids:
+        raise TraceFormatError("direct-BHP traced and forbidden UID sets overlap")
     event_counts: Counter[str] = Counter()
     packet_type_event_counts: dict[str, Counter[str]] = defaultdict(Counter)
     first_time: float | None = None
@@ -185,7 +202,28 @@ def analyze(events: Iterable[Event]) -> dict:
             pairs.append((control, data))
             paired_uids.update((data_uid, data_uid + 1))
 
-    unpaired = sorted(set(first_optical) - paired_uids)
+    forbidden_present = sorted(forbidden_direct_control_uids & set(first_optical))
+    if forbidden_present:
+        sample = ", ".join(map(str, forbidden_present[:8]))
+        raise TraceFormatError(
+            f"blocked direct-BHP controls present in optical trace: {len(forbidden_present)} "
+            f"UIDs (sample: {sample})"
+        )
+    direct_not_delivered = sorted(
+        uid for uid in delivered_direct_control_uids
+        if not any(
+            event.kind == "r" and event.to_node == event.destination.node
+            for event in by_uid[uid]
+            if event.packet_type == "OP_BURST"
+        )
+    )
+    if direct_not_delivered:
+        sample = ", ".join(map(str, direct_not_delivered[:8]))
+        raise TraceFormatError(
+            f"direct-BHP controls not delivered to declared destination: "
+            f"{len(direct_not_delivered)} UIDs (sample: {sample})"
+        )
+    unpaired = sorted(set(first_optical) - paired_uids - direct_control_uids)
     if unpaired:
         sample = ", ".join(map(str, unpaired[:8]))
         raise TraceFormatError(
@@ -328,9 +366,18 @@ def analyze(events: Iterable[Event]) -> dict:
     }
 
 
-def parse_path(path: str | Path) -> dict:
+def parse_path(
+    path: str | Path, direct_control_uids: set[int] | None = None,
+    delivered_direct_control_uids: set[int] | None = None,
+    forbidden_direct_control_uids: set[int] | None = None,
+) -> dict:
     with Path(path).open("r", encoding="utf-8") as stream:
-        return analyze(iter_events(stream))
+        return analyze(
+            iter_events(stream),
+            direct_control_uids=direct_control_uids,
+            delivered_direct_control_uids=delivered_direct_control_uids,
+            forbidden_direct_control_uids=forbidden_direct_control_uids,
+        )
 
 
 def main(argv: list[str] | None = None) -> int:

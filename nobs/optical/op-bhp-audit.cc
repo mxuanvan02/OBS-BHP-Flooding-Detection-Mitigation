@@ -29,6 +29,14 @@ bool BhpAuditLogger::open(const char* path)
     if (stream_ == 0)
         return false;
 
+    /* Multiple OpSRAgents may share one append-only lifecycle log.  Write
+     * its schema preamble exactly once, when the file is first created. */
+    if (fseek(stream_, 0, SEEK_END) != 0) {
+        close();
+        return false;
+    }
+    header_written_ = ftell(stream_) > 0;
+
     path_ = new char[strlen(path) + 1];
     strcpy(path_, path);
     write_header();
@@ -167,6 +175,8 @@ void BhpAuditLogger::log_outcome(double event_time, unsigned long packet_uid,
                                  const char* control_result,
                                  const char* data_result, bool right_censored)
 {
+    if (stream_ == 0)
+        return;
     record_prefix("OUTCOME", event_time);
     fprintf(stream_, "%lu,0,%d,-1,-1,0,0,0,,,,,,,,,,%s,%s,%s,%d,,,,\n",
             packet_uid, ingress, safe(reservation_result),

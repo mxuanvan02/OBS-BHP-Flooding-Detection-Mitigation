@@ -351,8 +351,125 @@ def validate_cell(
     source_path, audit_path = run_dir / "bhp_source.log", run_dir / "bhp_audit.log"
     creates = read_source_log(source_path)
     audit = read_audit(audit_path)
+    source_uids: set[str] = set()
+    for create in creates:
+        uid = create.get("packet_uid", "")
+        if not uid or uid in source_uids:
+            raise ValidationError(f"{run_dir}: duplicate/empty BHP_CREATE UID {uid!r}")
+        source_uids.add(uid)
+
+    by_uid: dict[str, dict[str, list[dict[str, str]]]] = defaultdict(lambda: defaultdict(list))
+    positions: dict[str, dict[str, list[int]]] = defaultdict(lambda: defaultdict(list))
+    for index, row in enumerate(audit):
+        uid = row["packet_uid"]
+        if not uid:
+            raise ValidationError(f"{run_dir}: audit record has empty packet UID")
+        if uid not in source_uids:
+            raise ValidationError(f"{run_dir}: audit UID {uid} has no BHP_CREATE provenance")
+        by_uid[uid][row["type"]].append(row)
+        positions[uid][row["type"]].append(index)
+
+    if not item["attack"] and creates:
+        raise ValidationError(f"{run_dir}: S0 emitted attack BHPs")
+    if item["attack"] and not creates:
+        raise ValidationError(f"{run_dir}: attack cell emitted no direct BHPs")
+
+    actions: dict[str, int] = defaultdict(int)
+    seen: set[str] = set()
+    traced_uids: set[int] = set()
+    delivered_uids: set[int] = set()
+    blocked_uids: set[int] = set()
+    for create in creates:
+        uid = create["packet_uid"]
+        seen.add(uid)
+        events = by_uid.get(uid, {})
+        chain = []
+        for kind in ("OBSERVE", "DECIDE", "ACT"):
+            rows = events.get(kind, [])
+            if len(rows) != 1:
+                raise ValidationError(f"{run_dir}: UID {uid} has {len(rows)} {kind} records")
+            chain.append(rows[0])
+        order = [positions[uid][kind][0] for kind in ("OBSERVE", "DECIDE", "ACT")]
+        if order != sorted(order) or len(set(order)) != 3:
+            raise ValidationError(f"{run_dir}: non-causal record order for UID {uid}: {order}")
+        times = [_time(create, source_path)] + [_time(row, audit_path) for row in chain]
+        if times != sorted(times):
+            raise ValidationError(f"{run_dir}: non-causal timestamps for UID {uid}: {times}")
+        observe, decide, act = chain
+        for name in ("ingress", "claimed_bytes", "reservation_cost"):
+            if create[name] != observe[name]:
+                raise ValidationError(f"{run_dir}: CREATE/OBSERVE {name} mismatch for UID {uid}")
+        for name in (
+            "ingress", "destination", "route_class", "claimed_bytes",
+            "claimed_packets", "reservation_cost",
+        ):
+            if decide[name] != observe[name] or act[name] != observe[name]:
+                raise ValidationError(f"{run_dir}: OBSERVE/DECIDE/ACT {name} mismatch for UID {uid}")
+        if any(observe.get(name, "") for name in AUDIT_COLUMNS[11:]):
+            raise ValidationError(f"{run_dir}: OBSERVE row contains decision/outcome fields for UID {uid}")
+        detections = events.get("DETECT", [])
+        if len(detections) > 1:
+            raise ValidationError(f"{run_dir}: UID {uid} has multiple DETECT records")
+        if detections:
+            detect_position = positions[uid]["DETECT"][0]
+            if not order[0] < detect_position < order[1]:
+                raise ValidationError(f"{run_dir}: non-causal DETECT order for UID {uid}")
+            detect_time = _time(detections[0], audit_path)
+            if not times[1] <= detect_time <= times[2]:
+                raise ValidationError(f"{run_dir}: non-causal DETECT timestamp for UID {uid}")
+        if decide["action"] != act["action"] or decide["decision_time"] != act["decision_time"]:
+            raise ValidationError(f"{run_dir}: DECIDE/ACT mismatch for UID {uid}")
+        if act["action"] not in {"ALLOW", "RELEASE", "DROP_OVER_PROFILE", "QUARANTINE_INGRESS"}:
+            raise ValidationError(f"{run_dir}: unsupported actuator action {act['action']!r}")
+        actions[act["action"]] += 1
+        outcomes = events.get("OUTCOME", [])
+        admitted = act["action"] in {"ALLOW", "RELEASE"}
+        if admitted:
+            if act["reservation_attempted"] != "1" or act["cleanup_succeeded"] != "1":
+                raise ValidationError(f"{run_dir}: admitted UID {uid} has invalid ACT semantics")
+            if len(outcomes) != 1:
+                raise ValidationError(
+                    f"{run_dir}: admitted UID {uid} has {len(outcomes)} OUTCOME records"
+                )
+            outcome = outcomes[0]
+            if positions[uid]["OUTCOME"][0] <= order[2]:
+                raise ValidationError(f"{run_dir}: OUTCOME precedes ACT for UID {uid}")
+            if _time(outcome, audit_path) < times[-1]:
+                raise ValidationError(f"{run_dir}: OUTCOME time precedes ACT for UID {uid}")
+            if outcome["reservation_result"] not in {"ACCEPTED", "REJECTED"}:
+                raise ValidationError(
+                    f"{run_dir}: invalid scheduler outcome for UID {uid}: "
+                    f"{outcome['reservation_result']!r}"
+                )
+            if outcome["ingress"] != create["ingress"]:
+                raise ValidationError(f"{run_dir}: OUTCOME ingress mismatch for UID {uid}")
+            expected_control_result = (
+                "DELIVERED_TO_EGRESS"
+                if outcome["reservation_result"] == "ACCEPTED"
+                else "RESERVATION_REJECTED"
+            )
+            if outcome["control_result"] != expected_control_result or outcome["data_result"] != "ABSENT":
+                raise ValidationError(f"{run_dir}: direct-BHP lifecycle outcome mismatch for UID {uid}")
+            if outcome["right_censored"] != "0":
+                raise ValidationError(f"{run_dir}: completed direct-BHP UID {uid} is right-censored")
+            numeric_uid = int(uid)
+            traced_uids.add(numeric_uid)
+            if outcome["reservation_result"] == "ACCEPTED":
+                delivered_uids.add(numeric_uid)
+        else:
+            if act["reservation_attempted"] != "0" or act["cleanup_succeeded"] != "1":
+                raise ValidationError(f"{run_dir}: blocked UID {uid} has invalid ACT semantics")
+            if outcomes:
+                raise ValidationError(f"{run_dir}: blocked UID {uid} unexpectedly reached scheduler")
+            blocked_uids.add(int(uid))
+
     try:
-        trace_metrics = TRACE.parse_path(run_dir / "out.tr")
+        trace_metrics = TRACE.parse_path(
+            run_dir / "out.tr",
+            direct_control_uids=traced_uids,
+            delivered_direct_control_uids=delivered_uids,
+            forbidden_direct_control_uids=blocked_uids,
+        )
     except (OSError, TRACE.TraceFormatError) as exc:
         raise ValidationError(f"{run_dir}: invalid retained network trace: {exc}") from exc
     tcp = trace_metrics["transport"]["tcp"]
@@ -375,82 +492,7 @@ def validate_cell(
         "optical_explicit_data_drops": trace_metrics["optical"]["data_bursts_explicitly_dropped"],
     }
     if not item["attack"]:
-        if creates:
-            raise ValidationError(f"{run_dir}: S0 emitted attack BHPs")
         return {"created": 0, "causal_chains": 0, "actions": {}, "network": network}
-    if not creates:
-        raise ValidationError(f"{run_dir}: attack cell emitted no direct BHPs")
-    by_uid: dict[str, dict[str, list[dict[str, str]]]] = defaultdict(lambda: defaultdict(list))
-    positions: dict[str, dict[str, list[int]]] = defaultdict(lambda: defaultdict(list))
-    for index, row in enumerate(audit):
-        if not row["packet_uid"]:
-            raise ValidationError(f"{run_dir}: audit record has empty packet UID")
-        by_uid[row["packet_uid"]][row["type"]].append(row)
-        positions[row["packet_uid"]][row["type"]].append(index)
-    actions: dict[str, int] = defaultdict(int)
-    seen: set[str] = set()
-    for create in creates:
-        uid = create["packet_uid"]
-        if not uid or uid in seen:
-            raise ValidationError(f"{run_dir}: duplicate/empty BHP_CREATE UID {uid!r}")
-        seen.add(uid)
-        events = by_uid.get(uid, {})
-        chain = []
-        for kind in ("OBSERVE", "DECIDE", "ACT"):
-            rows = events.get(kind, [])
-            if len(rows) != 1:
-                raise ValidationError(f"{run_dir}: UID {uid} has {len(rows)} {kind} records")
-            chain.append(rows[0])
-        order = [positions[uid][kind][0] for kind in ("OBSERVE", "DECIDE", "ACT")]
-        if order != sorted(order) or len(set(order)) != 3:
-            raise ValidationError(f"{run_dir}: non-causal record order for UID {uid}: {order}")
-        times = [_time(create, source_path)] + [_time(row, audit_path) for row in chain]
-        if times != sorted(times):
-            raise ValidationError(f"{run_dir}: non-causal timestamps for UID {uid}: {times}")
-        observe, decide, act = chain
-        for name in ("ingress", "claimed_bytes", "reservation_cost"):
-            if create[name] != observe[name]:
-                raise ValidationError(f"{run_dir}: CREATE/OBSERVE {name} mismatch for UID {uid}")
-        if any(observe.get(name, "") for name in AUDIT_COLUMNS[11:]):
-            raise ValidationError(f"{run_dir}: OBSERVE row contains decision/outcome fields for UID {uid}")
-        detections = events.get("DETECT", [])
-        if len(detections) > 1:
-            raise ValidationError(f"{run_dir}: UID {uid} has multiple DETECT records")
-        if detections:
-            detect_position = positions[uid]["DETECT"][0]
-            if not order[0] < detect_position < order[1]:
-                raise ValidationError(f"{run_dir}: non-causal DETECT order for UID {uid}")
-            detect_time = _time(detections[0], audit_path)
-            if not times[1] <= detect_time <= times[2]:
-                raise ValidationError(f"{run_dir}: non-causal DETECT timestamp for UID {uid}")
-        if decide["action"] != act["action"] or decide["decision_time"] != act["decision_time"]:
-            raise ValidationError(f"{run_dir}: DECIDE/ACT mismatch for UID {uid}")
-        if act["action"] not in {"ALLOW", "RELEASE", "DROP_OVER_PROFILE", "QUARANTINE_INGRESS"}:
-            raise ValidationError(f"{run_dir}: unsupported actuator action {act['action']!r}")
-        actions[act["action"]] += 1
-        outcomes = events.get("OUTCOME", [])
-        admitted = act["action"] in {"ALLOW", "RELEASE"}
-        if admitted:
-            if len(outcomes) != 1:
-                raise ValidationError(
-                    f"{run_dir}: admitted UID {uid} has {len(outcomes)} OUTCOME records"
-                )
-            outcome = outcomes[0]
-            if positions[uid]["OUTCOME"][0] <= order[2]:
-                raise ValidationError(f"{run_dir}: OUTCOME precedes ACT for UID {uid}")
-            if _time(outcome, audit_path) < times[-1]:
-                raise ValidationError(f"{run_dir}: OUTCOME time precedes ACT for UID {uid}")
-            if outcome["reservation_result"] not in {"ACCEPTED", "REJECTED"}:
-                raise ValidationError(
-                    f"{run_dir}: invalid scheduler outcome for UID {uid}: "
-                    f"{outcome['reservation_result']!r}"
-                )
-            if outcome["control_result"] != "CONSUMED_AT_INGRESS" or outcome["data_result"] != "ABSENT":
-                raise ValidationError(f"{run_dir}: direct-BHP lifecycle outcome mismatch for UID {uid}")
-            if outcome["right_censored"] != "0":
-                raise ValidationError(f"{run_dir}: completed direct-BHP UID {uid} is right-censored")
-        elif outcomes:
-            raise ValidationError(f"{run_dir}: blocked UID {uid} unexpectedly reached scheduler")
     label = item["label"]
     if label == "S1" and set(actions) - {"ALLOW", "RELEASE"}:
         raise ValidationError(f"{run_dir}: S1 permissive monitor mitigated direct BHPs")
@@ -514,6 +556,34 @@ def validate_network_outcomes(cell_reports: dict[str, dict[str, Any]]) -> dict[s
     return {"complete_seed_quartets": len(outcomes), "per_seed": outcomes}
 
 
+def build_verified_provenance(
+    root: Path,
+    manifest_path: Path,
+    completion_path: Path,
+    snapshot: Path,
+    expected_pairs: set[tuple[int, str]],
+    input_hashes: dict[str, str],
+) -> dict[str, Any]:
+    """Export the exact hash chain already verified by the fail-closed validator."""
+    cells: dict[str, Any] = {}
+    for seed, label in sorted(expected_pairs):
+        run_dir = root / f"seed_{seed}" / label
+        run_json = run_dir / "run.json"
+        metadata = json.loads(run_json.read_text(encoding="utf-8"))
+        cells[f"seed_{seed}/{label}"] = {
+            "run_json_sha256": sha256(run_json),
+            "artifact_sha256": dict(sorted(metadata["artifact_sha256"].items())),
+        }
+    return {
+        "validation_engine_sha256": sha256(Path(__file__).resolve()),
+        "matrix_manifest_sha256": sha256(manifest_path),
+        "completion_sha256": sha256(completion_path),
+        "experiment_config_snapshot_sha256": sha256(snapshot),
+        "verified_input_sha256": dict(sorted(input_hashes.items())),
+        "verified_cells": cells,
+    }
+
+
 def validate_results(config: dict[str, Any], root: Path) -> dict[str, Any]:
     manifest_path = root / "matrix_manifest.json"
     completion_path = root / "completion.json"
@@ -568,10 +638,20 @@ def validate_results(config: dict[str, Any], root: Path) -> dict[str, Any]:
         raise ValidationError("full-matrix claim does not match selected cells")
     if completion.get("full_matrix_complete") is not full:
         raise ValidationError("completion full-matrix claim does not match selected cells")
+    provenance = build_verified_provenance(
+        root, manifest_path, completion_path, snapshot, expected_pairs, input_hashes
+    )
     return {
-        "schema": "nobs-direct-bhp-validation-v1", "valid": True,
+        "schema": "nobs-direct-bhp-validation-v2", "valid": True,
         "selected_cells_complete": True, "full_matrix_complete": full,
         "expected_selected_cells": len(expected_pairs), "detector_boundary": validate_detector_boundary(),
+        "provenance": provenance,
+        "hashes": {
+            "validation_engine": provenance["validation_engine_sha256"],
+            "matrix_manifest.json": provenance["matrix_manifest_sha256"],
+            "completion.json": provenance["completion_sha256"],
+            "experiment_config.snapshot.json": provenance["experiment_config_snapshot_sha256"],
+        },
         "cells": cell_reports, "network_outcome_gate": network_outcomes,
     }
 

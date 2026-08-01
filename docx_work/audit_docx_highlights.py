@@ -89,11 +89,16 @@ def main() -> int:
         old_rows = len(old_t.rows) if old_t else 0
         new_rows = len(new_t.rows) if new_t else 0
         for ri in range(max(old_rows, new_rows)):
-            old_cols = len(old_t.rows[ri].cells) if old_t and ri < old_rows else 0
-            new_cols = len(new_t.rows[ri].cells) if new_t and ri < new_rows else 0
-            for ci in range(max(old_cols, new_cols)):
-                old = old_t.cell(ri, ci).text if old_t and ri < old_rows and ci < old_cols else None
-                new = new_t.cell(ri, ci).text if new_t and ri < new_rows and ci < new_cols else None
+            old_cells = list(old_t.rows[ri].cells) if old_t and ri < old_rows else []
+            new_cells = list(new_t.rows[ri].cells) if new_t and ri < new_rows else []
+            review_cells = (
+                list(review_t.rows[ri].cells)
+                if review_t and ri < len(review_t.rows)
+                else []
+            )
+            for ci in range(max(len(old_cells), len(new_cells))):
+                old = old_cells[ci].text if ci < len(old_cells) else None
+                new = new_cells[ci].text if ci < len(new_cells) else None
                 if old != new:
                     key = [ti, ri, ci]
                     changed_cells.append(key)
@@ -104,12 +109,7 @@ def main() -> int:
                     if new is None:
                         deleted_cells.append(key)
                         continue
-                    marked = bool(
-                        review_t
-                        and ri < len(review_t.rows)
-                        and ci < len(review_t.rows[ri].cells)
-                        and cell_marked(review_t.cell(ri, ci))
-                    )
+                    marked = ci < len(review_cells) and cell_marked(review_cells[ci])
                     if not marked:
                         missing_cell_marks.append(key)
 

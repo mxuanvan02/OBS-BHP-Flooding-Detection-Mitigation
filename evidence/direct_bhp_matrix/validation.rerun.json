@@ -30,22 +30,22 @@
       "causal_chains": 60680,
       "created": 60680,
       "network": {
-        "legal_ack_receive_packets": 22637,
+        "legal_ack_receive_packets": 13043,
         "legal_tcp_per_flow": {
           "100": {
-            "legal_receive_bytes": 12814920,
-            "legal_receive_packets": 12323
+            "legal_receive_bytes": 9975720,
+            "legal_receive_packets": 9593
           },
           "101": {
-            "legal_receive_bytes": 10818120,
-            "legal_receive_packets": 10403
+            "legal_receive_bytes": 3687880,
+            "legal_receive_packets": 3547
           }
         },
-        "legal_tcp_receive_bytes": 23633040,
-        "legal_tcp_receive_packets": 22726,
-        "optical_burst_pairs": 2763,
+        "legal_tcp_receive_bytes": 13663600,
+        "legal_tcp_receive_packets": 13140,
+        "optical_burst_pairs": 1925,
         "optical_explicit_data_drops": 0,
-        "optical_successful_link_reservations": 11029
+        "optical_successful_link_reservations": 7673
       }
     },
     "seed_101/S2_isolation": {
@@ -133,22 +133,22 @@
       "causal_chains": 50520,
       "created": 50520,
       "network": {
-        "legal_ack_receive_packets": 18517,
+        "legal_ack_receive_packets": 16678,
         "legal_tcp_per_flow": {
           "100": {
-            "legal_receive_bytes": 9244600,
-            "legal_receive_packets": 8890
+            "legal_receive_bytes": 11922600,
+            "legal_receive_packets": 11465
           },
           "101": {
-            "legal_receive_bytes": 10038120,
-            "legal_receive_packets": 9653
+            "legal_receive_bytes": 5530760,
+            "legal_receive_packets": 5319
           }
         },
-        "legal_tcp_receive_bytes": 19282720,
-        "legal_tcp_receive_packets": 18543,
-        "optical_burst_pairs": 2427,
+        "legal_tcp_receive_bytes": 17453360,
+        "legal_tcp_receive_packets": 16784,
+        "optical_burst_pairs": 2242,
         "optical_explicit_data_drops": 0,
-        "optical_successful_link_reservations": 9683
+        "optical_successful_link_reservations": 8943
       }
     },
     "seed_202/S2_isolation": {
@@ -236,22 +236,22 @@
       "causal_chains": 54048,
       "created": 54048,
       "network": {
-        "legal_ack_receive_packets": 20301,
+        "legal_ack_receive_packets": 18709,
         "legal_tcp_per_flow": {
           "100": {
-            "legal_receive_bytes": 8705880,
-            "legal_receive_packets": 8372
+            "legal_receive_bytes": 14779480,
+            "legal_receive_packets": 14212
           },
           "101": {
-            "legal_receive_bytes": 12472760,
-            "legal_receive_packets": 11994
+            "legal_receive_bytes": 4838120,
+            "legal_receive_packets": 4653
           }
         },
-        "legal_tcp_receive_bytes": 21178640,
-        "legal_tcp_receive_packets": 20366,
-        "optical_burst_pairs": 2555,
+        "legal_tcp_receive_bytes": 19617600,
+        "legal_tcp_receive_packets": 18865,
+        "optical_burst_pairs": 2383,
         "optical_explicit_data_drops": 0,
-        "optical_successful_link_reservations": 10192
+        "optical_successful_link_reservations": 9496
       }
     },
     "seed_303/S2_isolation": {
@@ -339,22 +339,22 @@
       "causal_chains": 44960,
       "created": 44960,
       "network": {
-        "legal_ack_receive_packets": 31018,
+        "legal_ack_receive_packets": 15148,
         "legal_tcp_per_flow": {
           "100": {
-            "legal_receive_bytes": 16280200,
-            "legal_receive_packets": 15655
+            "legal_receive_bytes": 10827480,
+            "legal_receive_packets": 10412
           },
           "101": {
-            "legal_receive_bytes": 15996280,
-            "legal_receive_packets": 15382
+            "legal_receive_bytes": 5043000,
+            "legal_receive_packets": 4850
           }
         },
-        "legal_tcp_receive_bytes": 32276480,
-        "legal_tcp_receive_packets": 31037,
-        "optical_burst_pairs": 3414,
+        "legal_tcp_receive_bytes": 15870480,
+        "legal_tcp_receive_packets": 15262,
+        "optical_burst_pairs": 2146,
         "optical_explicit_data_drops": 0,
-        "optical_successful_link_reservations": 13627
+        "optical_successful_link_reservations": 8559
       }
     },
     "seed_404/S2_isolation": {
@@ -442,22 +442,22 @@
       "causal_chains": 43528,
       "created": 43528,
       "network": {
-        "legal_ack_receive_packets": 18032,
+        "legal_ack_receive_packets": 14518,
         "legal_tcp_per_flow": {
           "100": {
-            "legal_receive_bytes": 9770840,
-            "legal_receive_packets": 9396
+            "legal_receive_bytes": 10251320,
+            "legal_receive_packets": 9858
           },
           "101": {
-            "legal_receive_bytes": 9097960,
-            "legal_receive_packets": 8749
+            "legal_receive_bytes": 4906760,
+            "legal_receive_packets": 4719
           }
         },
-        "legal_tcp_receive_bytes": 18868800,
-        "legal_tcp_receive_packets": 18145,
-        "optical_burst_pairs": 2288,
+        "legal_tcp_receive_bytes": 15158080,
+        "legal_tcp_receive_packets": 14577,
+        "optical_burst_pairs": 2013,
         "optical_explicit_data_drops": 0,
-        "optical_successful_link_reservations": 9126
+        "optical_successful_link_reservations": 8031
       }
     },
     "seed_505/S2_isolation": {
@@ -545,22 +545,22 @@
       "causal_chains": 61608,
       "created": 61608,
       "network": {
-        "legal_ack_receive_packets": 25557,
+        "legal_ack_receive_packets": 15469,
         "legal_tcp_per_flow": {
           "100": {
-            "legal_receive_bytes": 14835640,
-            "legal_receive_packets": 14266
+            "legal_receive_bytes": 10883640,
+            "legal_receive_packets": 10466
           },
           "101": {
-            "legal_receive_bytes": 11898680,
-            "legal_receive_packets": 11442
+            "legal_receive_bytes": 5305080,
+            "legal_receive_packets": 5102
           }
         },
-        "legal_tcp_receive_bytes": 26734320,
-        "legal_tcp_receive_packets": 25708,
-        "optical_burst_pairs": 2996,
+        "legal_tcp_receive_bytes": 16188720,
+        "legal_tcp_receive_packets": 15568,
+        "optical_burst_pairs": 2148,
         "optical_explicit_data_drops": 0,
-        "optical_successful_link_reservations": 11951
+        "optical_successful_link_reservations": 8574
       }
     },
     "seed_606/S2_isolation": {
@@ -648,22 +648,22 @@
       "causal_chains": 62784,
       "created": 62784,
       "network": {
-        "legal_ack_receive_packets": 28939,
+        "legal_ack_receive_packets": 11231,
         "legal_tcp_per_flow": {
           "100": {
-            "legal_receive_bytes": 15032200,
-            "legal_receive_packets": 14455
+            "legal_receive_bytes": 6749640,
+            "legal_receive_packets": 6491
           },
           "101": {
-            "legal_receive_bytes": 15281800,
-            "legal_receive_packets": 14695
+            "legal_receive_bytes": 4962920,
+            "legal_receive_packets": 4773
           }
         },
-        "legal_tcp_receive_bytes": 30314000,
-        "legal_tcp_receive_packets": 29150,
-        "optical_burst_pairs": 3361,
+        "legal_tcp_receive_bytes": 11712560,
+        "legal_tcp_receive_packets": 11264,
+        "optical_burst_pairs": 1696,
         "optical_explicit_data_drops": 0,
-        "optical_successful_link_reservations": 13411
+        "optical_successful_link_reservations": 6757
       }
     },
     "seed_707/S2_isolation": {
@@ -751,22 +751,22 @@
       "causal_chains": 55392,
       "created": 55392,
       "network": {
-        "legal_ack_receive_packets": 28632,
+        "legal_ack_receive_packets": 14588,
         "legal_tcp_per_flow": {
           "100": {
-            "legal_receive_bytes": 13896520,
-            "legal_receive_packets": 13363
+            "legal_receive_bytes": 9158280,
+            "legal_receive_packets": 8807
           },
           "101": {
-            "legal_receive_bytes": 16037880,
-            "legal_receive_packets": 15422
+            "legal_receive_bytes": 6246280,
+            "legal_receive_packets": 6007
           }
         },
-        "legal_tcp_receive_bytes": 29934400,
-        "legal_tcp_receive_packets": 28785,
-        "optical_burst_pairs": 3339,
+        "legal_tcp_receive_bytes": 15404560,
+        "legal_tcp_receive_packets": 14814,
+        "optical_burst_pairs": 1931,
         "optical_explicit_data_drops": 0,
-        "optical_successful_link_reservations": 13330
+        "optical_successful_link_reservations": 7699
       }
     },
     "seed_808/S2_isolation": {
@@ -851,89 +851,89 @@
         "isolation_recovery_fraction_of_s0": 1.0,
         "legal_tcp_receive_bytes": {
           "S0": 50623120,
-          "S1": 23633040,
+          "S1": 13663600,
           "S2_isolation": 50623120,
           "S2_rate_limit": 50623120
         },
         "rate_limit_recovery_fraction_of_s0": 1.0,
-        "s1_remaining_fraction_of_s0": 0.46684281806415723
+        "s1_remaining_fraction_of_s0": 0.2699082948660612
       },
       "202": {
         "isolation_recovery_fraction_of_s0": 1.0,
         "legal_tcp_receive_bytes": {
           "S0": 50623120,
-          "S1": 19282720,
+          "S1": 17453360,
           "S2_isolation": 50623120,
           "S2_rate_limit": 50623120
         },
         "rate_limit_recovery_fraction_of_s0": 1.0,
-        "s1_remaining_fraction_of_s0": 0.3809073798691191
+        "s1_remaining_fraction_of_s0": 0.34477053172542504
       },
       "303": {
         "isolation_recovery_fraction_of_s0": 1.0,
         "legal_tcp_receive_bytes": {
           "S0": 50623120,
-          "S1": 21178640,
+          "S1": 19617600,
           "S2_isolation": 50623120,
           "S2_rate_limit": 50623120
         },
         "rate_limit_recovery_fraction_of_s0": 1.0,
-        "s1_remaining_fraction_of_s0": 0.4183590422715945
+        "s1_remaining_fraction_of_s0": 0.38752253910861284
       },
       "404": {
         "isolation_recovery_fraction_of_s0": 1.0,
         "legal_tcp_receive_bytes": {
           "S0": 50623120,
-          "S1": 32276480,
+          "S1": 15870480,
           "S2_isolation": 50623120,
           "S2_rate_limit": 50623120
         },
         "rate_limit_recovery_fraction_of_s0": 1.0,
-        "s1_remaining_fraction_of_s0": 0.6375837759505933
+        "s1_remaining_fraction_of_s0": 0.31350260513378075
       },
       "505": {
         "isolation_recovery_fraction_of_s0": 1.0,
         "legal_tcp_receive_bytes": {
           "S0": 50623120,
-          "S1": 18868800,
+          "S1": 15158080,
           "S2_isolation": 50623120,
           "S2_rate_limit": 50623120
         },
         "rate_limit_recovery_fraction_of_s0": 1.0,
-        "s1_remaining_fraction_of_s0": 0.37273087869732247
+        "s1_remaining_fraction_of_s0": 0.2994299837702615
       },
       "606": {
         "isolation_recovery_fraction_of_s0": 1.0,
         "legal_tcp_receive_bytes": {
           "S0": 50623120,
-          "S1": 26734320,
+          "S1": 16188720,
           "S2_isolation": 50623120,
           "S2_rate_limit": 50623120
         },
         "rate_limit_recovery_fraction_of_s0": 1.0,
-        "s1_remaining_fraction_of_s0": 0.5281049449342514
+        "s1_remaining_fraction_of_s0": 0.31978906080857916
       },
       "707": {
         "isolation_recovery_fraction_of_s0": 1.0,
         "legal_tcp_receive_bytes": {
           "S0": 50623120,
-          "S1": 30314000,
+          "S1": 11712560,
           "S2_isolation": 50623120,
           "S2_rate_limit": 50623120
         },
         "rate_limit_recovery_fraction_of_s0": 1.0,
-        "s1_remaining_fraction_of_s0": 0.5988172992893366
+        "s1_remaining_fraction_of_s0": 0.2313678019055325
       },
       "808": {
         "isolation_recovery_fraction_of_s0": 1.0,
         "legal_tcp_receive_bytes": {
           "S0": 50623120,
-          "S1": 29934400,
+          "S1": 15404560,
           "S2_isolation": 50623120,
           "S2_rate_limit": 50623120
         },
         "rate_limit_recovery_fraction_of_s0": 1.0,
-        "s1_remaining_fraction_of_s0": 0.5913187492197242
+        "s1_remaining_fraction_of_s0": 0.30429890532231124
       }
     }
   },

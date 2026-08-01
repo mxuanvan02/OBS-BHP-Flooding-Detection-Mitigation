@@ -176,7 +176,7 @@ assert pdf.stat().st_size > 1_000_000, pdf.stat().st_size
 pages = int(re.search(r"^Pages:\s+(\d+)", info, re.M).group(1))
 assert pages >= 60, pages
 assert "A4" in info
-required = ["48.678", "24.307,5", "50,07%", "BHP điều khiển trực tiếp", "100% mức S0"]
+required = ["48.678", "15.034,25", "15.633.620", "69,12%", "BHP điều khiển trực tiếp", "100% mức S0"]
 missing = [x for x in required if x not in text]
 assert not missing, f"missing rendered content: {missing}"
 obsolete = ["82.568", "38.281", "3.426", "316,25", "90,77%", "40 Mb/s/nguồn"]

@@ -1,7 +1,7 @@
 {
   "effects": {
-    "S1_reduction_vs_S0_pct": 50.066688896298764,
-    "S1_remaining_vs_S0_pct": 49.933311103701236,
+    "S1_reduction_vs_S0_pct": 69.11762846699294,
+    "S1_remaining_vs_S0_pct": 30.882371533007053,
     "S2_isolation_recovered_lost_bytes_pct": 100.0,
     "S2_isolation_vs_S0_pct": 100.0,
     "S2_rate_limit_recovered_lost_bytes_pct": 100.0,
@@ -20,7 +20,7 @@
     "Legitimate nOBS controls do not enter the explicit direct-BHP guard path; zero collateral here is architectural scope, not an estimated false-positive rate.",
     "Claims are limited to the declared seven-node topology, traffic profile, and five-second runs."
   ],
-  "matrix": "evidence/direct_bhp_matrix",
+  "matrix": "/home/hitokiri/.openclaw/workspace/work/BHP-Flooding-OBS-Thesis-Reproduction/reproduction_runs/20260730_203550/native_matrix",
   "schema": "nobs-direct-bhp-analysis-v1",
   "seeds": [
     101,
@@ -32,7 +32,7 @@
     707,
     808
   ],
-  "source_validation_sha256": "812338e8741de622475667e792d98bc40e1eaf4bcc4641c78a57ee358e0d1782",
+  "source_validation_sha256": "34f59f56e19c3bf0976c13668b0bf50f4feb59be6a115f86561cb4d910229c33",
   "summary": {
     "S0": {
       "action_totals": {
@@ -173,78 +173,78 @@
       },
       "legal_tcp_bytes": {
         "descriptive_95pct_t_interval": [
-          20868973.420368813,
-          29686626.579631187
+          13658211.153955251,
+          17609028.84604475
         ],
-        "mean": 25277800.0,
+        "mean": 15633620.0,
         "n": 8,
-        "sd": 5273584.029622142,
+        "sd": 2362870.1093857386,
         "values": [
-          23633040,
-          19282720,
-          21178640,
-          32276480,
-          18868800,
-          26734320,
-          30314000,
-          29934400
+          13663600,
+          17453360,
+          19617600,
+          15870480,
+          15158080,
+          16188720,
+          11712560,
+          15404560
         ]
       },
       "legal_tcp_packets": {
         "descriptive_95pct_t_interval": [
-          20068.24367343155,
-          28546.75632656845
+          13134.818417264665,
+          16933.681582735335
         ],
-        "mean": 24307.5,
+        "mean": 15034.25,
         "n": 8,
-        "sd": 5070.753874636675,
+        "sd": 2271.990489793979,
         "values": [
-          22726,
-          18543,
-          20366,
-          31037,
-          18145,
-          25708,
-          29150,
-          28785
+          13140,
+          16784,
+          18865,
+          15262,
+          14577,
+          15568,
+          11264,
+          14814
         ]
       },
       "optical_burst_pairs": {
         "descriptive_95pct_t_interval": [
-          2517.0884946731403,
-          3268.6615053268597
+          1881.1483889443791,
+          2239.851611055621
         ],
-        "mean": 2892.875,
+        "mean": 2060.5,
         "n": 8,
-        "sd": 449.4941402764414,
+        "sd": 214.53005117498773,
         "values": [
-          2763,
-          2427,
-          2555,
-          3414,
-          2288,
-          2996,
-          3361,
-          3339
+          1925,
+          2242,
+          2383,
+          2146,
+          2013,
+          2148,
+          1696,
+          1931
         ]
       },
       "successful_link_reservations": {
         "descriptive_95pct_t_interval": [
-          10042.002294476457,
-          13045.247705523543
+          7500.26416378461,
+          8932.73583621539
         ],
-        "mean": 11543.625,
+        "mean": 8216.5,
         "n": 8,
-        "sd": 1796.1544586381524,
+        "sd": 856.7199909288582,
         "values": [
-          11029,
-          9683,
-          10192,
-          13627,
-          9126,
-          11951,
-          13411,
-          13330
+          7673,
+          8943,
+          9496,
+          8559,
+          8031,
+          8574,
+          6757,
+          7699
         ]
       }
     },

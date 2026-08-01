@@ -497,6 +497,16 @@ OpSRAgent::recv(Packet* packet, Handler*)
         // supposedly dest reached
         // I can change the packet type and send it to the entry point once again..... this would set things right. This part of the code is managing things at the receiver also..... finally the packet goes to the right agent and not our src rt agent.
         //cout << " setting the packet tye as tcp" << endl;
+        /* A direct-BHP control has no payload lifecycle to hand back to an
+         * application.  Its terminal outcome is recorded only after the
+         * control has traversed the source route and every reservation
+         * accepted along that route.  The phantom descriptor is then freed
+         * exactly once here. */
+        if (bhp_is_direct_control(packet)) {
+            bhp_log_direct_outcome(packet, 1);
+            bhp_discard_control(packet);
+            return;
+        }
         cmh->src_rt_valid = '\0';
         send(packet,0);
         return;
@@ -591,14 +601,22 @@ OpSRAgent::recv(Packet* packet, Handler*)
             result=LinkReservation_[slot_no].recv(packet,conversiontype_,0);
             if(DEBUG==1) printf("LinkReservation_ result %d at %.15f\n",result,NOW);
 
-            /* Direct BHPs deliberately have no data burst.  The scheduler
-             * result is the experiment outcome: retain the reservation when
-             * accepted, but terminate the synthetic control lifecycle here
-             * for every result so normal data-burst error paths never touch
-             * the phantom descriptor. */
+            /* Direct BHPs deliberately have no data burst.  An accepted
+             * control must follow the same source route as a normal control;
+             * only the phantom data descriptor is excluded.  Rejected or
+             * unexpected results terminate the control lifecycle here. */
             if (bhp_is_direct_control(packet)) {
-                bhp_log_direct_outcome(packet, result);
-                bhp_discard_control(packet);
+                if (result == 1) {
+                    if (headeraddedfirsttime == 1) {
+                        Scheduler::instance().schedule(node, packet,
+                                                       burst->delayedresv);
+                    } else {
+                        node->recv(packet, (Handler *)0);
+                    }
+                } else {
+                    bhp_log_direct_outcome(packet, result);
+                    bhp_discard_control(packet);
+                }
                 return;
             }
 
@@ -926,9 +944,11 @@ void OpSRAgent::bhp_log_direct_outcome(Packet* packet,
         (unsigned long)hdr_cmn::access(packet)->uid();
     const char* reservation = reservation_result == 1 ? "ACCEPTED" :
         (reservation_result == -1 ? "REJECTED" : "UNEXPECTED");
+    const char* control = reservation_result == 1 ?
+        "DELIVERED_TO_EGRESS" : "RESERVATION_REJECTED";
     bhp_audit_.log_outcome(Scheduler::instance().clock(), uid,
-                           bhp_guard_ingress_, reservation,
-                           "CONSUMED_AT_INGRESS", "ABSENT", false);
+                           hdr_burst::access(packet)->source, reservation,
+                           control, "ABSENT", false);
 }
 
 void OpSRAgent::bhp_discard_control(Packet* packet)
@@ -1009,8 +1029,6 @@ void OpSRAgent::alloc(int slot)
         slot_[i] = old[i];
     delete [] old;
 }
-
-
 
 
 
