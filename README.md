@@ -65,6 +65,36 @@ bash setup_environment.sh
 source .venv/bin/activate
 ```
 
+### Windows
+
+NS-2.35 is a native C++ codebase built against Tcl/Tk and X11 headers; it does
+not build or run directly on Windows. The supported path on Windows is WSL2
+(Windows Subsystem for Linux) running Ubuntu, which is the same environment
+this repository is validated against.
+
+1. Install WSL2 with an Ubuntu 24.04 distribution (from an elevated PowerShell):
+   ```powershell
+   wsl --install -d Ubuntu-24.04
+   ```
+   Reboot if prompted, then open the "Ubuntu-24.04" app to finish first-run
+   user setup.
+2. Inside the Ubuntu/WSL2 shell, follow the Linux instructions above exactly
+   (`git clone`, `bash setup_environment.sh --system-deps`, `source
+   .venv/bin/activate`, etc.). Treat the WSL2 shell as a regular Ubuntu
+   machine; there is no separate Windows-specific script.
+3. Clone the repository inside the Linux filesystem (e.g. `~/src/...`), not
+   under `/mnt/c/...`. Building NS-2.35 and running the Python pipeline on
+   the Windows-mounted filesystem is much slower and can hit path/permission
+   issues; keep everything under the WSL2 home directory.
+4. VS Code users can attach directly to the WSL2 distro with the "WSL"
+   extension and open the cloned folder there; the terminal inside VS Code
+   then runs the same Ubuntu commands as above.
+
+Native NS-2.35 compilation, `provision_native_ns.sh`, and `run_native_repro.sh`
+are only supported inside WSL2 (or a real Linux/macOS host). Do not attempt to
+run the compiled `ns` binary or the shell scripts directly from
+`cmd.exe`/PowerShell.
+
 ## Source synchronization and reproducible native run
 
 The experiment is reproducible only when both components below are available:
