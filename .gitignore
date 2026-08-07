@@ -25,3 +25,25 @@ docx_work/FIGURE_LINEAGE.json
 /LuanVan_ThS_NguyenQuangTin_FINAL_NATIVE_DIRECT_BHP_*.zip
 /deliverables/LuanVan_ThS_NguyenQuangTin_FINAL_NATIVE_DIRECT_BHP_*.zip
 /deliverables/final_native_direct_bhp_*/
+
+# Scratch verification/render output from TOC+citation fix work (2026-08-07).
+# These are throwaway inspection artifacts, not source or deliverables.
+docx_work/_toc_inspect/
+docx_work/toc_verify/
+docx_work/toc_verify2/
+docx_work/toc_verify3/
+docx_work/toc_verify4/
+docx_work/verify_toc_render/
+docx_work/reviews/
+docx_work/terminology_audit.txt
+docx_work/scan_toc_lists.py
+final_pdf/
+review_render/
+*.bak-fixtoc-*.docx
+*.bak-fixcite-*.docx
+*.bak-final-*
+*.bak-stage2-*
+*.bak-vnproofread-*
+*.bak-pre-final-*
+*.bak-review-*
+*.bak-sync-*

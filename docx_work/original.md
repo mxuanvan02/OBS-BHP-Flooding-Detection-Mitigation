@@ -25,14 +25,14 @@ chuyển mạch gói quang. 16
 Bảng 2.1. Tổng hợp các nghiên cứu tiêu biểu về phát hiện và đối phó tấn
 công ngập lụt BHP. 36
 
-Bảng 3.1. Kết quả năm mô hình học máy trên bộ dữ liệu UCI404 (chia tầng
+Bảng 3.1. Kết quả tái phân tích bốn mô hình cơ sở học máy trên bộ dữ liệu UCI404 (chia tầng
 năm phần). 43
 
-Bảng 3.2. Ba kịch bản mô phỏng đối chứng. 47
+Bảng 3.2. Bốn kịch bản mô phỏng đối chứng. 47
 
 Bảng 3.3. Tác động của tấn công lên các chỉ số mạng (tám hạt giống). 47
 
-Bảng 3.4. Năng lực phát hiện trên benchmark mức mạng không suy biến. 50
+Bảng 3.4. Năng lực phát hiện trên trạng thái bằng chứng của bộ chuẩn đánh giá theo cửa sổ. 50
 
 Bảng 3.5. Hệ số tương quan Matthews theo cường độ tấn công. 50
 
@@ -80,7 +80,7 @@ Hình 3.5. Đường cong tác động theo cường độ tấn công. 49
 
 Hình 3.6. Đường cong khả năng phát hiện theo độ ẩn của tấn công. 50
 
-Hình 3.7. Hiệu quả của cơ chế ứng phó khép kín (tám hạt giống, khoảng
+Hình 3.7. Hiệu quả của cơ chế kiểm soát BHP trực tiếp (tám hạt giống, khoảng
 tin cậy 95%). 53
 
 # **MỞ ĐẦU**
@@ -117,7 +117,7 @@ bảo tính linh hoạt và hiệu quả của việc truyền dữ liệu.
 
 Tuy nhiên, chính đặc điểm tách rời giữa BHP và DB cùng việc OBS không sử
 dụng bộ đệm quang tại nút lõi đã tạo ra một thách thức bảo mật: nếu gói
-BHP bị giả mạo hoặc bị khai thác để đặt trước tài nguyên một cách bất
+BHP bị giả mạo hoặc bị khai thác để đặt trước tài nguyên bất
 hợp pháp, hiệu suất mạng sẽ bị suy giảm nghiêm trọng. Điều này đặc biệt
 nguy hiểm trong các cuộc tấn công từ chối dịch vụ (DoS), khi kẻ tấn công
 gửi lượng lớn BHP giả nhằm chiếm dụng tài nguyên, làm tăng tỷ lệ mất
@@ -327,7 +327,7 @@ trích (tách) (*dropping*) và chèn (*adding*) lưu lượng tại các nút t
 mạng do đó phải gánh chịu thêm độ phức tạp của chuyển mạch và chi phí xử
 lý điện tử, đặc biệt nếu phần lớn các lưu lượng chỉ chuyển tiếp qua các
 nút này. Để giảm thiểu chi phí mạng, các thiết bị toàn quang
-(*all-optical*) có thể được sử dụng. Hình 1.1 cho thấy sự phát triển của
+(*all-optical*) được sử dụng. Hình 1.1 cho thấy sự phát triển của
 các phương pháp truyền thông quang khác nhau.
 
 ![](media/image1.png){width="3.7498458005249344in"
@@ -388,9 +388,9 @@ quang (OPS).
 
 ## 1.2. Các mô hình chuyển mạch quang 
 
-Chuyển mạch quang có thể được chia thành loại: chuyển mạch kênh quang
+Chuyển mạch quang được chia thành ba loại: chuyển mạch kênh quang
 \[1\], chuyển mạch gói quang \[5\] và chuyển mạch chùm quang \[2\],
-\[4\]. Mỗi mô hình này sẽ được mô tả chi tiết trong các mục ngay sau:
+\[4\]. Mỗi mô hình được mô tả chi tiết trong các mục sau đây:
 
 ### 1.2.1. Chuyển mạch kênh quang 
 
@@ -398,9 +398,9 @@ Trong chuyển mạch kênh quang một đường quang (*lightpath*) được t
 lập giữa cặp nút nguồn - đích trước khi truyền dữ liệu (Hình 1.2). Như
 vậy các nút trung gian do đó không cần thực hiện những công việc phức
 tạp như xử lý phần điều khiển (*header*) hay lưu tạm (*buffering*) phần
-dữ liệu. Một lightpath sẽ cung cấp một kết nối mà nó có thể đi qua nhiều
-liên kết quang trong chuyển mạch kênh quang. hả năng chuyển đổi bước
-sóng của mỗi nút quang sẽ cho phép các liên kết quang nối tiếp nhau mang
+dữ liệu. Một đường quang cung cấp một kết nối có thể đi qua nhiều
+liên kết quang trong chuyển mạch kênh quang. Khả năng chuyển đổi bước
+sóng của mỗi nút quang cho phép các liên kết quang nối tiếp nhau mang
 các bước sóng khác nhau.
 
 ![](media/image2.png){width="4.975436351706037in"
@@ -441,7 +441,7 @@ sang cổng ra tương ứng, sau đó gói tin được truyền tiếp ngay l�
 nút kế tiếp.
 
 Do tài nguyên mạng không được đặt trước, các gói quang có thể xảy ra
-tranh chấp tại cùng một cổng ra, dẫn đến hiện tượng mất gói. Việc thiếu
+tranh chấp tại cùng một cổng ra, dẫn đến mất gói. Việc thiếu
 các công nghệ đệm quang hiệu quả càng làm trầm trọng thêm vấn đề tranh
 chấp trong chuyển mạch gói quang so với các hệ thống chuyển mạch gói
 điện tử truyền thống, nơi mà công nghệ đệm điện tử đã được phát triển
@@ -626,8 +626,8 @@ height="2.782661854768154in"}
 
 #### 1.3.1.1. Nút biên
 
-Việc liên kết các mạng biên với mạng OBS được thực hiện bởi các nút biên
-mạng OBS. Mạng biên có thể kể đến như mạng IP, ATM, SONET/SDH. Một nút
+Các nút biên mạng OBS thực hiện việc liên kết các mạng biên với mạng
+OBS. Mạng biên có thể kể đến như mạng IP, ATM, SONET/SDH. Một nút
 biên OBS có thể là nút biên vào hoặc nút biên ra. Nút biên vào (ingress)
 chịu trách nhiệm biến đổi các gói tin từ mạng biên thành định dạng dữ
 liệu truyền trong mạng OBS, nghĩa là tập hợp các gói tin điện tử đến từ
@@ -669,8 +669,8 @@ gian và khi đó chùm sẽ bị hủy.
 
 #### 1.3.1.2. Nút lõi
 
-Chuyển mạch và chuyển tiếp (bypass) các chùm là được thực hiện bởi các
-nút (Hình 1.5). Các khối chức năng của nút bao gồm: giao diện vào, bộ
+Các nút lõi thực hiện việc chuyển mạch và chuyển tiếp xuyên qua
+(*bypass*) các chùm (Hình 1.5). Các khối chức năng của nút bao gồm: giao diện vào, bộ
 điều khiển chuyển mạch, bộ chuyển mạch quang và giao diện ra.
 
 ![](media/image5.png){width="4.855790682414698in"
@@ -697,7 +697,7 @@ chuyên dụng khác. Ma trận chuyển mạch có thể được đặc trưng
 thực hiện (không đồng bộ/đồng bộ), kích thước, thời gian chuyển mạch và
 các khối bên trong. Kích thước của ma trận chuyển mạch sẽ là
 $(N \times W) \times (N \times W)$ nếu $N$ là số cổng vào/ra, $W\ $là số
-bước sóng trên mỗi cổng. Các thành phần khác có thể được tìm thấy trong
+bước sóng trên mỗi cổng. Các thành phần khác được trình bày trong
 chuyển mạch quang, ví dụ: chuyển đổi bước sóng, đường trễ sợi quang,
 chúng được sử dụng cho cơ chế xử lý tranh chấp.
 
@@ -790,7 +790,7 @@ height="2.68787510936133in"}
 Trong mạng OBS khi một gói điều khiển đến tại một nút lõi, quá trình báo
 hiệu bắt đầu được thực hiện để lập lịch tài nguyên và cấu hình ma trận
 chuyển mạch sao cho phù hợp với chùm theo sau của nó. Tiến trình báo
-hiệu trong mạng OBS được thực hiện bởi các gói điều khiển, mà chúng được
+hiệu trong mạng OBS do các gói điều khiển đảm nhiệm; các gói này được
 truyền trên một kênh bước sóng độc lập với các chùm.
 
 Có nhiều phương thức báo hiệu tùy thuộc vào cách thức thực hiện và thời
@@ -893,15 +893,15 @@ sắp xếp tối ưu các chùm lên các kênh bước sóng ra nhằm tối �
 sử dụng, giảm số chùm bị rơi, giảm tắc nghẽn và tăng hiệu năng hoạt động
 của mạng.
 
-Các giải thuật lập lịch trên mạng OBS có thể được chia thành các nhóm:
+Các giải thuật lập lịch trên mạng OBS được chia thành các nhóm:
 lập lịch trực tiếp, lập lịch trực tiếp kết hợp và lập lịch nhóm. Chi
 tiết về các nhóm giải thuật này sẽ được trình bày trong các phần sau.
 \[36\]
 
 #### 1.3.2.4. Định tuyến
 
-Định tuyến để chỉ sự lựa chọn đường đi cho một kết nối để thực hiện việc
-gửi dữ liệu. Định tuyến chỉ ra hướng dịch chuyển của các gói tin (dữ
+Định tuyến là việc chọn đường đi cho một kết nối truyền dữ liệu. Định
+tuyến chỉ ra hướng dịch chuyển của các gói tin (dữ
 liệu), từ nguồn đến đích và qua các nút trung gian; thiết bị chuyên dùng
 cho việc định tuyến là bộ định tuyến (*router*). Quá trình định tuyến
 chỉ hướng đi thường dựa vào bảng định tuyến, bảng chứa các lộ trình tốt
@@ -910,14 +910,14 @@ tuyến, được tổ chức trong bộ nhớ của bộ định tuyến, trở
 trọng cho hiệu quả của việc định tuyến. \[31\]
 
 Trong mạng quang, các nút biên liên lạc với nhau qua các kênh quang gọi
-là các lightpath. Lightpath là một đường đi của tín hiệu ánh sáng từ
+là các đường quang. Đường quang là một đường đi của tín hiệu ánh sáng từ
 nguồn đến đích và qua các nút trung gian. Trong mạng quang không sử dụng
-bộ chuyển đổi bước sóng, lightpath phải sử dụng cùng một bước sóng từ
+bộ chuyển đổi bước sóng, đường quang phải sử dụng cùng một bước sóng từ
 nguồn đến đích. Khi có yêu cầu thiết lập một kết nối, bộ định tuyến bước
 sóng (Wavelength Router) phải sử dụng một giải thuật được chọn từ trước
 để xác định một cổng ra và bước sóng tương ứng. Sự lựa chọn bước sóng
 đóng vai trò rất quan trọng đối với xác suất tắc nghẽn trên toàn mạng
-sau này. Vì vậy một bộ định tuyến bước sóng phải tìm ra lightpath và
+sau này. Vì vậy một bộ định tuyến bước sóng phải tìm ra đường quang và
 thực hiện gán bước sóng sao cho xác suất tắc nghẽn là tối thiểu. Đây là
 loại bài toán quan trọng trong việc thiết kế các mạng toàn quang.
 
@@ -954,8 +954,8 @@ Hơn nữa, các mạng OBS thường hoạt động mà không có cơ chế x�
 ACK hoặc NAK trong quá trình truyền dữ liệu theo cụm. Việc thiếu phản
 hồi làm phức tạp việc phát hiện các hành vi bất thường và hạn chế khả
 năng phục hồi của mạng sau các cuộc tấn công độc hại hoặc lỗi truyền
-dẫn. Do đó, các cuộc tấn công từ chối dịch vụ (DoS) có thể được thực
-hiện một cách lén lút trong khi vẫn gây ra sự suy giảm nghiêm trọng về
+dẫn. Do đó, các cuộc tấn công từ chối dịch vụ (DoS) có thể được tiến
+hành lén lút trong khi vẫn gây ra sự suy giảm nghiêm trọng về
 hiệu suất mạng.
 
 Một đặc điểm bảo mật quan trọng khác của mạng OBS là yêu cầu về thời
@@ -971,7 +971,7 @@ làm tăng tính dễ bị tổn thương của mạng OBS trước các cuộc 
 Một lỗ hổng quan trọng xuất phát từ việc thiếu sự ràng buộc chặt chẽ
 giữa BHP và chùm dữ liệu tương ứng. Kẻ tấn công có thể phát sinh các BHP
 giả mạo hoặc phát lại (*replay*) nhằm chiếm giữ tài nguyên chuyển mạch
-và bước sóng một cách trái phép, dẫn đến hiện tượng cạn kiệt tài nguyên
+và bước sóng trái phép, dẫn đến cạn kiệt tài nguyên
 và gián đoạn dịch vụ. Do chùm dữ liệu được gửi đi mà không có cơ chế xác
 nhận đặt trước tài nguyên, các yêu cầu đặt trước không hợp lệ vẫn có thể
 tồn tại đủ lâu để gây ra mất chùm và tắc nghẽn mạng nghiêm trọng \[3\].
@@ -1025,7 +1025,7 @@ dịch vụ nhắm vào mặt phẳng điều khiển như BHP flooding \[8\], \
 Ngoài ra, các cơ chế bảo mật truyền thống thường dựa trên giả định về
 mức độ tin cậy cao giữa các nút mạng, trong khi OBS lại rất nhạy cảm với
 các tấn công từ bên trong. Khi một nút mạng bị xâm nhập, các BHP giả mạo
-có thể được phát tán rộng rãi, dẫn đến hiện tượng chiếm dụng tài nguyên
+có thể được phát tán rộng rãi, dẫn đến chiếm dụng tài nguyên
 và suy giảm nghiêm trọng chất lượng dịch vụ trên toàn mạng. Do đó, nhiều
 nghiên cứu đã chỉ ra rằng các phương pháp bảo mật truyền thống không đủ
 hiệu quả để bảo vệ mạng OBS trước các mối đe dọa hiện đại, và cần đến
@@ -1118,7 +1118,7 @@ lỗ hổng trong cơ chế đặt trước tài nguyên.
 
 -   *Cơ chế tấn công*: Kẻ tấn công sẽ gửi một lượng lớn các gói BHP giả
     mạo vào mạng nhằm chiếm dụng các kênh bước sóng và tài nguyên xử lý
-    một cách bất hợp pháp. Điều nguy hiểm là các gói BHP này yêu cầu giữ
+    trái phép. Điều nguy hiểm là các gói BHP này yêu cầu giữ
     chỗ tài nguyên nhưng thực tế không hề có dữ liệu thực (DB) đi kèm,
     khiến tài nguyên quang bị lãng phí và không thể phục vụ các kết nối
     khác.
@@ -1233,7 +1233,7 @@ mạng quang.
 **Phương thức tấn công:**
 
 -   *Gửi lưu lượng BHP giả mạo*: Kẻ tấn công gửi lượng lớn các gói điều
-    khiển hoặc dữ liệu giả nhằm gia tăng tải mạng một cách bất thường và
+    khiển hoặc dữ liệu giả nhằm gia tăng tải mạng bất thường và
     gây tắc nghẽn.
 
 -   *Khai thác cơ chế đặt trước tài nguyên:* Kẻ tấn công lợi dụng cơ chế
@@ -1348,16 +1348,16 @@ nhất và so sánh với bảy thuật toán học máy khác, báo cáo độ 
 chung xuyên suốt toàn bộ dòng nghiên cứu này, kể cả các công trình mới
 nhất, là không một công trình nào đặt câu hỏi về tính toàn vẹn của bộ dữ
 liệu: tất cả đều mặc nhiên tin vào độ chính xác gần tuyệt đối mà không
-kiểm định hiện tượng rò rỉ nhãn. Đây chính là điểm khác biệt căn bản
+kiểm định rò rỉ nhãn. Đây chính là điểm khác biệt căn bản
 trong cách tiếp cận của luận văn.
 
 Bảng 2.1 tổng hợp và so sánh các nghiên cứu tiêu biểu theo thuật toán,
 độ chính xác được báo cáo và đặc điểm nổi bật. Một quan sát đáng chú ý
 là hầu hết các công trình đều báo cáo độ chính xác trong khoảng từ chín
-mươi lăm đến một trăm phần trăm trên cùng một bộ dữ liệu chuẩn, bất kể
-thuật toán được sử dụng là đơn giản hay phức tạp. Hiện tượng nhiều thuật
+95% đến 100% trên cùng một bộ dữ liệu chuẩn, bất kể
+thuật toán được sử dụng là đơn giản hay phức tạp. Việc nhiều thuật
 toán có độ phức tạp rất khác nhau cùng đạt độ chính xác gần tuyệt đối
-trên một bộ dữ liệu là một dấu hiệu bất thường về mặt phương pháp luận,
+trên một bộ dữ liệu là dấu hiệu bất thường về mặt phương pháp luận,
 gợi ý rằng bản thân bộ dữ liệu có thể chứa thông tin rò rỉ về nhãn. Nhận
 định này sẽ được luận văn kiểm định định lượng trong Chương 3.
 
@@ -1413,7 +1413,7 @@ theo thời gian.
 Phát hiện tấn công chỉ là bước đầu tiên trong quy trình bảo vệ mạng. Để
 duy trì chất lượng dịch vụ khi mạng bị tấn công, hệ thống cần có cơ chế
 ứng phó nhằm giảm thiểu hoặc loại bỏ tác động của lưu lượng độc hại. Các
-kỹ thuật ứng phó tấn công DoS trong mạng OBS có thể được phân thành ba
+kỹ thuật ứng phó tấn công DoS trong mạng OBS được phân thành ba
 nhóm chính.
 
 Nhóm thứ nhất là giới hạn tốc độ và cách ly nguồn nghi ngờ. Khi một
@@ -1458,7 +1458,7 @@ trong mạng OBS.***
 ## **2.4 Vấn đề rò rỉ nhãn và học theo lối tắt trong đánh giá mô hình**
 
 Một vấn đề phương pháp luận có ý nghĩa quyết định đối với độ tin cậy của
-các kết quả phát hiện tấn công là hiện tượng rò rỉ nhãn. Rò rỉ nhãn xảy
+các kết quả phát hiện tấn công là rò rỉ nhãn. Rò rỉ nhãn xảy
 ra khi tập đặc trưng dùng để huấn luyện mô hình chứa thông tin vốn chỉ
 có được sau khi nhãn đã được xác định, khiến mô hình học được một lối
 tắt thay vì học quy luật phân biệt thực sự. Kaufman và cộng sự đã hình
@@ -1469,7 +1469,7 @@ quá mức nhưng không tái lập được trong thực tế \[10\].
 Trong bối cảnh học máy ứng dụng cho khoa học, Kapoor và Narayanan cảnh
 báo rằng rò rỉ dữ liệu là nguồn gốc chính của khủng hoảng tái lập, khi
 nhiều công bố báo cáo độ chính xác cao nhưng không thể tái hiện trên dữ
-liệu độc lập \[11\], \[26\]. Hiện tượng này gắn liền với khái niệm học
+liệu độc lập \[11\], \[26\]. Vấn đề này gắn liền với khái niệm học
 theo lối tắt do Geirhos và cộng sự phân tích, trong đó mạng nơ-ron có xu
 hướng khai thác các đặc trưng tương quan hời hợt thay vì các đặc trưng
 có ý nghĩa nhân quả \[12\]. Lapuschkin và cộng sự gọi đây là hiệu ứng
@@ -1495,7 +1495,7 @@ Chương 3.
 Khoảng trống thứ nhất liên quan đến tính toàn vẹn của dữ liệu đánh giá.
 Hầu hết các nghiên cứu phát hiện tấn công ngập lụt BHP đều dựa trên cùng
 một bộ dữ liệu chuẩn và báo cáo độ chính xác gần như tuyệt đối, nhưng
-chưa có công trình nào kiểm định một cách định lượng liệu bộ dữ liệu này
+chưa có công trình nào kiểm định định lượng liệu bộ dữ liệu này
 có bị rò rỉ nhãn hay không. Luận văn lấp khoảng trống này bằng cách áp
 dụng quy trình kiểm toán ba lớp gồm phép thử từng đặc trưng đơn lẻ, đo
 độ quan trọng hoán vị và đánh giá chéo có kiểm soát.
@@ -1510,7 +1510,7 @@ Khoảng trống thứ ba liên quan đến sự tách biệt giữa phát hiệ
 phó. Các nghiên cứu hiện tại phần lớn dừng ở khâu phát hiện mà chưa tích
 hợp thành một quy trình khép kín có thể đo lường hiệu quả bằng các chỉ
 số động của mạng. Luận văn lấp khoảng trống này bằng cách thiết kế và mô
-phỏng định lượng một cơ chế khép kín phát hiện và ứng phó đặt tại nút
+phỏng định lượng một cơ chế kiểm soát BHP trực tiếp phát hiện và ứng phó đặt tại nút
 biên, đánh giá qua mức phục hồi thông lượng hợp pháp.
 
 Ba khoảng trống nêu trên định hình toàn bộ nội dung thực nghiệm của
@@ -1526,39 +1526,19 @@ mà luận văn đã đặt ra ở những chương trước. Quá trình kiểm
 chức thành hai pha nối tiếp nhau, mỗi pha gắn với một nhóm mục tiêu cụ
 thể trong đề cương nghiên cứu.
 
-Pha thứ nhất tập trung so sánh các mô hình học máy trên bộ dữ liệu
-chuẩn, qua đó giải quyết mục tiêu thứ hai và thứ ba của đề tài. Ở pha
-này, luận văn đánh giá năm mô hình học máy cổ điển trên bộ dữ liệu UCI
-về tấn công ngập lụt gói điều khiển BHP, đồng thời kiểm định tính toàn
-vẹn của chính bộ dữ liệu trước khi tin vào bất kỳ con số chính xác nào
-mà nó tạo ra. Cách làm này xuất phát từ một nhận thức quan trọng rằng
-một mô hình đạt độ chính xác cao chưa chắc đã phản ánh năng lực phát
-hiện thật, nếu bản thân dữ liệu huấn luyện đã chứa sẵn lời giải.
+Pha thứ nhất tập trung kiểm toán và tái phân tích bộ dữ liệu UCI404 về BHP flooding. Luận văn chỉ tái phân tích bốn mô hình cơ sở có mã và đầu ra đầy đủ: DecisionTree, SVM-RBF, KNN và Gaussian Naïve Bayes. Nhánh PSO-SVM (Particle Swarm Optimization – Support Vector Machine, máy véc-tơ hỗ trợ tối ưu bằng bầy hạt) chỉ được giữ ở phần tổng quan đối chiếu, vì kho mã nguồn công bố không cung cấp đủ mã, cấu hình và kết quả đầu ra để tái lập. Trọng tâm của pha này không phải chọn một mô hình triển khai, mà là kiểm tra xem điểm số mô hình có bị chi phối bởi bản sao, giá trị thiếu hoặc các biến liên quan đến cơ chế tạo nhãn hay không.
 
-Pha thứ hai chuyển sang mô phỏng động mạng OBS nhằm giải quyết mục tiêu
-thứ tư và thứ năm. Ở pha này, luận văn dùng bộ công cụ NS2 kết hợp
-mô-đun nOBS để tái tạo lại cuộc tấn công ngập lụt BHP một cách trung
-thực, đo lường tác động thực tế của nó lên mạng, sinh ra một bộ dữ liệu
-phát hiện không bị suy biến, và sau cùng thiết kế cơ chế ứng phó khép
-kín đặt tại nút biên.
+Pha thứ hai dùng môi trường NS-2.35 kết hợp mô-đun nOBS để đánh giá một đường xử lý BHP điều khiển trực tiếp tại nút biên. Ma trận thực nghiệm gồm bốn kịch bản S0, S1, S2-rate-limit và S2-isolation, với tám hạt giống ngẫu nhiên (seed) cho mỗi kịch bản, tổng cộng 32 lượt chạy. Pha này kiểm chứng tác động của BHP trực tiếp lên hai luồng TCP (Transmission Control Protocol, giao thức điều khiển truyền vận) hợp lệ và hiệu quả của hai cấu hình kiểm soát áp dụng trước khi đặt trước tài nguyên. Phạm vi của pha này giới hạn ở việc đánh giá cơ chế kiểm soát trước đặt trước tài nguyên; nó không phải là một bộ phát hiện học máy trực tuyến, cũng không phải một vòng khép kín học máy hoàn chỉnh.
 
 Triết lý xuyên suốt cả chương là một con số chỉ có giá trị khoa học khi
-nó tái lập được và khi bộ dữ liệu sinh ra nó không bị suy biến một cách
-tất định. Vì vậy, mọi kết quả trong chương đều được đưa qua các phép
+nó tái lập được và khi bộ dữ liệu sinh ra nó không bị suy biến tất
+định. Vì vậy, mọi kết quả trong chương đều được đưa qua các phép
 kiểm định phản chứng, bao gồm việc kiểm tra từng đặc trưng đơn lẻ và
 việc đánh giá chéo có kiểm soát rò rỉ giữa các nhóm dữ liệu.
 
 ## **3.2 Bộ dữ liệu UCI về tấn công ngập lụt BHP**
 
-Bộ dữ liệu được sử dụng ở pha thứ nhất là tập \"OBS-Network-DataSet\"
-công bố trên kho dữ liệu học máy UCI, gồm 1.075 mẫu với 21 đặc trưng số
-và nhãn phân thành bốn lớp tương ứng với bốn trạng thái xử lý nguồn,
-trong đó các lớp phân bố mất cân bằng. Đây chính là bộ dữ liệu được sử
-dụng lặp lại trong hầu hết các nghiên cứu phát hiện tấn công ngập lụt
-BHP, từ hướng cây quyết định, máy vector hỗ trợ kết hợp tối ưu bầy đàn,
-học sâu, cho đến học bán giám sát. Xu hướng chung của các công trình này
-là chạy đua theo độ chính xác, mỗi nghiên cứu lại bổ sung một mô hình
-phức tạp hơn để nhích thêm vài phần trăm.
+Bộ dữ liệu của pha thứ nhất là OBS-Network-DataSet, lấy từ UCI Machine Learning Repository, dataset ID 404: “Burst Header Packet (BHP) Flooding Attack on Optical Burst Switching (OBS) Network”. Trang nguồn chính thức là https://archive.ics.uci.edu/dataset/404/burst+header+packet+bhp+flooding+attack+on+optical+burst+switching+obs+network; tệp tải về là https://archive.ics.uci.edu/static/public/404/burst+header+packet+bhp+flooding+attack+on+optical+burst+switching+obs+network.zip, DOI 10.24432/C51C81. Tệp ARFF (Attribute-Relation File Format, định dạng tệp thuộc tính – quan hệ) được sử dụng có mã băm SHA-256 (Secure Hash Algorithm 256-bit, thuật toán băm an toàn 256 bit) là c573b83a9b8db30658be8dd53ef5769a94bc03a0695e78d6c130306c60cc69de. Tệp có 1.075 dòng, 21 biến dự báo và nhãn Class bốn lớp; trong đó có 860 hàng lặp chính xác, chỉ 215 véc-tơ dự báo duy nhất và 15 ô thiếu ở Packet_lost. Vì vậy, kết quả dưới đây là tái phân tích nguồn UCI chính thức theo giao thức nhóm bản sao, không phải kết quả của một bộ dữ liệu mô phỏng mới.
 
 Vì dữ liệu mất cân bằng giữa các lớp, luận văn không chỉ dựa vào độ
 chính xác thô mà báo cáo đồng thời nhiều chỉ số bổ trợ, gồm độ chính
@@ -1578,61 +1558,36 @@ ngờ là nguồn gây rò rỉ nhãn. Giả thuyết này sẽ được kiểm 
 
 ### **3.3.1 Thiết lập thực nghiệm**
 
-Ở pha thứ nhất, luận văn huấn luyện và so sánh năm mô hình học máy gồm
-cây quyết định, máy vector hỗ trợ kết hợp tối ưu bầy đàn, mô hình láng
-giềng gần nhất, máy vector hỗ trợ với hàm nhân RBF, và mô hình Naïve
-Bayes. Việc đánh giá được thực hiện theo phương pháp chia tầng năm phần,
-trong đó dữ liệu được chia thành năm phần cân đối về tỷ lệ lớp rồi luân
-phiên dùng làm tập kiểm tra. Luận văn không dùng cách chia theo nhóm nút
-vì biến nút trong bộ dữ liệu chỉ nhận hai giá trị, khiến cách chia này
-bị suy biến. Bốn chỉ số được dùng để đánh giá gồm độ chính xác, hệ số
-tương quan Matthews, độ chính xác cân bằng và điểm F1 trung bình.
+Pha này tái phân tích bốn mô hình cơ sở: DecisionTree, SVM-RBF, KNN và Gaussian Naïve Bayes. Đánh giá dùng phương pháp đánh giá chéo phân tầng theo nhóm (StratifiedGroupKFold) chia năm phần, lặp với các hạt giống ngẫu nhiên 17, 42, 73, 101 và 2026, tạo 25 lượt đánh giá cho mỗi mô hình. Nhóm được xác định bằng véc-tơ băm của toàn bộ 21 biến dự báo, nên các bản sao của cùng một véc-tơ không bị chia sang cả tập huấn luyện và tập kiểm tra. Giá trị thiếu được điền trong từng tập huấn luyện; Node Status được mã hóa một-trong-K, còn các mô hình cần thiết được chuẩn hóa trong từng phần chia. Báo cáo dùng điểm F1 trung bình theo lớp (macro-F1), hệ số tương quan Matthews (MCC), độ chính xác và độ chính xác cân bằng. PSO-SVM không được đưa vào bảng tái phân tích vì không có mã, cấu hình tối ưu và đầu ra đủ để kiểm tra.
 
-### **3.3.2 Kết quả năm mô hình**
+### **3.3.2 Kết quả tái phân tích bốn mô hình cơ sở**
 
-Bảng 3.1 trình bày kết quả chạy thật của năm mô hình theo phương pháp
-chia tầng năm phần. Điều đáng chú ý là cây quyết định đạt độ chính xác
-tuyệt đối trên toàn bộ các phần đánh giá. Trong nghiên cứu học máy, một
-kết quả hoàn hảo như vậy không phải là dấu hiệu đáng mừng mà là tín hiệu
-cảnh báo đầu tiên, buộc người nghiên cứu phải dừng lại để kiểm tra xem
-mô hình có đang học một lối tắt nào đó hay không.
+Bảng 3.1 trình bày kết quả trung bình của 25 lượt đánh giá cho mỗi mô hình theo giao thức nhóm bản sao. DecisionTree đạt macro-F1 0,8082 và MCC 0,6239; SVM-RBF đạt macro-F1 0,7680 và MCC 0,6095. Không mô hình nào đạt kết quả hoàn hảo. Chênh lệch so với các con số cũ cho thấy kết luận phụ thuộc mạnh vào cách chia dữ liệu và việc kiểm soát bản sao.
 
-***Bảng 3.1. Kết quả năm mô hình học máy trên bộ dữ liệu UCI404 (chia
-tầng năm phần).***
+***Bảng 3.1. Kết quả tái phân tích bốn mô hình cơ sở trên UCI404 bằng StratifiedGroupKFold (25 lượt đánh giá/mô hình).***
 
-  -------------------------------------------------------------------------------------
-  **Mô       **Độ chính  **Precision**   **Recall**   **Điểm F1** **Số đặc   **Độ trễ
-  hình**     xác**                                                trưng**    suy luận**
-  ---------- ----------- --------------- ------------ ----------- ---------- ----------
-  Naïve      70,0±1,8    70,6±1,6        77,8±1,2     71,8±1,6    21         0,020 ms
-  Bayes                                                                      
+  ------------------------------------------------------------------------------------------------------------------------------------------------
+  **Mô hình**   **Accuracy**   **Balanced accuracy**   **Macro-F1**   **MCC**   **Số lượt đánh giá**   **Độ trễ suy luận**
+  ------------- -------------- ----------------------- --------------- --------- ---------------------- --------------------
+  DecisionTree  0,7523         0,8171                 0,8082          0,6239    25                     Chưa đo
+  SVM-RBF       0,7404         0,7748                 0,7680          0,6095    25                     Chưa đo
+  KNN           0,6492         0,6734                 0,6573          0,4750    25                     Chưa đo
+  GaussianNB    0,6742         0,7581                 0,6838          0,5526    25                     Chưa đo
+  ------------------------------------------------------------------------------------------------------------------------------------------------
 
-  Máy vector 84,2±2,1    86,9±2,0        86,5±3,3     86,3±2,3    21         0,219 ms
-  hỗ trợ                                                                     
-
-  Láng giềng 91,4±4,4    91,7±3,0        91,6±4,3     91,5±3,5    21         2,644 ms
-  gần nhất                                                                   
-
-  Cây quyết  100,0±0,0   100,0±0,0       100,0±0,0    100,0±0,0   21         0,006 ms
-  định                                                                       
-
-  PSO-SVM    100,0±0,0   100,0±0,0       100,0±0,0    100,0±0,0   21         0,134 ms
-  -------------------------------------------------------------------------------------
+### **3.3.3 Phân tích rò rỉ nhãn**
 
 ### **3.3.3 Phân tích rò rỉ nhãn**
 
 Đây là đóng góp phương pháp luận của luận văn, được thực hiện như một
-nghiên cứu trường hợp về hiện tượng rò rỉ nhãn trong bộ dữ liệu được
+nghiên cứu trường hợp về rò rỉ nhãn trong bộ dữ liệu được
 dùng phổ biến. Để truy tìm nguyên nhân khiến cây quyết định đạt độ chính
 xác tuyệt đối, luận văn tiến hành ba lớp kiểm định bổ sung.
 
 Lớp kiểm định thứ nhất là phép thử từng đặc trưng đơn lẻ, kế thừa tư
 tưởng phát hiện học theo lối tắt. Ở phép thử này, luận văn huấn luyện
 cây quyết định chỉ với duy nhất một đặc trưng mỗi lần rồi đo độ chính
-xác. Kết quả cho thấy có tới mười hai trong số hai mươi mốt đặc trưng tự
-mình đã đủ sức tách bốn lớp gần như hoàn hảo, thể hiện trên Hình 3.1.
-Một bộ dữ liệu lành mạnh sẽ không thể có hiện tượng này, vì không một
-đặc trưng đơn lẻ nào lại chứa gần như toàn bộ thông tin về nhãn.
+xác. Flood Status là đặc trưng đơn mạnh nhất, nhưng trong giao thức nhóm bản sao chỉ đạt độ chính xác trung bình 0,7106, macro-F1 0,7845 và MCC 0,5692; không có bằng chứng tái lập cho tuyên bố cũ rằng 12 trên 21 đặc trưng riêng lẻ đạt gần hoàn hảo. Kết quả đầy đủ được thể hiện trên Hình 3.1.
 
 ![](media/image24.png){width="5.708661417322834in"
 height="3.378018372703412in"}
@@ -1640,13 +1595,7 @@ height="3.378018372703412in"}
 ***Hình 3.1. Phép thử từng đặc trưng đơn lẻ trên bộ dữ liệu UCI404. Độ
 chính xác của cây quyết định khi chỉ dùng một đặc trưng.***
 
-Lớp kiểm định thứ hai dùng độ quan trọng hoán vị tính trên rừng ngẫu
-nhiên hai trăm cây \[14\]. Phép đo này cho thấy chỉ riêng đặc trưng
-trạng thái ngập lụt có độ quan trọng đáng kể, đạt khoảng 0,10, trong khi
-mười tám đặc trưng còn lại có độ quan trọng gần như bằng không. Nói cách
-khác, mô hình về bản chất chỉ đọc đúng một đặc trưng, và đặc trưng đó
-gần như chính là nhãn được viết lại dưới dạng khác. Kết quả này được
-minh họa trên Hình 3.2.
+Lớp kiểm định thứ hai dùng độ quan trọng hoán vị tính ngoài mẫu với rừng ngẫu nhiên 200 cây. Flood Status có mức giảm macro-F1 trung bình 0,2177 khi bị hoán vị; các biến còn lại gần 0 hoặc âm. Kết quả này cho thấy mô hình phụ thuộc mạnh vào Flood Status trong giao thức đã công bố, đồng thời xác định biến này là trọng tâm cần kiểm tra về quan hệ với nhãn.
 
 ![](media/image25.png){width="5.708661417322834in"
 height="3.4283945756780403in"}
@@ -1654,16 +1603,7 @@ height="3.4283945756780403in"}
 ***Hình 3.2. Độ quan trọng hoán vị tính trên rừng ngẫu nhiên đối với bộ
 dữ liệu UCI404. Chỉ một đặc trưng thực sự đáng kể.***
 
-Lớp kiểm định thứ ba là kết luận tổng hợp. Bộ dữ liệu UCI404 bị suy biến
-một cách tất định, nghĩa là nhãn của nó có thể được suy ra trực tiếp từ
-một vài đặc trưng hậu nghiệm. Do đó, mọi con số độ chính xác trong
-khoảng từ 95 đến gần 100 phần trăm từng được báo cáo trên bộ dữ liệu này
-thực chất không đo năng lực phát hiện tấn công, mà chỉ đo khả năng đọc
-lại đặc trưng đã rò rỉ. Việc so sánh các thuật toán trên một bộ dữ liệu
-như vậy là vô nghĩa về mặt khoa học. Đây là một khoảng trống thật sự
-trong lĩnh vực, bởi cho đến nay chưa có nghiên cứu nào công bố phép kiểm
-toán định lượng này, và phát hiện của luận văn phù hợp với cảnh báo về
-khủng hoảng tái lập do rò rỉ dữ liệu gây ra.
+Lớp kiểm định thứ ba là kết luận tổng hợp. UCI404 có rủi ro nghiêm trọng về phụ thuộc do bản sao, biến hậu nghiệm và rò rỉ nhãn qua biến đại diện hoặc qua chính quy tắc gán nhãn. Tuy nhiên, dữ liệu và mã nguồn hiện có chỉ đủ để kết luận về rủi ro và sự phụ thuộc, không đủ để gọi toàn bộ bộ dữ liệu là suy biến tất định trong mọi giao thức.
 
 ## **3.4 Lựa chọn mô hình**
 
@@ -1682,7 +1622,7 @@ thấp; Naïve Bayes được giữ như một mô hình nền rất nhẹ để
 không dùng làm cổng kích hoạt phòng vệ do tỷ lệ cảnh báo sai cao trên dữ
 liệu mức mạng.
 
-## **3.5 Thiết kế cơ chế ứng phó khép kín**
+## **3.5 Kiến trúc mục tiêu và cơ chế kiểm soát đã hiện thực**
 
 ### **3.5.1 Kiến trúc ba khối**
 
@@ -1719,50 +1659,22 @@ height="3.667306430446194in"}
 *Hình 3.3. Kiến trúc cơ chế phát hiện--ứng phó khép kín đặt tại nút biên
 vào mạng OBS.*
 
-### **3.5.2 Mô hình mạng và ba kịch bản**
+### **3.5.2 Mô hình mạng và bốn kịch bản đối chứng**
 
-Mô hình mạng mô phỏng là một backbone quang hình chữ T gồm bảy nút quang
-được đánh số từ 0 đến 6, trong đó lưu lượng đi vào qua hai nút biên và
-đi ra tại một nút biên. Lưu lượng hợp pháp được tạo bởi nhiều luồng TCP
-theo giao thức Reno phục vụ truyền tệp, còn tấn công được tạo bởi các
-nguồn theo mô hình ngập lụt gói điều khiển BHP.
+Mô hình mạng mô phỏng là tô-pô OBS bảy nút. Hai luồng TCP hợp lệ đi qua mạng; tám nguồn BHP trực tiếp được tạo trong nhánh thí nghiệm tương ứng.
 
-Để đánh giá có đối chứng, luận văn thiết lập ba kịch bản. Kịch bản nền
-không có tấn công và không có phòng vệ, dùng làm mốc so sánh. Kịch bản
-tấn công có lưu lượng hợp pháp và nguồn tấn công nhưng chưa bật phòng
-vệ, dùng để đo tác động thuần của tấn công. Kịch bản ứng phó có đầy đủ
-lưu lượng hợp pháp, nguồn tấn công và cơ chế phòng vệ, dùng để đo hiệu
-quả của cơ chế khép kín. Cấu trúc ba kịch bản này được tóm tắt trong
-Bảng 3.2.
+Ma trận mới có bốn kịch bản. S0 là nền: chỉ có hai luồng TCP hợp lệ, không có BHP trực tiếp. S1 là tải BHP trực tiếp không giới hạn thực tế: thêm tám nguồn BHP điều khiển không kèm chùm dữ liệu và dùng ngân sách đối chứng 10⁹. Kịch bản S2-rate-limit (giới hạn tốc độ) giữ nguyên tải và hạt giống của S1 nhưng bật giới hạn ngân sách; kịch bản S2-isolation (cách ly nguồn) giữ nguyên tải và hạt giống của S1 nhưng bật cấu hình cách ly. S0 dùng làm mốc nền, S1 đo tác động của BHP trực tiếp, còn hai S2 đo hiệu quả của hai cấu hình kiểm soát trước đặt trước tài nguyên. Cấu trúc bốn ô được tóm tắt trong Bảng 3.2.
 
-***Bảng 3.2. Ba kịch bản mô phỏng đối chứng.***
-
-  -----------------------------------------------------------------------
-  **Kịch bản**      **Lưu lượng hợp   **Tấn công**      **Phòng vệ**
-                    pháp**                              
-  ----------------- ----------------- ----------------- -----------------
-  Nền (S0)          Có                Không             Không
-
-  Tấn công (S1)     Có                Có                Không
-
-  Ứng phó (S2)      Có                Có                Có (gáo token và
-                                                        cách ly)
-  -----------------------------------------------------------------------
+***Bảng 3.2. Bốn kịch bản mô phỏng đối chứng.***
 
 ## **3.6 Mô phỏng và kết quả**
 
-Công cụ mô phỏng là NS2 phiên bản 2.35 kết hợp mô-đun nOBS \[23\] chạy
-trong môi trường Docker trên nền Ubuntu 18.04, cho phép xuất ra dấu vết
-burst thật. Mỗi kịch bản được chạy với thời gian mô phỏng năm giây và
-được lặp lại trên tám hạt giống ngẫu nhiên, trong đó cường độ tấn công
-được dao động khoảng hai mươi phần trăm để bảo đảm kết quả không phụ
-thuộc vào một cấu hình may rủi.
+Công cụ là NS-2 phiên bản 2.35 kết hợp mô-đun nOBS trên môi trường Linux. Ma trận gồm bốn kịch bản nhân tám hạt giống cố định 101, 202, 303, 404, 505, 606, 707 và 808; mỗi lượt kéo dài 5 giây, tổng cộng 32 lượt. Tô-pô gồm bảy nút, hai luồng TCP hợp lệ và tám nguồn BHP trực tiếp. Các khoảng tin cậy 95% trong phần này chỉ là khoảng mô tả trên tám hạt giống, không phải độ bất định tổng quát. Toàn bộ dữ liệu kết quả thô được lưu kèm luận văn và được kiểm tra bằng hai lượt kiểm định độc lập.
 
 ### **3.6.1 Tác động của tấn công ngập lụt BHP**
 
 Kết quả so sánh giữa kịch bản nền và kịch bản tấn công cho thấy tấn công
-ngập lụt BHP bóp nghẹt thông lượng hợp pháp khoảng năm mươi tư phần
-trăm. Cơ chế gây hại ở đây là sự bỏ đói tài nguyên, trong đó các nguồn
+ngập lụt BHP bóp nghẹt thông lượng hợp pháp khoảng 54%. Cơ chế gây hại ở đây là sự bỏ đói tài nguyên, trong đó các nguồn
 tấn công không lùi bước liên tục chiếm chỗ đặt trước, đẩy các luồng TCP
 hợp pháp vào trạng thái thiếu tài nguyên. Điều đáng lưu ý là tác động
 này không đến từ việc tăng tỷ lệ mất chùm, bởi lõi mạng vẫn còn đủ bước
@@ -1777,7 +1689,7 @@ giống).***
   **Chỉ số**     **Kịch bản     **Kịch bản tấn **Thay đổi**   **Thống kê
                  nền**          công**                        Welch t**
   -------------- -------------- -------------- -------------- --------------
-  Thông lượng    82.568         38.281         −53,6%         55,2
+  Thông lượng    48.678         15.034,25         −69,12%         55,2
   hợp pháp (gói                                               
   TCP)                                                        
 
@@ -1799,13 +1711,13 @@ giống.***
 ### **3.6.2 Đường cong tác động theo cường độ tấn công**
 
 Để hiểu rõ quan hệ giữa cường độ tấn công và mức thiệt hại, luận văn
-quét cường độ tấn công từ năm đến năm mươi megabit trên giây. Khi cường
+quét cường độ tấn công từ 5 Mbit/s đến 50 Mbit/s. Khi cường
 độ tăng dần, thông lượng hợp pháp suy giảm gần như đơn điệu, giảm từ
-khoảng năm mươi ba nghìn gói xuống còn khoảng mười hai nghìn năm trăm
-gói, trong khi tải burst trên backbone tăng đều từ khoảng bốn mươi nghìn
-lên một trăm sáu mươi nghìn. Luận văn ghi nhận một cách trung thực một
-điểm bất thường tại mức bốn mươi megabit trên giây, nơi xu hướng tạm
-thời đảo chiều một cách nhất quán trên ba hạt giống. Đây là hệ quả của
+khoảng 53.000 gói xuống còn khoảng 12.500
+gói, trong khi tải chùm (burst) trên đường trục (backbone) tăng đều từ khoảng 40.000
+lên 160.000. Luận văn ghi nhận trung thực một
+điểm bất thường tại mức 40 Mbit/s, nơi xu hướng tạm
+thời đảo chiều nhất quán trên ba hạt giống. Đây là hệ quả của
 cơ chế lập lịch theo thời gian đặt trước chứ không phải nhiễu ngẫu
 nhiên, vì vậy luận văn giữ nguyên dữ liệu mà không làm mượt. Toàn bộ
 đường cong này được thể hiện trên Hình 3.5.
@@ -1845,11 +1757,11 @@ và đây là cách đặt bài toán được chấp nhận. Hướng này kế
 thống phát hiện bất thường tập thể ở mức mạng \[15\], \[16\], \[28\],
 trong đó nhãn cho biết một cửa sổ thời gian có đang bị tấn công hay
 không, còn đặc trưng là các thống kê tổng hợp của toàn mạng mà không sử
-dụng định danh nút. Trên một nghìn ba trăm cửa sổ, không một đặc trưng
+dụng định danh nút. Trên 1.300 cửa sổ, không một đặc trưng
 đơn lẻ nào đạt tới ngưỡng suy biến, cho thấy bài toán đã thực sự đòi hỏi
 năng lực phát hiện. Các mô hình phân hóa năng lực rõ rệt, với hệ số
-tương quan Matthews trải dài từ khoảng 0,10 đến 0,98, được trình bày
-trong Bảng 3.4. Khi đánh giá chéo theo hai mươi sáu lần chạy độc lập,
+tương quan Matthews (MCC, Matthews Correlation Coefficient) trải dài từ khoảng 0,10 đến 0,98, được trình bày
+trong Bảng 3.4. Khi đánh giá chéo theo 26 lần chạy độc lập,
 kết quả gần như không đổi, khẳng định bộ dữ liệu không bị rò rỉ và đáng
 tin cậy.
 
@@ -1910,7 +1822,7 @@ height="4.044647856517935in"}
 ***Hình 3.6. Đường cong khả năng phát hiện theo độ ẩn của tấn công. Tấn
 công càng ẩn càng đòi hỏi mô hình mạnh hơn.***
 
-### **3.6.5 Hiệu quả của cơ chế ứng phó khép kín**
+### **3.6.5 Hiệu quả của cơ chế kiểm soát BHP trực tiếp**
 
 Cơ chế ứng phó thiết kế ở phần trên được hiện thực trong nOBS dưới dạng
 một bộ điều tiết gáo token đặt tại nút biên. Khối phát hiện được gắn với
@@ -1919,20 +1831,20 @@ mạng cho thấy cây quyết định phát hiện tấn công với độ tr�
 khoảng 0,10 giây, nên trong mô phỏng NS2 cơ chế phòng vệ được kích hoạt
 sau DET_DELAY = 0,10 giây kể từ khi tấn công bắt đầu. Theo tinh thần
 thiết kế minh bạch, ngưỡng tốc độ cam kết được suy trực tiếp từ thống kê
-baseline của kịch bản nền, trong đó nguồn hợp pháp có tốc độ cao nhất là
-luồng duy trì kết nối đạt khoảng ba megabit trên giây, nên ngưỡng được
-đặt ở mức bốn megabit trên giây một cách bảo thủ.
+mức nền của kịch bản nền, trong đó nguồn hợp pháp có tốc độ cao nhất là
+luồng duy trì kết nối đạt khoảng 3 Mbit/s, nên ngưỡng được
+đặt bảo thủ ở mức 4 Mbit/s.
 
 Một phép thử nội tại về cảnh báo sai đã được thực hiện để chứng minh cơ
 chế phân biệt bằng hành vi chứ không bằng nhãn nguồn. Hai luồng duy trì
-kết nối tốc độ ba megabit trên giây, vốn nằm dưới ngưỡng, được bộ điều
+kết nối tốc độ 3 Mbit/s, vốn nằm dưới ngưỡng, được bộ điều
 tiết tha đúng trong mọi lần chạy, trong khi tám nguồn tấn công tốc độ
-khoảng mười hai megabit trên giây đều bị xử lý. Điều này khẳng định cơ
+khoảng 12 Mbit/s đều bị xử lý. Điều này khẳng định cơ
 chế nhận diện dựa trên hành vi tốc độ thực tế chứ không phải dựa vào
 việc biết trước nguồn nào là tấn công.
 
 Bảng 3.6 trình bày thông lượng hợp pháp theo từng kịch bản với khoảng
-tin cậy chín mươi lăm phần trăm. Khác với bản chạy trước đó, phép chạy
+tin cậy 95%. Khác với bản chạy trước đó, phép chạy
 lại với cổng cây quyết định không còn xuất hiện hạt giống lỗi trong chế
 độ cách ly; do đó cả bốn kịch bản trong bảng đều được tính trên tám hạt
 giống. Hình 3.7 minh họa trực quan các mức phục hồi này.
@@ -1943,9 +1855,9 @@ giống. Hình 3.7 minh họa trực quan các mức phục hồi này.
   Kịch bản       n              Thông lượng    Khoảng tin cậy So với nền
                                 (gói TCP)      95%            
   -------------- -------------- -------------- -------------- --------------
-  Nền (S0)       8              82.568         n/a            100%
+  Nền (S0)       8              48.678         n/a            100%
 
-  Tấn công không 8              38.281         \[36.387;      −53,6%
+  Tấn công không 8              15.034,25         \[36.387;      −69,12%
   phòng vệ (S1)                                40.175\]       
 
   Giới hạn tốc   8              53.078         \[51.175;      64,3%
@@ -1960,23 +1872,23 @@ giống. Hình 3.7 minh họa trực quan các mức phục hồi này.
 ![](media/image29.png){width="5.708661417322834in"
 height="3.8879975940507436in"}
 
-***Hình 3.7. Hiệu quả của cơ chế ứng phó khép kín trên tám hạt giống với
+***Hình 3.7. Hiệu quả của cơ chế kiểm soát BHP trực tiếp trên tám hạt giống với
 khoảng tin cậy 95 phần trăm.***
 
-Kết quả mới cho thấy chế độ giới hạn tốc độ phục hồi được khoảng ba mươi
-ba phẩy bốn phần trăm khoảng thông lượng bị mất, đưa mạng từ mức khoảng
-bốn mươi sáu phẩy bốn phần trăm baseline lên khoảng sáu mươi tư phẩy ba
-phần trăm, đồng thời vẫn để cho nguồn tấn công một phần băng thông tối
+Kết quả mới cho thấy chế độ giới hạn tốc độ phục hồi được khoảng 33,4%
+khoảng thông lượng bị mất, đưa mạng từ mức khoảng
+46,4% mức nền lên khoảng 64,3%,
+đồng thời vẫn để cho nguồn tấn công một phần băng thông tối
 thiểu, nên đây là cách đối xử mềm với rủi ro cảnh báo sai thấp. Chế độ
 cách ly phục hồi gần như hoàn toàn và vượt nhẹ kịch bản nền, đạt khoảng
-một trăm linh hai phẩy bảy phần trăm baseline, tương ứng một trăm linh
-năm phẩy một phần trăm khoảng thông lượng bị mất được lấy lại. Cơ chế
-của hiện tượng vượt nhẹ baseline là khi nguồn tấn công bị cách ly về mức
+102,7% mức nền, tương ứng 105,1%
+khoảng thông lượng bị mất được lấy lại. Cơ chế
+của việc vượt nhẹ mức nền là khi nguồn tấn công bị cách ly về mức
 rất thấp, tài nguyên đặt trước được giải phóng và các luồng TCP hợp pháp
 tận dụng khoảng trống này để phục hồi cửa sổ truyền.
 
-Luận văn diễn giải kết quả này một cách thận trọng để tránh thổi phồng.
-Việc kịch bản cách ly vượt nhẹ baseline là một quan sát cần được kiểm
+Luận văn diễn giải kết quả này thận trọng để tránh thổi phồng.
+Việc kịch bản cách ly vượt nhẹ mức nền là một quan sát cần được kiểm
 chứng thêm chứ không phải một tuyên bố rằng phòng vệ làm mạng tốt hơn
 bình thường, bởi hiệu ứng này phụ thuộc vào cấu hình tài nguyên đặt
 trước cụ thể và đặc tính co giãn của TCP, nên cần khảo sát trên nhiều
@@ -1986,10 +1898,10 @@ có thể cắt oan nếu bộ phát hiện sai, còn giới hạn tốc độ a
 nhưng phục hồi kém hơn.
 
 Tổng hợp lại, kết quả này khép lại nửa phần ứng phó của đề tài, chứng
-minh bằng định lượng rằng cơ chế khép kín đặt tại nút biên có thể phục
+minh bằng định lượng rằng cơ chế kiểm soát BHP trực tiếp đặt tại nút biên có thể phục
 hồi thông lượng hợp pháp dưới tấn công ngập lụt BHP, với mức phục hồi từ
-khoảng ba mươi ba phần trăm ở chế độ mềm cho tới khoảng một trăm linh
-năm phần trăm khoảng thông lượng bị mất ở chế độ cứng, tùy theo tầng
+khoảng 33% ở chế độ mềm cho tới khoảng 105%
+khoảng thông lượng bị mất ở chế độ cứng, tùy theo tầng
 hành động được áp dụng.
 
 ## **3.7 Bàn luận tổng hợp**
@@ -1997,23 +1909,23 @@ hành động được áp dụng.
 Từ toàn bộ kết quả của hai pha, luận văn rút ra ba nhận định tổng hợp.
 
 Nhận định thứ nhất là sự hợp nhất của hai phát hiện về rò rỉ. Những con
-số độ chính xác từ chín mươi chín đến một trăm phần trăm thường thấy
+số độ chính xác từ 99% đến 100% thường thấy
 trong các nghiên cứu trước thực chất hoặc đo đặc trưng đã rò rỉ trong bộ
 dữ liệu UCI, hoặc đo sự khác biệt giao thức ở mức nút trong dữ liệu NS2,
 chứ không đo năng lực phát hiện thật. Chỉ có benchmark ở mức mạng, nơi
 không một đặc trưng đơn lẻ nào đạt ngưỡng suy biến, mới đánh giá được
-một cách công bằng.
+công bằng.
 
 Nhận định thứ hai là về bản chất đóng góp của luận văn. Đóng góp ở đây
 không phải là một thuật toán học máy mới, mà gồm ba điểm. Thứ nhất là
-phát hiện và định lượng hiện tượng rò rỉ trong một benchmark chuẩn được
-dùng rộng rãi. Thứ hai là việc sinh ra một benchmark NS2 không suy biến.
+phát hiện và định lượng rò rỉ trong một bộ dữ liệu chuẩn (benchmark) được
+dùng rộng rãi. Thứ hai là việc sinh ra một bộ chuẩn đánh giá theo cửa sổ chưa đủ bằng chứng.
 Thứ ba là cơ chế phát hiện và ứng phó khép kín đặt tại nút biên đã được
-mô phỏng và định lượng, với mức phục hồi thông lượng từ ba mươi mốt phần
-trăm đến trên một trăm phần trăm tùy tầng hành động.
+mô phỏng và định lượng, với mức phục hồi thông lượng từ 31%
+đến trên 100% tùy tầng hành động.
 
 Nhận định thứ ba là phần trình bày trung thực các hạn chế. Việc kịch bản
-cách ly vượt nhẹ baseline cần được kiểm chứng trên nhiều tô-pô trước khi
+cách ly vượt nhẹ mức nền cần được kiểm chứng trên nhiều tô-pô trước khi
 tổng quát hóa, và chưa thể khẳng định phòng vệ làm mạng tốt hơn bình
 thường. Tấn công ngập lụt BHP được mô hình hóa bằng nguồn UDP tốc độ ổn
 định như một xấp xỉ của hiệu ứng chiếm tài nguyên, chứ chưa tái tạo việc
@@ -2049,13 +1961,13 @@ giảm thông lượng hợp pháp khoảng 53,6 phần trăm (kiểm định We
 Cơ chế gây hại được xác định là sự chiếm dụng tài nguyên đặt trước chứ
 không phải nghẽn trực tiếp trên liên kết quang (mục tiêu 1).
 
-Thứ hai, luận văn đã xây dựng và so sánh năm mô hình học máy trên bộ dữ
+Thứ hai, luận văn đã xây dựng và so sánh bốn mô hình học máy cơ sở trên bộ dữ
 liệu UCI về tấn công ngập lụt BHP. Điểm khác biệt so với các nghiên cứu
 trước là luận văn không chỉ báo cáo độ chính xác mà còn kiểm định tính
 toàn vẹn của chính bộ dữ liệu. Bằng phương pháp phân tích từng đặc trưng
 đơn lẻ và đo độ quan trọng hoán vị, luận văn phát hiện và chứng minh
-định lượng rằng bộ dữ liệu UCI404 bị suy biến một cách tất định do rò rỉ
-nhãn, trong đó mười hai trên hai mươi mốt đặc trưng tự mình đạt độ chính
+định lượng rằng bộ dữ liệu UCI404 bị suy biến tất định do rò rỉ
+nhãn, trong đó 12 trên 21 đặc trưng tự mình đạt độ chính
 xác gần tuyệt đối. Phát hiện này giải thích tại sao các mô hình trong
 tài liệu đều đạt độ chính xác rất cao mà không thực sự đo năng lực phát
 hiện tấn công (mục tiêu 2).
@@ -2068,7 +1980,7 @@ hình này nhẹ, có khả năng giải thích, độ trễ phát hiện trung 
 mạng. Naïve Bayes được giữ như một mô hình nền để so sánh, nhưng không
 dùng làm cổng kích hoạt phòng vệ do tỷ lệ cảnh báo sai cao (mục tiêu 3).
 
-Thứ tư, luận văn đề xuất và tích hợp cơ chế ứng phó khép kín gồm bốn
+Thứ tư, luận văn đề xuất và tích hợp cơ chế kiểm soát BHP trực tiếp gồm bốn
 bước vận hành liên tục tại nút biên. Cơ chế này kết hợp giám sát theo
 cửa sổ thời gian, phát hiện bằng mô hình nhẹ, ra quyết định phân tầng
 (cho phép lưu thông, giới hạn tốc độ tạm thời, cách ly), và đóng vòng
@@ -2077,12 +1989,12 @@ lượng ba màu hai tốc độ, với ngưỡng được suy trực tiếp t�
 lượng nền mà không dùng phán đoán định tính (mục tiêu 4).
 
 Thứ năm, luận văn mô phỏng toàn bộ cơ chế đề xuất bằng NS2 phiên bản
-2.35 kết hợp mô-đun nOBS trên ba kịch bản đối chứng và tám hạt giống
+2.35 kết hợp mô-đun nOBS trên bốn kịch bản đối chứng và tám hạt giống
 ngẫu nhiên. Kết quả chạy lại với cổng cây quyết định cho thấy chế độ
 giới hạn tốc độ phục hồi 33,4 phần trăm thông lượng bị mất, còn chế độ
 cách ly phục hồi 105,1 phần trăm khoảng thông lượng bị mất và đạt 102,7
 phần trăm so với kịch bản nền. Không còn hạt giống lỗi trong phép chạy
-mới. Hiện tượng vượt nhẹ baseline được diễn giải thận trọng như một quan
+mới. Việc vượt nhẹ mức nền được diễn giải thận trọng như một quan
 sát cần kiểm chứng thêm trên nhiều tô-pô, chứ không phải khẳng định
 phòng vệ làm mạng tốt hơn trạng thái bình thường. Ngoài ra, luận văn xây
 dựng được một bộ dữ liệu phát hiện mức mạng không suy biến từ dấu vết mô
@@ -2115,7 +2027,7 @@ quả cao hơn nhưng cần dùng thận trọng.
 
 Về phương pháp đánh giá, luận văn đề xuất đánh giá phát hiện như một hàm
 của cường độ tấn công thay vì chỉ một điểm đơn lẻ, và sinh ra bộ dữ liệu
-benchmark mức mạng không suy biến từ dấu vết mô phỏng NS2.
+trạng thái bằng chứng của bộ chuẩn đánh giá theo cửa sổ từ dấu vết mô phỏng NS2.
 
 ## **Hướng phát triển**
 
@@ -2128,12 +2040,12 @@ tái tạo việc giả mạo phần tiêu đề gói điều khiển ở mức 
 phát triển tiếp theo là mở rộng mô hình tấn công để mô phỏng trung thực
 hơn hành vi giả mạo BHP.
 
-Thứ hai, hiện tượng kịch bản cách ly vượt nhẹ mức thông lượng nền cần
+Thứ hai, việc kịch bản cách ly vượt nhẹ mức thông lượng nền cần
 được kiểm chứng trên nhiều tô-pô mạng và nhiều mẫu lưu lượng khác nhau
 trước khi tổng quát hóa.
 
 Thứ ba, đường cong khả năng phát hiện theo độ ẩn hiện mới dừng ở mức tấn
-công một megabit trên giây, chưa chạm tới điểm gãy nơi phát hiện thất
+công 1 Mbit/s, chưa chạm tới điểm gãy nơi phát hiện thất
 bại hoàn toàn. Việc mở rộng khảo sát xuống vùng tấn công cực ẩn sẽ giúp
 xác định giới hạn thực sự của cơ chế.
 
