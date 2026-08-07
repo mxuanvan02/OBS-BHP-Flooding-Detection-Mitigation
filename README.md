@@ -4,6 +4,14 @@ Research prototype for detecting and mitigating Burst Header Packet (BHP) floodi
 
 The enforcement target is the trusted OBS edge ingress, before a BHP creates a wavelength reservation in the optical core. The codebase contains both the reconstructed valid-burst overload experiment and the native control-only BHP/guard prototype; their evidence and claims are kept separate.
 
+## License
+
+Code, analysis scripts, and repository-authored documentation are licensed
+under MIT (see `LICENSE`). Third-party vendored code under `artifacts/github/`
+keeps its own upstream license. The thesis manuscript under `deliverables/`
+(DOCX/PDF) is the author's personal academic work and is not covered by the
+MIT license.
+
 ## Evidence status
 
 - Native direct-BHP matrix: **32/32 cells validated** (4 scenarios × 8 fixed seeds).
