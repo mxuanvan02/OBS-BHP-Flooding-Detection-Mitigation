@@ -408,25 +408,8 @@ for p in new.paragraphs:
 new.save(high)
 print(out); print(high)
 
-# ── Auto-apply TOC/List-of-Tables/List-of-Figures field fix ─────────────────
-# Runs fix_toc_lists.py against the freshly rebuilt DOCX (`out`) so every
-# rebuild automatically gets: TOC1/TOC2/TOC3/Hyperlink styles injected into
-# styles.xml, bookmarks on real body captions, and static List-of-Tables /
-# List-of-Figures text converted to HYPERLINK+PAGEREF fields. Idempotent:
-# fix_toc_lists.py skips paragraphs that already have a bookmark.
-import subprocess
-fix_script = Path(__file__).resolve().parent / "fix_toc_lists.py"
-result = subprocess.run([sys.executable, str(fix_script)], cwd=base)
-if result.returncode != 0:
-    raise SystemExit(f"fix_toc_lists.py failed with exit code {result.returncode}")
-
-# ── Auto-apply in-text citation fix ──────────────────────────────────────────
-# Runs fix_citations.py against the same freshly rebuilt DOCX so every rebuild
-# automatically gets: one bookmark per TAI LIEU THAM KHAO entry (ref_1..ref_38)
-# and every in-text "[n]" occurrence wrapped in a real hyperlink anchored to
-# the matching entry. Idempotent: skips paragraphs/entries already converted.
-cite_script = Path(__file__).resolve().parent / "fix_citations.py"
-result = subprocess.run([sys.executable, str(cite_script)], cwd=base)
-if result.returncode != 0:
-    raise SystemExit(f"fix_citations.py failed with exit code {result.returncode}")
+# NOTE: DOCX field/TOC/citation polishing (fix_toc_lists.py, fix_citations.py)
+# is a personal manuscript-formatting pass kept local only; it is intentionally
+# not tracked in this repository and not auto-invoked from this build step,
+# to keep the published source focused on the direct-BHP experiment.
 

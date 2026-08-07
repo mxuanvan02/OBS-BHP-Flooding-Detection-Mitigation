@@ -47,3 +47,14 @@ review_render/
 *.bak-pre-final-*
 *.bak-review-*
 *.bak-sync-*
+
+# Personal DOCX manuscript-formatting scripts (TOC/citation field fixes,
+# terminology audits, one-off cleanup). Out of scope for the published
+# direct-BHP experiment source; kept local only.
+docx_work/fix_toc_lists.py
+docx_work/fix_citations.py
+docx_work/apply_source_cleanup.py
+docx_work/audit_terms.py
+docx_work/extract_final_docx.py
+docx_work/update_toc_field.py
+docx_work/verify_citations.py
