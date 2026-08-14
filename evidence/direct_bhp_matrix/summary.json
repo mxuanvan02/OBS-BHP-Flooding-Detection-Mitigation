@@ -20,7 +20,7 @@
     "Legitimate nOBS controls do not enter the explicit direct-BHP guard path; zero collateral here is architectural scope, not an estimated false-positive rate.",
     "Claims are limited to the declared seven-node topology, traffic profile, and five-second runs."
   ],
-  "matrix": "/home/hitokiri/.openclaw/workspace/work/BHP-Flooding-OBS-Thesis-Reproduction/reproduction_runs/20260730_203550/native_matrix",
+  "matrix": "/media/SAS/SSD_OFFLOAD/home-hitokiri/.openclaw-workspace-work/BHP-Flooding-OBS-Thesis-Reproduction/reproduction_runs/20260801_195924/native_matrix",
   "schema": "nobs-direct-bhp-analysis-v1",
   "seeds": [
     101,
@@ -32,7 +32,7 @@
     707,
     808
   ],
-  "source_validation_sha256": "34f59f56e19c3bf0976c13668b0bf50f4feb59be6a115f86561cb4d910229c33",
+  "source_validation_sha256": "2bb6996aab603b2f3cb69b2a0a87226935459df048e03b04ffe5788e4a16cd64",
   "summary": {
     "S0": {
       "action_totals": {

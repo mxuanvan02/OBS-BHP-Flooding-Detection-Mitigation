@@ -1,157 +1,224 @@
 # OBS BHP Flooding Detection and Mitigation
 
-Research prototype for detecting and mitigating Burst Header Packet (BHP) flooding in Optical Burst Switching (OBS) networks. The repository combines machine-learning analysis, NS-2.35+nOBS network simulation, native BHP control-plane enforcement, causal auditing, and mitigation evaluation.
+Research code for experiments on Burst Header Packet (BHP) flooding in Optical Burst Switching (OBS) networks. This repository contains **experiment source only**: NS-2.35+nOBS overlay code, experiment configurations, runners, validators, compact canonical evidence, analysis scripts, tests, and experiment outputs.
 
-The enforcement target is the trusted OBS edge ingress, before a BHP creates a wavelength reservation in the optical core. The codebase contains both the reconstructed valid-burst overload experiment and the native control-only BHP/guard prototype; their evidence and claims are kept separate.
+**Not included:** thesis DOCX/PDF/ZIP files, document-rendering scripts, LibreOffice requirements, and manuscript-specific audits. Those artifacts are maintained locally outside this Git repository.
 
-## License
+## What is reproducible here
 
-Code, analysis scripts, and repository-authored documentation are licensed
-under MIT (see `LICENSE`). Third-party vendored code under `artifacts/github/`
-keeps its own upstream license. The thesis manuscript under `deliverables/`
-(DOCX/PDF) is the author's personal academic work and is not covered by the
-MIT license.
+| Route | Command | What it does | Primary output |
+|---|---|---|---|
+| Portable configuration check | `python3 experiments/direct_bhp/validator.py --config experiments/direct_bhp/config.json` | Validates config and control-path boundary without NS execution | JSON verdict on stdout |
+| Portable tests | `python3 -m unittest discover -s experiments/tests -v` | Tests runner/validator/parser invariants | unittest report |
+| UCI404 analysis | `python3 source_only/uci404/pipeline.py` | Recomputes ML-analysis tables and figures from the included ARFF | `source_only/uci404/outputs/` |
+| Native smoke run | `bash run_native_repro.sh --smoke` | Runs one real NS-2.35+nOBS cell | `reproduction_runs/<timestamp>/native_matrix/` |
+| Native full run | `bash run_native_repro.sh --full` | Runs all 32 native cells and analyzes them | `reproduction_runs/<timestamp>/native_matrix/` |
+| Verify retained canonical evidence | `python3 experiments/direct_bhp/verify_canonical_evidence.py --output /tmp/direct-bhp-canonical-check.json` | Checks the trace-free 32-cell evidence bundle and its hash binding; does not run NS | `/tmp/direct-bhp-canonical-check.json` |
 
-## Evidence status
+The direct-BHP experiment is bounded to the declared seven-node topology, traffic profile, fixed seeds, and five-second runs. The guard is a deterministic token-budget control path; it is not an ML detector or a deployment benchmark.
 
-- Native direct-BHP matrix: **32/32 cells validated** (4 scenarios × 8 fixed seeds).
-- Results are limited to the declared seven-node topology, traffic profile and five-second runs.
-- The guard is a deterministic token-budget control path, not a reconstructed ML detector.
-- UCI/ML material is separately audited and is not silently claimed as an exact reproduction where source/protocol artifacts are unavailable.
+## 1. Prepare Ubuntu / WSL2
 
-## What the code does
-
-- analyzes OBS/BHP datasets and evaluates classification metrics while checking label leakage;
-- simulates legal TCP traffic and BHP/burst load through NS-2.35+nOBS;
-- prototypes direct control-only BHP generation and admission control with `BHPFloodAgent`, `BhpGuard`, and `BhpAuditLogger`;
-- records the causal chain `BHP_CREATE → OBSERVE → DETECT → DECIDE → ACT`;
-- validates source provenance, experiment manifests, traces, metrics, figures, and document artifacts.
-
-## Clone, install, and reproduce the published artifacts
-
-Validated reference environment: Ubuntu 24.04, Python 3.12.12, LibreOffice 24.2, and the exact Python package versions in `requirements.txt`. From a fresh clone:
+Use Ubuntu 24.04 or WSL2 Ubuntu. Clone inside the Linux filesystem, not `/mnt/c`.
 
 ```bash
 git clone git@github.com:mxuanvan02/OBS-BHP-Flooding-Detection-Mitigation.git
 cd OBS-BHP-Flooding-Detection-Mitigation
-
-# Ubuntu/Debian: install system tools, create .venv, and install pinned Python packages.
 bash setup_environment.sh --system-deps
 source .venv/bin/activate
-
-# Recompute the UCI404 machine-learning tables and figures from the included ARFF.
-python3 source_only/uci404/pipeline.py
-python3 -m unittest discover -s source_only/uci404/tests -v
-
-# Validate portable/native configuration and all portable tests.
-python3 experiments/direct_bhp/validator.py --config experiments/direct_bhp/config.json
-python3 -m unittest discover -s experiments/tests -v
-python3 -m unittest discover -s tests -v
-
-# Rebuild and gate the thesis DOCX/PDF using the packaged validated 32-cell matrix.
-bash run_pipeline.sh --reuse-canonical
 ```
 
-A successful final command prints `PIPELINE_OK` and the generated artifact paths under `reproduction_runs/<timestamp>/`. This is the shortest audited route from a fresh clone to the tables, figures, statistics, DOCX, and PDF reported in the repository. It verifies and reuses the retained native 32-cell evidence because raw native traces are intentionally not committed. It does **not** describe the matrix as a newly executed NS-2 experiment.
+Expected final marker:
 
-The included UCI404 ARFF is hash-gated at `c573b83a9b8db30658be8dd53ef5769a94bc03a0695e78d6c130306c60cc69de`. The UCI/ML analysis remains separate from the direct-BHP native experiment and does not fabricate the unavailable original PSO-SVM protocol.
+```text
+ENVIRONMENT_READY: .../.venv
+```
 
-### Dependency check only
+`setup_environment.sh --system-deps` installs only experiment prerequisites (Python, compiler/build tools, Tcl/Tk/X11 development headers, and archive utilities). It does not install LibreOffice.
 
-If system packages are already installed, omit `--system-deps`:
+## 2. Run portable checks
 
 ```bash
-bash setup_environment.sh
-source .venv/bin/activate
+python3 experiments/direct_bhp/validator.py --config experiments/direct_bhp/config.json
+python3 -m unittest discover -s experiments/tests -v
+python3 -m unittest discover -s source_only/uci404/tests -v
+python3 -m unittest discover -s tests -v
 ```
 
-### Windows
+Success conditions:
 
-NS-2.35 is a native C++ codebase built against Tcl/Tk and X11 headers; it does
-not build or run directly on Windows. The supported path on Windows is WSL2
-(Windows Subsystem for Linux) running Ubuntu, which is the same environment
-this repository is validated against.
+- validator returns JSON with `"valid": true`;
+- all unittest commands end with `OK`.
 
-1. Install WSL2 with an Ubuntu 24.04 distribution (from an elevated PowerShell):
-   ```powershell
-   wsl --install -d Ubuntu-24.04
-   ```
-   Reboot if prompted, then open the "Ubuntu-24.04" app to finish first-run
-   user setup.
-2. Inside the Ubuntu/WSL2 shell, follow the Linux instructions above exactly
-   (`git clone`, `bash setup_environment.sh --system-deps`, `source
-   .venv/bin/activate`, etc.). Treat the WSL2 shell as a regular Ubuntu
-   machine; there is no separate Windows-specific script.
-3. Clone the repository inside the Linux filesystem (e.g. `~/src/...`), not
-   under `/mnt/c/...`. Building NS-2.35 and running the Python pipeline on
-   the Windows-mounted filesystem is much slower and can hit path/permission
-   issues; keep everything under the WSL2 home directory.
-4. VS Code users can attach directly to the WSL2 distro with the "WSL"
-   extension and open the cloned folder there; the terminal inside VS Code
-   then runs the same Ubuntu commands as above.
+## 3. Recompute UCI404 analysis (optional, separate from native BHP experiment)
 
-Native NS-2.35 compilation, `provision_native_ns.sh`, and `run_native_repro.sh`
-are only supported inside WSL2 (or a real Linux/macOS host). Do not attempt to
-run the compiled `ns` binary or the shell scripts directly from
-`cmd.exe`/PowerShell.
+```bash
+python3 source_only/uci404/pipeline.py
+```
 
-## Source synchronization and reproducible native run
+Outputs:
 
-The experiment is reproducible only when both components below are available:
+```text
+source_only/uci404/outputs/
+├── dataset_schema.csv
+├── provenance.json
+├── output_manifest.json
+├── raw/
+│   ├── fold_metrics.csv
+│   ├── rf_oof_permutation_fold.csv
+│   └── single_feature_fold_metrics.csv
+├── summary/
+│   ├── model_summary.csv
+│   ├── rf_permutation_importance_summary.csv
+│   └── single_feature_summary.csv
+└── figures/
+    ├── model_macro_f1.png
+    ├── rf_oof_permutation_importance.png
+    └── single_feature_audit.png
+```
 
-1. The versioned nOBS overlay in `nobs/` (guard, audit, source-routing and BHP-agent files).
-2. A native, patched NS-2.35 binary at `build/ns-allinone-2.35/ns-2.35/ns`, or at the path supplied by `NOBS_NS_TREE`.
+This route is a leakage/provenance-audited dataset analysis. It does not execute NS-2.35 and must not be presented as a direct-BHP native result.
 
-The current repository snapshot contains the nOBS overlay and the runner/configuration, but **does not contain the native NS binary**. The runner therefore fails closed instead of silently substituting a Python simulation. To perform a fresh native rerun, install/build NS-2.35 first:
-
-Run the provisioner below. It downloads the pinned NS-2.35 archive, verifies its SHA-256, extracts local X11 headers when needed, applies the versioned nOBS overlay, adds all nOBS objects to `OBJ_CC`, and builds the native binary. No manual copying or Makefile editing is required:
+## 4. Build the native NS-2.35+nOBS executable
 
 ```bash
 bash provision_native_ns.sh
 ```
 
-The archive can also be supplied offline with `NS235_ARCHIVE=/absolute/path/ns-allinone-2.35.tar.gz`. The provisioner accepts only SHA-256 `2216f4e8e274f5c2437741fc6e9c9728369fabe1838c708ef974d262b941cd5d`. `xgraph` is optional; failure to build that helper does not invalidate the `ns` binary. Compiler or dependency failure stops the script and is not silently replaced by the Python model.
+The provisioner downloads (or uses `NS235_ARCHIVE`), SHA-256-verifies the pinned NS-2.35 archive, applies the versioned `nobs/` overlay, and builds:
 
-After success, `build/ns-allinone-2.35/ns-2.35/ns` is the native executable. To rebuild from scratch, use `bash provision_native_ns.sh --clean`.
-
-These steps are intentionally explicit: a native 32-cell rerun is accepted only with the patched executable and all trace/causal gates. Verify the state with:
-
-```bash
-cd /path/to/BHP-Flooding-OBS-Thesis-Reproduction
-sha256sum nobs/optical/op-bhp-guard.cc experiments/parse_trace.py
-test -x "${NOBS_NS_TREE:-build/ns-allinone-2.35/ns-2.35}/ns" \
-  && echo "native NS-2.35: READY" \
-  || echo "native NS-2.35: MISSING (full run unavailable)"
-python3 experiments/direct_bhp/validator.py \
-  --config experiments/direct_bhp/config.json
+```text
+build/ns-allinone-2.35/ns-2.35/ns
 ```
 
-### One-cell smoke test
+Expected final marker:
 
-After provisioning the native binary, run this command. It creates a timestamped directory under `reproduction_runs/`; the outer log captures every command and message, while the runner stores `out.tr`, `stat.txt`, `bhp_audit.log`, `bhp_source.log`, `stdout.log`, `stderr.log`, `command.txt` and hashes for the selected cell:
+```text
+NATIVE_PROVISION_OK: .../ns
+```
+
+To rebuild cleanly:
 
 ```bash
-cd /path/to/BHP-Flooding-OBS-Thesis-Reproduction
-NOBS_NS_TREE=/absolute/path/to/ns-allinone-2.35/ns-2.35 \
+bash provision_native_ns.sh --clean
+```
+
+## 5. Run a real native smoke test
+
+```bash
+NOBS_NS_TREE="$PWD/build/ns-allinone-2.35/ns-2.35" \
   bash run_native_repro.sh --smoke
 ```
 
-The smoke run is a real native NS-2.35+nOBS execution, not a canonical-data replay. It validates the selected cell, but does not claim 32/32 or reproduce thesis-level aggregate statistics.
+The default smoke cell is seed `101`, scenario `S2_rate_limit`. Expected final marker:
 
-### Full native 32-cell reproduction
+```text
+NATIVE_RUN_OK
+```
+
+Outputs are created at:
+
+```text
+reproduction_runs/<timestamp>/
+├── native_run.log
+└── native_matrix/
+    ├── experiment_config.snapshot.json
+    ├── matrix_manifest.json
+    ├── completion.json
+    ├── validation.json
+    ├── revalidation.json
+    ├── SHA256SUMS.txt
+    └── seed_101/S2_rate_limit/
+        ├── out.tr
+        ├── stat.txt
+        ├── bhp_audit.log
+        ├── bhp_source.log
+        ├── stdout.log
+        ├── stderr.log
+        ├── command.txt
+        └── run.json
+```
+
+`out.tr` is the native network trace. `bhp_source.log` records generated direct BHPs; `bhp_audit.log` records the causal control chain; `run.json` records command, inputs and artifact SHA-256 values.
+
+## 6. Run the complete native 32-cell matrix
 
 ```bash
-cd /path/to/BHP-Flooding-OBS-Thesis-Reproduction
-NOBS_NS_TREE=/absolute/path/to/ns-allinone-2.35/ns-2.35 \
+NOBS_NS_TREE="$PWD/build/ns-allinone-2.35/ns-2.35" \
   bash run_native_repro.sh --full
 ```
 
-The full command runs 8 fixed seeds × 4 scenarios, then performs fail-closed validation and native-result analysis. All output is saved under a new timestamped run directory. The final lines print `NATIVE_RUN_OK`, `output` and `log` paths; `completion.json`, `revalidation.json` and, for the full run, `analysis/` are stored below that output directory. A non-zero exit means the run is not accepted.
+This executes 8 fixed seeds (`101` … `808`) × 4 scenarios:
 
-### Reuse canonical evidence (does not rerun NS)
+- `S0`: legal baseline;
+- `S1`: direct-BHP attack, permissive profile;
+- `S2_rate_limit`: direct-BHP attack with token-budget rate limit;
+- `S2_isolation`: direct-BHP attack with isolation profile.
 
-```bash
-bash run_pipeline.sh --reuse-canonical
+In addition to the smoke-run files, a full run creates:
+
+```text
+reproduction_runs/<timestamp>/native_matrix/analysis/
+├── per_seed.csv
+├── summary.json
+└── REPORT.md
 ```
 
-This mode is intentionally different: it checks the retained canonical 32-cell evidence and rebuilds document artifacts. It must not be described as a fresh native run. Use `--full` in `run_pipeline.sh` only after the native binary and patched build are provisioned; that pipeline also renders and gates the DOCX/PDF.
+Acceptance requirements are all enforced fail-closed:
+
+- `completion.json`: 32 successful cells, 0 failures, `full_matrix_complete: true`;
+- `revalidation.json`: `valid: true`;
+- `analysis/`: per-seed metrics and aggregate effects;
+- `SHA256SUMS.txt`: hashes for all retained run artifacts.
+
+A non-zero exit means the run is not accepted. Do not describe a smoke run as a full-matrix result.
+
+## 7. Validate committed canonical evidence without rerunning NS
+
+Raw traces are deliberately excluded from Git. The compact canonical evidence is retained in `evidence/direct_bhp_matrix/`.
+
+```bash
+python3 experiments/direct_bhp/verify_canonical_evidence.py \
+  --evidence evidence/direct_bhp_matrix \
+  --output /tmp/direct-bhp-canonical-check.json
+cat /tmp/direct-bhp-canonical-check.json
+```
+
+Expected terminal marker: `CANONICAL_EVIDENCE_OK`. The JSON result must report:
+
+- `"schema": "nobs-direct-bhp-canonical-evidence-check-v2"`;
+- `"valid": true` and `"cells": 32`;
+- `validation_rerun_sha256`: the exact SHA-256 of the retained v2 revalidation record;
+- `validation_engine_sha256`: the validator source hash recorded when the 32-cell matrix was checked;
+- `summary_sha256`: the SHA-256 of the descriptive analysis summary bound to that validation record.
+
+### How to read canonical-evidence outputs
+
+| File | Role | Key fields to inspect | What it does **not** prove |
+|---|---|---|---|
+| `completion.json` | Matrix completion declaration | `successful_cells: 32`, `failed_cells: 0`, `full_matrix_complete: true` | Per-cell causal correctness by itself |
+| `matrix_manifest.json` | Declared experiment inputs and 32 selected cells | fixed seed/scenario pairs, input SHA-256 map, full-matrix flag | That a local executable is byte-identical to the retained native executable |
+| `validation.json` and `validation.rerun.json` | Identical v2 fail-closed validation reports | `valid`, complete cell set, network-outcome gate, input/artifact provenance, hashes of completion/manifest/config | A new native run on the machine performing this check |
+| `per_seed.csv` | One descriptive row per seed × scenario | legal TCP bytes/packets, optical counters, direct-BHP action counts | Uncertainty beyond the eight fixed seeds |
+| `summary.json` | Aggregate descriptive statistics and effect calculations | `source_validation_sha256`, means, intervals, action totals, claim limits | A deployment or generalization claim |
+| `REPORT.md` | Human-readable matrix summary | 32/32 status, seed set, main directional effects, claim boundary | Additional machine-verifiable evidence beyond the JSON/CSV records |
+
+The verifier rejects the bundle if either validation report is not v2, the two validation files differ, the expected 32 cells are absent, the completion/manifest/config hashes do not match v2 provenance, or `summary.json` does not bind to `validation.rerun.json`.
+
+This is intentionally a **trace-free bundle check**. It verifies the retained compact evidence and its provenance chain. It is **not** a new NS-2.35 execution, does not replay raw traces, and produces no thesis document.
+
+## Repository layout
+
+```text
+nobs/                         versioned NS-2.35 overlay and direct-BHP components
+experiments/                  native scenarios, runner, validator, parser, analysis, tests
+evidence/direct_bhp_matrix/   compact validated 32-cell evidence (not raw traces)
+source_only/uci404/           separately scoped UCI404 analysis
+data/                         input datasets
+results/                      committed non-native experiment outputs
+provision_native_ns.sh        build native NS-2.35+nOBS
+run_native_repro.sh           smoke/full native execution entry point
+VALIDATION.md                 concise command-to-output contract
+```
+
+See `REPO_SCOPE.md` for claim boundaries and `VALIDATION.md` for the short execution checklist.

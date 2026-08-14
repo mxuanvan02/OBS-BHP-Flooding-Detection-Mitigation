@@ -1,12 +1,28 @@
 # Repository scope
 
-This repository contains a research prototype for BHP-flooding detection and mitigation in Optical Burst Switching (OBS) networks.
+This repository is an experiment-code artifact for BHP-flooding research in Optical Burst Switching (OBS) networks.
 
-- `nobs/`: modified nOBS/ns-2 source and native BHP control-plane components.
-- `experiments/`: experiment runners, validators, parsers, analysis and tests.
-- `data/`, `ml_pipeline.py`, and `results/`: dataset analysis, leakage checks, metrics and figures.
-- `evidence/direct_bhp_matrix/`: compact validation metadata/statistics; raw traces are intentionally excluded.
-- `audits/`: scope, threat-model, provenance and claim-boundary audits.
-- `deliverables/`: generated DOCX/PDF research artifacts.
+## Included
 
-The native direct-BHP matrix is validated at 32/32 cells in the declared reconstructed configuration. The main NS-2/nOBS attack matrix uses valid bursts generated from UDP load; the direct control-only BHP path is a separate prototype/smoke path. ML/UCI outputs are reported with their leakage and provenance limitations rather than being presented as deployment evidence.
+- `nobs/`: modified nOBS/NS-2.35 source overlay, including native BHP source, guard and audit components.
+- `experiments/`: Tcl scenarios, native runner, validators, trace parsing, analysis and tests.
+- `evidence/direct_bhp_matrix/`: compact validation metadata, per-seed statistics and result summaries for the retained 32-cell matrix.
+- `source_only/uci404/`, `data/`, `ml_pipeline.py`, `simulator.py`, and `results/`: separately scoped dataset analysis and reconstructed approximation code/results.
+- `audits/`: experiment scope, provenance, threat-model and claim-boundary audits that do not depend on a thesis manuscript.
+
+## Excluded
+
+The repository deliberately excludes all thesis artifacts and document-production tooling:
+
+- DOCX, PDF and ZIP deliverables;
+- manuscript editing/rendering scripts and figure insertion scripts;
+- thesis-specific requirements, traceability audits and screenshots;
+- LibreOffice/PDF document dependencies.
+
+Those materials are retained outside the repository as local thesis artifacts. The experiment code neither creates nor validates a thesis document.
+
+## Claim boundaries
+
+The native direct-BHP matrix covers four scenarios across eight fixed seeds in a declared seven-node topology and five-second run duration. It validates a deterministic token-budget guard on the native control path. It does not establish an online ML detector-actuator loop, a production deployment, a false-positive estimate for all legitimate traffic, or a reproduction of unavailable upstream protocols.
+
+Raw native traces are not committed because of repository size. A fresh native run is reproducible by provisioning NS-2.35 with `provision_native_ns.sh` and executing `run_native_repro.sh --full`; the committed evidence is a compact, independently checkable record rather than a substitute for executing NS.

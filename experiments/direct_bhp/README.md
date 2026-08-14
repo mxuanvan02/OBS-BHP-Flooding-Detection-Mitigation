@@ -74,8 +74,17 @@ Each cell under `seed_<seed>/<label>/` retains:
 - `command.txt`
 - `run.json`, including input and artifact SHA-256 values
 
-## Execution status for the retained evidence
+## Trace-free canonical evidence
 
-The retained canonical evidence contains a completed and validated 32-cell matrix generated on 2026-07-26: four configured scenarios × eight fixed seeds. During the later implementation session, only limited native smoke execution was performed locally; the canonical evidence was reused rather than all 32 native cells being rerun. Therefore `--reuse-canonical` validates the retained completion, validation and summary artifacts, but does not regenerate raw traces excluded from the repository.
+`evidence/direct_bhp_matrix/` is a compact record of the accepted 32-cell matrix: completion metadata, the retained validation reports, per-seed statistics, summary statistics, and manifest/config snapshots. Raw per-cell traces are intentionally not committed.
 
-The 32-cell evidence is limited to the declared seven-node topology, traffic profile and five-second runs. It does not establish that the separate ML/UCI, reconstructed UDP/CBR, online-detector, PSO-SVM deployment or end-to-end latency branches have been run completely.
+Use the repository-root command below to check this compact bundle without implying a native rerun:
+
+```bash
+python3 experiments/direct_bhp/verify_canonical_evidence.py \
+  --evidence evidence/direct_bhp_matrix
+```
+
+It checks the 32 expected seed/scenario keys and the SHA-256 binding from `summary.json` to `validation.rerun.json`. For full causal-chain and trace validation, provision NS-2.35 and run a fresh matrix with `bash run_native_repro.sh --full`.
+
+The result scope remains the declared seven-node topology, traffic profile and five-second runs. It does not establish an ML detector-actuator loop, a production deployment, or an end-to-end latency benchmark.

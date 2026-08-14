@@ -106,7 +106,6 @@ def main():
     manifest = {
         "project": "obs-bhp-reproduction-mvp",
         "classification": "reproduced_mvp_with_explicit_assumptions",
-        "source_pdf": "deliverables/LuanVan_ThS_NguyenQuangTin_CAPNHAT_KETQUA_NS2_20260726.pdf",
         "python": platform.python_version(),
         "numpy": np.__version__,
         "config": cfg,
@@ -119,7 +118,7 @@ def main():
         },
         "notes": [
             "Not NS-2.35+nOBS bit-for-bit reproduction.",
-            "Missing thesis artifacts are documented in README and thesis_requirements.md.",
+            "This approximation is separate from the native NS-2.35+nOBS experiment.",
             "S2 isolation uses n=6 as reported.",
         ],
     }

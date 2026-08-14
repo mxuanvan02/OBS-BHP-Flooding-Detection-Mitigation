@@ -4,57 +4,24 @@ __pycache__/
 *.tr
 *.tmp
 *.sqlite
+.venv/
+_backups/
 build/
 reproduction_runs/
 artifacts/sources/
 artifacts/**/.git/
-docx_work/final_render/
-docx_work/final_render_20260727/
-docx_work/rendered/
-docx_work/rendered_highlight/
-docx_work/page_checks/
-docx_work/audits/
-/LuanVan_ThS_NguyenQuangTin_CAPNHAT_KETQUA_NS2_20260726.docx
-/LuanVan_ThS_NguyenQuangTin_CAPNHAT_KETQUA_NS2_20260726_HIGHLIGHT.docx
-.venv/
-_backups/
-docx_work/final_render_*/
-docx_work/render_*/
-docx_work/*_extracted.txt
-docx_work/FIGURE_LINEAGE.json
-/LuanVan_ThS_NguyenQuangTin_FINAL_NATIVE_DIRECT_BHP_*.zip
-/deliverables/LuanVan_ThS_NguyenQuangTin_FINAL_NATIVE_DIRECT_BHP_*.zip
-/deliverables/final_native_direct_bhp_*/
 
-# Scratch verification/render output from TOC+citation fix work (2026-08-07).
-# These are throwaway inspection artifacts, not source or deliverables.
-docx_work/_toc_inspect/
-docx_work/toc_verify/
-docx_work/toc_verify2/
-docx_work/toc_verify3/
-docx_work/toc_verify4/
-docx_work/verify_toc_render/
-docx_work/reviews/
-docx_work/terminology_audit.txt
-docx_work/scan_toc_lists.py
+# Native and analysis outputs can be regenerated; committed canonical evidence
+# lives only under evidence/direct_bhp_matrix/.
+results/generated/
+source_only/uci404/outputs/generated/
+
+# Thesis/manuscript artifacts are maintained outside this experiment repository.
+deliverables/
+docx_work/
 final_pdf/
 review_render/
-*.bak-fixtoc-*.docx
-*.bak-fixcite-*.docx
-*.bak-final-*
-*.bak-stage2-*
-*.bak-vnproofread-*
-*.bak-pre-final-*
-*.bak-review-*
-*.bak-sync-*
-
-# Personal DOCX manuscript-formatting scripts (TOC/citation field fixes,
-# terminology audits, one-off cleanup). Out of scope for the published
-# direct-BHP experiment source; kept local only.
-docx_work/fix_toc_lists.py
-docx_work/fix_citations.py
-docx_work/apply_source_cleanup.py
-docx_work/audit_terms.py
-docx_work/extract_final_docx.py
-docx_work/update_toc_field.py
-docx_work/verify_citations.py
+LuanVan_*.docx
+LuanVan_*.pdf
+LuanVan_*.zip
+thesis_requirements.md
